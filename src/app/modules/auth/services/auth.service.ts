@@ -3,9 +3,9 @@ import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
 import { map, catchError, switchMap, finalize } from 'rxjs/operators';
 import { UserModel } from '../models/user.model';
 import { AuthModel } from '../models/auth.model';
-import { AuthHTTPService } from './auth-http';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import { AuthHTTPService } from './auth-http/auth-http.service';
 
 export type UserType = UserModel | undefined;
 
@@ -44,10 +44,23 @@ export class AuthService implements OnDestroy {
   }
 
   // public methods
-  login(email: string, password: string): Observable<UserType> {
+  login(userName: string, password: string): Observable<UserType> {
     this.isLoadingSubject.next(true);
-    return this.authHttpService.login(email, password).pipe(
-      map((auth: AuthModel) => {
+    return this.authHttpService.login(userName, password).pipe(
+      map((data: { data: { token: string } }) => {
+        const now = new Date();
+        const auth: AuthModel = {
+          authToken: data.data.token,
+          expiresIn: new Date(now.getTime() + 10 * 60000),
+          refreshToken: new Date(
+            now.getTime() + 7 * 24 * 60 * 60 * 1000
+          ).toISOString(),
+          setAuth: (newAuth) => {
+            auth.authToken = newAuth.authToken;
+            auth.expiresIn = newAuth.expiresIn;
+            auth.refreshToken = newAuth.refreshToken;
+          },
+        };
         const result = this.setAuthFromLocalStorage(auth);
         return result;
       }),

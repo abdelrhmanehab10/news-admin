@@ -5,7 +5,7 @@ import { UserModel } from '../../models/user.model';
 import { environment } from '../../../../../environments/environment';
 import { AuthModel } from '../../models/auth.model';
 
-const API_USERS_URL = `${environment.apiUrl}/auth`;
+const API_USERS_URL = `${environment.apiUrl}`;
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +14,9 @@ export class AuthHTTPService {
   constructor(private http: HttpClient) {}
 
   // public methods
-  login(email: string, password: string): Observable<any> {
-    return this.http.post<AuthModel>(`${API_USERS_URL}/login`, {
-      email,
+  login(userName: string, password: string): Observable<any> {
+    return this.http.post<AuthModel>(`${API_USERS_URL}/Auth/Login`, {
+      userName,
       password,
     });
   }
@@ -37,7 +37,7 @@ export class AuthHTTPService {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
-    return this.http.get<UserModel>(`${API_USERS_URL}/me`, {
+    return this.http.get<UserModel>(`${API_USERS_URL}/User/GetUser`, {
       headers: httpHeaders,
     });
   }
