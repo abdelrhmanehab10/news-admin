@@ -4,11 +4,11 @@
     class="svg-icon fs-2x fs-3x ms-n1"
     [ngClass]="'svg-icon-' + iconColor"
   ></span>
-  <div [ngClass]="'text-inverse-' + color" class="fw-bolder fs-2 mb-2 mt-5">
+  <div [ngClass]="'text-' + color" class="fw-bolder fs-2 mb-2 mt-5">
     {{ title }}
   </div>
 
-  <div class="fw-bold" [ngClass]="'text-inverse-' + color + ' fs-7'">
+  <div class="fw-bold" [ngClass]="'text-' + color + ' fs-7'">
     {{ description }}
   </div>
 </div>

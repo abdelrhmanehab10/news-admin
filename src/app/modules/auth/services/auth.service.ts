@@ -20,8 +20,8 @@ export class AuthService implements OnDestroy {
   // public fields
   currentUser$: Observable<UserType>;
   isLoading$: Observable<boolean>;
-  currentUserSubject: BehaviorSubject<UserType>;
   isLoadingSubject: BehaviorSubject<boolean>;
+  currentUserSubject: BehaviorSubject<UserType>;
 
   get currentUserValue(): UserType {
     return this.currentUserSubject.value;
@@ -36,9 +36,9 @@ export class AuthService implements OnDestroy {
     private router: Router
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
+    this.isLoading$ = this.isLoadingSubject.asObservable();
     this.currentUserSubject = new BehaviorSubject<UserType>(undefined);
     this.currentUser$ = this.currentUserSubject.asObservable();
-    this.isLoading$ = this.isLoadingSubject.asObservable();
     const subscr = this.getUserByToken().subscribe();
     this.unsubscribe.push(subscr);
   }
