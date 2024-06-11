@@ -12,16 +12,16 @@ body {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  font-family: Helvetica, 'sans-serif';
+  font-family: "Cairo", "sans-serif";
   background-color: #f2f3f8;
-  color: #5E6278;
+  color: #5e6278;
   line-height: 1;
   font-size: 14px;
   font-weight: 400;
 }
 
 .splash-screen span {
-  color: #5E6278;
+  color: #5e6278;
   transition: none !important;
   text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
@@ -35,13 +35,12 @@ body {
 
 [data-bs-theme="dark"] .splash-screen {
   background-color: #151521;
-  color: #92929F;
+  color: #92929f;
 }
 
 [data-bs-theme="dark"] .splash-screen span {
-  color: #92929F;
+  color: #92929f;
 }
-
 
 #root {
   opacity: 1;
