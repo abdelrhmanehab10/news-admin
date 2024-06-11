@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { BehaviorSubject } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  catchError,
+  finalize,
+  map,
+  of,
+} from 'rxjs';
 import * as objectPath from 'object-path';
 import {
   LayoutType,
@@ -13,6 +20,8 @@ import { DarkSidebarConfig } from './configs/dark-sidebar.config';
 import { LightHeaderConfig } from './configs/light-header.config';
 import { LightSidebarConfig } from './configs/light-sidebar.config';
 import { ActivatedRoute } from '@angular/router';
+import { LayoutHTTPService } from './layout-http/layout-http.service';
+import { AuthModel } from 'src/app/modules/auth/models/auth.model';
 
 const LAYOUT_CONFIG_LOCAL_STORAGE_KEY = `${environment.appVersion}-layoutConfig`;
 const BASE_LAYOUT_TYPE_LOCAL_STORAGE_KEY = `${environment.appVersion}-baseLayoutType`;
@@ -70,9 +79,23 @@ export class LayoutService {
   private attrs: BehaviorSubject<HTMLAttributesType> =
     new BehaviorSubject<HTMLAttributesType>(getEmptyHTMLAttributes());
 
-  constructor(private activatedRoute: ActivatedRoute) {}
+  private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
 
-  getProp(path: string, config?: ILayout): string | boolean | undefined | Object {
+  isLoading$: Observable<boolean>;
+  isLoadingSubject: BehaviorSubject<boolean>;
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private layoutHTTPService: LayoutHTTPService
+  ) {
+    this.isLoadingSubject = new BehaviorSubject<boolean>(false);
+    this.isLoading$ = this.isLoadingSubject.asObservable();
+  }
+
+  getProp(
+    path: string,
+    config?: ILayout
+  ): string | boolean | undefined | Object {
     if (config) {
       return objectPath.get(config, path);
     }
@@ -223,5 +246,39 @@ export class LayoutService {
   reInitProps() {
     this.classes.next(getEmptyCssClasses());
     this.attrs.next(getEmptyHTMLAttributes());
+  }
+
+  getNewsStatusCount() {
+    const auth = this.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.layoutHTTPService.getNewsStatusCount(auth.authToken).pipe(
+      map((data) => {
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  private getAuthFromLocalStorage(): AuthModel | undefined {
+    try {
+      const lsValue = localStorage.getItem(this.authLocalStorageToken);
+      if (!lsValue) {
+        return undefined;
+      }
+
+      const authData = JSON.parse(lsValue);
+      return authData;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
   }
 }

@@ -25,6 +25,7 @@ import {
   DropdownMenusModule,
   ModalsModule,
   EngagesModule,
+  WidgetsModule,
 } from '../partials';
 import { EngagesComponent } from '../partials/layout/engages/engages.component';
 import { ThemeModeModule } from '../partials/layout/theme-mode-switcher/theme-mode.module';
@@ -38,7 +39,9 @@ import { ClassicComponent } from './components/toolbar/classic/classic.component
 import { ExtendedComponent } from './components/toolbar/extended/extended.component';
 import { ReportsComponent } from './components/toolbar/reports/reports.component';
 import { SaasComponent } from './components/toolbar/saas/saas.component';
-import {SharedModule} from "../shared/shared.module";
+import { SharedModule } from '../shared/shared.module';
+import { StatsWidget5Component } from '../partials/content/widgets/stats/stats-widget5/stats-widget5.component';
+import { NewsStatusCountComponent } from './components/news-status-count/news-status-count.component';
 
 const routes: Routes = [
   {
@@ -70,9 +73,11 @@ const routes: Routes = [
     ExtendedComponent,
     ReportsComponent,
     SaasComponent,
+    NewsStatusCountComponent,
   ],
   imports: [
     CommonModule,
+    WidgetsModule,
     RouterModule.forChild(routes),
     TranslationModule,
     InlineSVGModule,
@@ -86,7 +91,7 @@ const routes: Routes = [
     NgbTooltipModule,
     TranslateModule,
     ThemeModeModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [RouterModule],
 })
