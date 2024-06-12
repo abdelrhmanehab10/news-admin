@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { LayoutService } from '../../_metronic/layout';
+import { LayoutService } from 'src/app/services/layout/layout.service';
 
 type Tabs = 'Sidebar' | 'Header' | 'Toolbar';
 

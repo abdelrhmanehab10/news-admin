@@ -1,6 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { PageInfoService, PageLink } from '../../../core/page-info.service';
+import {
+  PageInfoService,
+  PageLink,
+} from '../../../../../services/layout/page-info.service';
 
 @Component({
   selector: 'app-page-title',

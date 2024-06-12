@@ -1,46 +1,61 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { LayoutService } from '../../core/layout.service';
-import { Subscription, first } from 'rxjs';
-import { NewStatusCount } from '../../models/counter';
+// import { Component, OnInit } from '@angular/core';
+// import { Subscription, first } from 'rxjs';
+// import { Router } from '@angular/router';
+// import { NewStatusCount } from 'src/app/models/layout.model';
+// import { LayoutService } from '../..';
 
-@Component({
-  selector: 'app-news-status-count',
-  templateUrl: './news-status-count.component.html',
-  styleUrls: ['./news-status-count.component.scss'],
-})
-export class NewsStatusCountComponent implements OnInit {
-  private unsubscribe: Subscription[] = [];
-  cardBGColors: string[] = ['primary', 'info', 'success', 'danger', 'warning'];
-  appNewsStatusCount: NewStatusCount[] = [];
-  total: number = 0;
-  hasError: boolean = false;
+// @Component({
+//   selector: 'app-news-status-count',
+//   templateUrl: './news-status-count.component.html',
+//   styleUrls: ['./news-status-count.component.scss'],
+// })
+// export class NewsStatusCountComponent implements OnInit {
+//   private unsubscribe: Subscription[] = [];
+//   cardBGColors: string[] = [
+//     'primary',
+//     'secondary',
+//     'success',
+//     'danger',
+//     'warning',
+//     'info',
+//     'light',
+//     'dark',
+//   ];
 
-  constructor(private layout: LayoutService) {}
+//   appNewsStatusCount: NewStatusCount[] = [];
+//   total: number = 0;
 
-  ngOnInit(): void {
-    this.updateNewsStatusCount();
-  }
+//   hasError: boolean = false;
+//   displayCounters = false;
 
-  updateNewsStatusCount() {
-    this.hasError = false;
-    const loginSubscr = this.layout
-      .getNewsStatusCount()
-      .pipe(first())
-      .subscribe((data) => {
-        if (data) {
-          this.total = data.reduce(
-            (a: number, c: NewStatusCount) => a + c.count,
-            0
-          );
-          this.appNewsStatusCount = data;
-        } else {
-          this.hasError = true;
-        }
-      });
-    this.unsubscribe.push(loginSubscr);
-  }
+//   constructor(private layout: LayoutService, private router: Router) {}
 
-  generateCardBGColor(id: number) {
-    return this.cardBGColors[id];
-  }
-}
+//   ngOnInit(): void {
+//     this.updateNewsStatusCount();
+//   }
+
+//   updateNewsStatusCount() {
+//     this.hasError = false;
+//     const loginSubscr = this.layout
+//       .getNewsStatusCount()
+//       .pipe(first())
+//       .subscribe({
+//         next: (data) => {
+//           this.total = data.reduce(
+//             (a: number, c: NewStatusCount) => a + c.count,
+//             0
+//           );
+//           this.appNewsStatusCount = data;
+//         },
+//         error: (error) => {
+//           console.log('[NEWS_STATUS_COUNT]', error);
+//           this.hasError = true;
+//         },
+//       });
+//     this.unsubscribe.push(loginSubscr);
+//   }
+
+//   generateCardBGColor(id: number) {
+//     return this.cardBGColors[id];
+//   }
+// }

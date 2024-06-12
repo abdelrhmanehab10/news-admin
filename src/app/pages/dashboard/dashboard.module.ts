@@ -1,17 +1,27 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { DashboardComponent } from './dashboard.component';
 import { ModalsModule, WidgetsModule } from '../../_metronic/partials';
+import { PublishComponent } from './publish/publish.component';
 
 @NgModule({
-  declarations: [DashboardComponent],
+  declarations: [PublishComponent],
   imports: [
     CommonModule,
     RouterModule.forChild([
       {
         path: '',
-        component: DashboardComponent,
+        children: [
+          {
+            path: '',
+            redirectTo: 'publish',
+            pathMatch: 'full',
+          },
+          {
+            path: 'publish',
+            component: PublishComponent,
+          },
+        ],
       },
     ]),
     WidgetsModule,

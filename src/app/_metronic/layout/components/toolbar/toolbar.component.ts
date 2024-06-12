@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ILayout, LayoutType } from '../../core/configs/config';
-import { LayoutService } from '../../core/layout.service';
+import { ILayout, LayoutType } from '../../../../core/configs/config';
+import { LayoutService } from 'src/app/services/layout/layout.service';
 
 @Component({
   selector: 'app-toolbar',

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { AuthService } from '../../services/auth.service';
 import { first } from 'rxjs/operators';
+import { AuthService } from 'src/app/pages/auth';
 
 enum ErrorStates {
   NotSubmitted,
@@ -50,14 +50,14 @@ export class ForgotPasswordComponent implements OnInit {
     });
   }
 
-  submit() {
-    this.errorState = ErrorStates.NotSubmitted;
-    const forgotPasswordSubscr = this.authService
-      .forgotPassword(this.f.email.value)
-      .pipe(first())
-      .subscribe((result: boolean) => {
-        this.errorState = result ? ErrorStates.NoError : ErrorStates.HasError;
-      });
-    this.unsubscribe.push(forgotPasswordSubscr);
-  }
+  // submit() {
+  //   this.errorState = ErrorStates.NotSubmitted;
+  //   const forgotPasswordSubscr = this.authService
+  //     .forgotPassword(this.f.email.value)
+  //     .pipe(first())
+  //     .subscribe((result: boolean) => {
+  //       this.errorState = result ? ErrorStates.NoError : ErrorStates.HasError;
+  //     });
+  //   this.unsubscribe.push(forgotPasswordSubscr);
+  // }
 }

@@ -1,56 +1,38 @@
-<form class="form w-100" novalidate="novalidate" id="kt_login_signup_form" [formGroup]="registrationForm"
+<!-- <form class="form w-100" novalidate="novalidate" id="kt_login_signup_form" 
+[formGroup]="registrationForm"
   (ngSubmit)="submit()">
-  <!--begin::Heading-->
   <div class="text-center mb-11">
-    <!--begin::Title-->
     <h1 class="text-gray-900 fw-bolder mb-3">
       Sign Up
     </h1>
-    <!--end::Title-->
 
-    <!--begin::Subtitle-->
     <div class="text-gray-500 fw-semibold fs-6">
       Your Social Campaigns
     </div>
-    <!--end::Subtitle--->
   </div>
-  <!--begin::Heading-->
 
-  <!--begin::Login options-->
   <div class="row g-3 mb-9">
-    <!--begin::Col-->
     <div class="col-md-6">
-      <!--begin::Google link--->
       <a href="#"
         class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
         <img alt="Logo" src="./assets/media/svg/brand-logos/google-icon.svg" class="h-15px me-3" />
         Sign in with Google
       </a>
-      <!--end::Google link--->
     </div>
-    <!--end::Col-->
 
-    <!--begin::Col-->
     <div class="col-md-6">
-      <!--begin::Google link--->
       <a href="#"
         class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
         <img alt="Logo" src="./assets/media/svg/brand-logos/apple-black.svg" class="theme-light-show h-15px me-3" />
         <img alt="Logo" src="./assets/media/svg/brand-logos/apple-black-dark.svg" class="theme-dark-show h-15px me-3" />
         Sign in with Apple
       </a>
-      <!--end::Google link--->
     </div>
-    <!--end::Col-->
   </div>
-  <!--end::Login options-->
 
-  <!--begin::Separator-->
   <div class="separator separator-content my-14"><span class="w-125px text-gray-500 fw-semibold fs-7">Or with
       email</span></div>
-  <!--end::Separator-->
 
-  <!-- begin::Alert error-->
   <ng-container *ngIf="hasError">
     <div class="mb-lg-15 alert alert-danger">
       <div class="alert-text font-weight-bold">
@@ -58,9 +40,7 @@
       </div>
     </div>
   </ng-container>
-  <!-- end::Alert error-->
 
-  <!--begin::Form group-->
   <div class="fv-row mb-8">
     <label class="form-label fw-bolder text-gray-900 fs-6">Fullname</label>
     <input class="form-control bg-transparent" type="text" name="fullname" formControlName="fullname"
@@ -84,9 +64,7 @@
         control: registrationForm.controls['fullname']
       }"></ng-container>
   </div>
-  <!--end::Form group-->
 
-  <!--begin::Form group-->
   <div class="fv-row mb-8">
     <label class="form-label fw-bolder text-gray-900 fs-6">Email</label>
     <input class="form-control bg-transparent" type="email" placeholder="Email" name="email" formControlName="email"
@@ -115,9 +93,7 @@
         control: registrationForm.controls['email']
       }"></ng-container>
   </div>
-  <!--end::Form group-->
 
-  <!--begin::Form group-->
   <div class="fv-row mb-8">
     <label class="form-label fw-bolder text-gray-900 fs-6">Password</label>
     <input class="form-control bg-transparent" type="password" placeholder="Password" name="password"
@@ -141,9 +117,7 @@
         control: registrationForm.controls['password']
       }"></ng-container>
   </div>
-  <!--end::Form group-->
-
-  <!--begin::Form group-->
+  
   <div class="fv-row mb-8">
     <label class="form-label fw-bolder text-gray-900 fs-6">Confirm Password</label>
     <input class="form-control bg-transparent" type="password" placeholder="Confirm password" name="cPassword"
@@ -177,9 +151,6 @@
       </div>
     </ng-container>
   </div>
-  <!--end::Form group-->
-
-  <!--begin::Form group-->
   <div class="fv-row mb-8">
     <label class="form-check form-check-inline">
       <input id="kt_login_toc_agree" type="checkbox" formControlName="agree" name="agree" class="form-check-input" />
@@ -189,9 +160,6 @@
       </span>
     </label>
   </div>
-  <!--end::Form group-->
-
-  <!--begin::Form group-->
   <div class="d-grid mb-10">
     <button type="submit" id="kt_sign_up_submit" [disabled]="
         registrationForm.invalid || !registrationForm.controls['agree'].value
@@ -207,9 +175,7 @@
       </ng-container>
     </button>
   </div>
-  <!--end::Form group-->
 
-  <!--begin::Sign up-->
   <div class="text-gray-500 text-center fw-semibold fs-6">
     Already have an Account?
 
@@ -217,9 +183,8 @@
       Sign in
     </a>
   </div>
-  <!--end::Sign up-->
 
-</form>
+</form> -->
 
 <ng-template #formError let-control="control" let-message="message" let-validation="validation">
   <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
