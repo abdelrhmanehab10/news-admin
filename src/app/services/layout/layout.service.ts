@@ -22,6 +22,7 @@ import { LayoutHTTPService } from './layout-http/layout-http.service';
 import { LightSidebarConfig } from 'src/app/core/configs/light-sidebar.config';
 import { DarkHeaderConfig } from 'src/app/core/configs/dark-header.config';
 import { LightHeaderConfig } from 'src/app/core/configs/light-header.config';
+import { AuthService } from '../auth/auth.service';
 
 const LAYOUT_CONFIG_LOCAL_STORAGE_KEY = `${environment.appVersion}-layoutConfig`;
 const BASE_LAYOUT_TYPE_LOCAL_STORAGE_KEY = `${environment.appVersion}-baseLayoutType`;
@@ -86,7 +87,8 @@ export class LayoutService {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private layoutHTTPService: LayoutHTTPService
+    private layoutHTTPService: LayoutHTTPService,
+    private authService: AuthService
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.isLoading$ = this.isLoadingSubject.asObservable();
@@ -249,7 +251,7 @@ export class LayoutService {
   }
 
   getNewsStatusCount() {
-    const auth = this.getAuthFromLocalStorage();
+    const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
     }
@@ -265,20 +267,5 @@ export class LayoutService {
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
-  }
-
-  private getAuthFromLocalStorage(): AuthModel | undefined {
-    try {
-      const lsValue = localStorage.getItem(this.authLocalStorageToken);
-      if (!lsValue) {
-        return undefined;
-      }
-
-      const authData = JSON.parse(lsValue);
-      return authData;
-    } catch (error) {
-      console.error(error);
-      return undefined;
-    }
   }
 }
