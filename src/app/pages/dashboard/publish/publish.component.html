@@ -1,17 +1,6 @@
-<div class="text-center">
-  <button class="btn btn-sm btn-dark fw-bold">نشر</button>
-</div>
-<div class="mb-6">
-  <div class="w-25">
-    <select
-      class="form-select form-select-solid form-select-lg"
-      name="currency"
-    >
-      <option value="editor">محرر</option>
-      <option value="head">رئيس قسم</option>
-      <option value="disk">ديسك</option>
-      <option value="linguistic">Linguistic</option>
-    </select>
-  </div>
-</div>
-<app-tables-widget9 class="card mb-5 mb-xl-8"></app-tables-widget9>
+<app-tables-widget9
+  [news]="newsToPublish"
+  [rolesPassList]="rolesPassList"
+  [newsCategories]="newsCategories"
+  class="card mb-5 mb-xl-8"
+></app-tables-widget9>
