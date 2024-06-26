@@ -414,26 +414,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  updateNewsStatusCount() {
-    this.hasError = false;
-    const getNewsStatusCountSubscr = this.layout
-      .getNewsStatusCount()
-      .subscribe({
-        next: (data: NewStatusCount[]) => {
-          this.total = data.reduce(
-            (a: number, c: NewStatusCount) => a + c.count,
-            0
-          );
-          this.appNewsStatusCount = data;
-        },
-        error: (error: any) => {
-          console.log('[NEWS_STATUS_COUNT]', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getNewsStatusCountSubscr);
-  }
-
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
