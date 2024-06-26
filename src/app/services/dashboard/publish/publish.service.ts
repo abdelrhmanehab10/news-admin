@@ -63,48 +63,6 @@ export class PublishService {
     );
   }
 
-  getNewsCategories() {
-    const auth = this.authService.getAuthFromLocalStorage();
-    if (!auth || !auth.authToken) {
-      return of(undefined);
-    }
-
-    this.isLoadingSubject.next(true);
-    return this.publishHTTPService.getNewsCategories(auth.authToken).pipe(
-      map((data) => {
-        return data.data;
-      }),
-      catchError((err) => {
-        console.error('err', err);
-        return of(undefined);
-      }),
-      finalize(() => this.isLoadingSubject.next(false))
-    );
-  }
-
-  getNewsSubCategories(id: string) {
-    const auth = this.authService.getAuthFromLocalStorage();
-    if (!auth || !auth.authToken) {
-      return of(undefined);
-    }
-
-    this.isLoadingSubject.next(true);
-    return this.publishHTTPService
-      .getNewsSubCategories(auth.authToken, id)
-      .pipe(
-        map((data) => {
-          console.log(data);
-
-          return data.data;
-        }),
-        catchError((err) => {
-          console.error('err', err);
-          return of(undefined);
-        }),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
-  }
-
   deleteNew(ids: string[]) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {

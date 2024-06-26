@@ -48,8 +48,6 @@ export class AuthService implements OnDestroy {
     this.isLoadingSubject.next(true);
     return this.authHttpService.login(userName, password).pipe(
       map((data: { data: { token: string } }) => {
-        console.log(data);
-
         const now = new Date();
         const auth: AuthModel = {
           authToken: data.data.token,

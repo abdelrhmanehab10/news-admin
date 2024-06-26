@@ -35,40 +35,10 @@ export class PublishHTTPService {
 
     return this.http.get<{
       status: number;
-      data: NEW[];
+      data: { id: string; name: string }[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/News/GetRolesPassList`, {
-      headers: httpHeaders,
-    });
-  }
-
-  getNewsCategories(token: string): Observable<any> {
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<{
-      status: number;
-      data: NEW[];
-      message: string | null;
-      errors: string[] | null;
-    }>(`${API_URL}/NewsCategory/GetNewsCategories`, {
-      headers: httpHeaders,
-    });
-  }
-
-  getNewsSubCategories(token: string, id: string): Observable<any> {
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<{
-      status: number;
-      data: NEW[];
-      message: string | null;
-      errors: string[] | null;
-    }>(`${API_URL}/NewsCategory/GetNewsSubCategories?categoryId=${id}`, {
       headers: httpHeaders,
     });
   }
@@ -79,7 +49,7 @@ export class PublishHTTPService {
     });
 
     const formData = new FormData();
-    
+
     ids.forEach((id) => {
       formData.append(`NewsIDs`, id);
     });
