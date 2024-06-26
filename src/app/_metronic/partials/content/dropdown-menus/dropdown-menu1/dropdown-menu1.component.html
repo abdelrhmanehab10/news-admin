@@ -1,12 +1,12 @@
 <div class="px-7 py-5">
-  <div class="fs-5 text-gray-900 fw-bolder">Filter Options</div>
+  <div class="fs-5 text-gray-900 fw-bolder">اظهار حسب</div>
 </div>
 
 <div class="separator border-gray-200"></div>
 
-<div class="px-7 py-5">
+<form class="px-7 py-5">
   <div class="mb-10">
-    <label class="form-label fw-bold">Status:</label>
+    <label class="form-label fw-bold">الدور:</label>
 
     <div>
       <select
@@ -15,16 +15,48 @@
         data-placeholder="Select option"
         data-allow-clear="true"
       >
-        <option></option>
-        <option selected value="1">Approved</option>
-        <option value="2">Pending</option>
-        <option value="3">In Process</option>
-        <option value="4">Rejected</option>
+        @for(item of rolesPassList; track item; let idx = $index){
+        <option value="{{ idx }}">{{ item.name }}</option>
+        }
       </select>
     </div>
   </div>
-
   <div class="mb-10">
+    <label class="form-label fw-bold">الباب:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        (change)="onSelectedNewsCategoriesChange($event)"
+      >
+        <option></option>
+        @for(item of newsCategories; track item; let idx = $index){
+        <option value="{{ item.categoryID }}">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  @if(newsSubCategories.length){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الباب الفرعي:</label>
+
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+      >
+        @for(item of newsSubCategories; track item; let idx = $index){
+        <option value="{{ item.sectionID }}">{{ item.secTitle }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  }
+  <!-- <div class="mb-10">
     <label class="form-label fw-bold">Member Type:</label>
 
     <div class="d-flex">
@@ -53,9 +85,7 @@
     <label class="form-label fw-bold">Notifications:</label>
 
     <div
-      class="
-        form-check form-switch form-switch-sm form-check-custom form-check-solid
-      "
+      class="form-check form-switch form-switch-sm form-check-custom form-check-solid"
     >
       <input
         class="form-check-input"
@@ -66,23 +96,22 @@
       />
       <label class="form-check-label">Enabled</label>
     </div>
-  </div>
+  </div> -->
 
   <div class="d-flex justify-content-end">
-    <button
-      type="reset"
-      class="btn btn-sm btn-light btn-active-light-primary me-2"
-      data-kt-menu-dismiss="true"
-    >
-      Reset
-    </button>
-
     <button
       type="submit"
       class="btn btn-sm btn-primary"
       data-kt-menu-dismiss="true"
     >
-      Apply
+      اظهار
+    </button>
+    <button
+      type="reset"
+      class="btn btn-sm btn-light btn-active-light-primary me-2"
+      data-kt-menu-dismiss="true"
+    >
+      مسح
     </button>
   </div>
-</div>
+</form>

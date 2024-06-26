@@ -69,7 +69,6 @@ import { TablesWidget5Component } from './tables/tables-widget5/tables-widget5.c
 import { TablesWidget6Component } from './tables/tables-widget6/tables-widget6.component';
 import { TablesWidget7Component } from './tables/tables-widget7/tables-widget7.component';
 import { TablesWidget8Component } from './tables/tables-widget8/tables-widget8.component';
-import { TablesWidget9Component } from './tables/tables-widget9/tables-widget9.component';
 import { TablesWidget10Component } from './tables/tables-widget10/tables-widget10.component';
 import { TablesWidget11Component } from './tables/tables-widget11/tables-widget11.component';
 import { TablesWidget12Component } from './tables/tables-widget12/tables-widget12.component';
@@ -84,7 +83,9 @@ import { CardsWidget7Component } from './_new/cards/cards-widget7/cards-widget7.
 import { TablesWidget16Component } from './_new/tables/tables-widget16/tables-widget16.component';
 import { NewChartsWidget8Component } from './_new/charts/new-charts-widget8/new-charts-widget8.component';
 import { CardsWidget18Component } from './_new/cards/cards-widget18/cards-widget18.component';
-import { SharedModule } from "../../../shared/shared.module";
+import { SharedModule } from '../../../shared/shared.module';
+import { TablesWidget9Component } from 'src/app/components/dashboard/publish/table/tables-widget9.component';
+
 @NgModule({
   declarations: [
     // Advanced Tables
@@ -173,7 +174,7 @@ import { SharedModule } from "../../../shared/shared.module";
     InlineSVGModule,
     NgApexchartsModule,
     NgbDropdownModule,
-    SharedModule
+    SharedModule,
   ],
   exports: [
     // Advanced Tables
@@ -256,7 +257,7 @@ import { SharedModule } from "../../../shared/shared.module";
     TablesWidget16Component,
     NewChartsWidget8Component,
     TablesWidget16Component,
-    CardsWidget18Component
+    CardsWidget18Component,
   ],
 })
 export class WidgetsModule {}
