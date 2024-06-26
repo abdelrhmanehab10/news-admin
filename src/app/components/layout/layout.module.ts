@@ -41,6 +41,7 @@ import {
 import { ThemeModeModule } from 'src/app/_metronic/partials/layout/theme-mode-switcher/theme-mode.module';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { NewsStatusCountComponent } from './news-status-count/news-status-count.component';
+import { ComponentsModule } from '../components.module';
 
 const routes: Routes = [
   {
@@ -75,6 +76,7 @@ const routes: Routes = [
     NewsStatusCountComponent,
   ],
   imports: [
+    ComponentsModule,
     CommonModule,
     WidgetsModule,
     RouterModule.forChild(routes),

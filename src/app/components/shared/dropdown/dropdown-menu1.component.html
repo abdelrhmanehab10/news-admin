@@ -4,9 +4,10 @@
 
 <div class="separator border-gray-200"></div>
 
-<form class="px-7 py-5">
+<form (ngSubmit)="onFilter()" class="px-7 py-5">
+  @if(isNewsStatus){
   <div class="mb-10">
-    <label class="form-label fw-bold">الدور:</label>
+    <label class="form-label fw-bold">المرحلة:</label>
 
     <div>
       <select
@@ -14,6 +15,24 @@
         data-kt-select2="true"
         data-placeholder="Select option"
         data-allow-clear="true"
+        name="newsStatus"
+      >
+        @for(item of newsStatus; track item; let idx = $index){
+        <option value="{{ item.id }}">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  } @if(isRolesPassList){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الدور:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        name="role"
       >
         @for(item of rolesPassList; track item; let idx = $index){
         <option value="{{ idx }}">{{ item.name }}</option>
@@ -21,6 +40,7 @@
       </select>
     </div>
   </div>
+  } @if(isCategories){
   <div class="mb-10">
     <label class="form-label fw-bold">الباب:</label>
     <div>
@@ -29,7 +49,7 @@
         data-kt-select2="true"
         data-placeholder="Select option"
         data-allow-clear="true"
-        (change)="onSelectedNewsCategoriesChange($event)"
+        (change)="isSubCategories && onSelectedNewsCategoriesChange($event)"
       >
         <option></option>
         @for(item of newsCategories; track item; let idx = $index){
@@ -38,7 +58,7 @@
       </select>
     </div>
   </div>
-  @if(newsSubCategories.length){
+  } @if(isSubCategories && newsSubCategories.length){
   <div class="mb-10">
     <label class="form-label fw-bold">الباب الفرعي:</label>
 

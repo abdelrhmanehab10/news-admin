@@ -28,7 +28,7 @@ import { PermissionDetailsComponent } from './permission-details/permission-deta
       },
     ]),
     CrudModule,
-    SharedModule,
+    // SharedModule,
     NgbNavModule,
     NgbDropdownModule,
     NgbCollapseModule,

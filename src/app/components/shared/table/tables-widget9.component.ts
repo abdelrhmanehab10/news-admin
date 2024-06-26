@@ -1,5 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { Toast } from 'bootstrap';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { NEW } from 'src/app/models/new.model';
@@ -12,17 +11,25 @@ import { PublishService } from 'src/app/services/dashboard/publish/publish.servi
 export class TablesWidget9Component {
   private unsubscribe: Subscription[] = [];
 
+  @Output() selectedNewsEmitter = new EventEmitter<string[]>();
+  @Output() searchEmitter = new EventEmitter<string>();
+  @Output() pageNumberEmitter = new EventEmitter<number>();
+
   @Input() news: NEW[];
-  @Input() rolesPassList: { id: string; name: string }[];
-  @Input() newsCategories: { categoryID: string; name: string }[];
-  @Input() newsSubCategories: { id: string; name: string }[];
+  @Input() publish: () => void;
+  @Input() restore: () => void;
+  @Input() deleteNew: (id: string) => void;
+
+  @Input() isCategories: boolean = false;
+  @Input() isSubCategories: boolean = false;
+  @Input() isRolesPassList: boolean = false;
+  @Input() isNewsStatusCount: boolean = false;
 
   hasError: boolean = false;
+
   selectedNews: string[] = [];
-  constructor(
-    private publishService: PublishService,
-    private toastr: ToastrService
-  ) {}
+  searchQuery: string = '';
+  pageNumber: number = 1;
 
   convertToArabicTime(time: any) {
     let [hours, minutes] = time.split(':').map(Number);
@@ -46,32 +53,25 @@ export class TablesWidget9Component {
     return `${day}/${month}/200${year}`;
   }
 
-  publish() {
-    //publish new logic
+  onSelect(e: any) {
+    this.selectedNews.push(e.target.id);
+    this.selectedNewsEmitter.emit(this.selectedNews);
   }
 
-  restore() {
-    //restore new
+  onSearch(e: any) {
+    this.searchQuery = e.target.value;
+    this.searchEmitter.emit(this.searchQuery);
   }
 
-  deleteNew(id?: string) {
-    this.hasError = false;
-    if (id) {
-      this.selectedNews.push(id);
+  onPageChange(e: any) {
+    if (e.target.classList.includes('next')) {
+      this.pageNumber++;
+    } else if (e.target.classList.includes('previous')) {
+      this.pageNumber--;
+    } else {
+      this.pageNumber = e.target.value;
     }
-
-    const deleteNewSubscr = this.publishService
-      .deleteNew(this.selectedNews)
-      .subscribe({
-        next: (data: string) => {
-          this.toastr.error(data);
-        },
-        error: (error: any) => {
-          console.log('[DELETE]', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(deleteNewSubscr);
+    this.pageNumberEmitter.emit(this.pageNumber);
   }
 
   ngOnDestroy() {

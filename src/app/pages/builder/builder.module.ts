@@ -5,7 +5,8 @@ import { BuilderComponent } from './builder.component';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
 import { InlineSVGModule } from 'ng-inline-svg-2';
-import { SharedModule } from "../../_metronic/shared/shared.module";
+import { SharedModule } from '../../_metronic/shared/shared.module';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   declarations: [BuilderComponent],
@@ -21,6 +22,7 @@ import { SharedModule } from "../../_metronic/shared/shared.module";
         component: BuilderComponent,
       },
     ]),
+    ComponentsModule,
   ],
 })
 export class BuilderModule {}

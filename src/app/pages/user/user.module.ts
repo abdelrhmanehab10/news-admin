@@ -5,11 +5,15 @@ import { RouterModule } from '@angular/router';
 import { UserDetailsComponent } from './user-details/user-details.component';
 import { CrudModule } from 'src/app/modules/crud/crud.module';
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
-import { NgbCollapseModule, NgbDropdownModule, NgbNavModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbCollapseModule,
+  NgbDropdownModule,
+  NgbNavModule,
+  NgbTooltipModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-
-
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   declarations: [UserListingComponent, UserDetailsComponent],
@@ -28,12 +32,13 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
       },
     ]),
     CrudModule,
-    SharedModule,
+    // SharedModule,
+    // ComponentsModule,
     NgbNavModule,
     NgbDropdownModule,
     NgbCollapseModule,
     NgbTooltipModule,
     SweetAlert2Module.forChild(),
-  ]
+  ],
 })
-export class UserModule { }
+export class UserModule {}

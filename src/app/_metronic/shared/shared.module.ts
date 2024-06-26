@@ -1,17 +1,14 @@
-import {NgModule} from '@angular/core';
-import {KeeniconComponent} from './keenicon/keenicon.component';
-import {CommonModule} from "@angular/common";
+import { NgModule } from '@angular/core';
+// import { KeeniconComponent } from '../../components/shared/keenicon/keenicon.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
-    KeeniconComponent
+    // KeeniconComponent
   ],
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
   exports: [
-    KeeniconComponent
-  ]
+    // KeeniconComponent
+  ],
 })
-export class SharedModule {
-}
+export class SharedModule {}
