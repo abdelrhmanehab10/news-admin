@@ -4,12 +4,7 @@
     @for(item of appNewsStatusCount; track item; let idx = $index){
     <div class="col-xl-2 col-6">
       <app-stats-widget5
-        svgIcon="{{
-          '../../../assets/media/icons/duotune/graphs/' +
-            'gra00' +
-            item.roleId +
-            '.svg'
-        }}"
+        svgIcon="{{ '../../../assets/media/counters/' + idx + '.svg' }}"
         class="card hoverable card-xl-stretch mb-5 mb-xl-8"
         [ngClass]="'bg-' + generateCardBGColor(idx)"
         color="white"
