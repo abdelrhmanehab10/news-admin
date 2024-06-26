@@ -1,6 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { NEW } from 'src/app/models/new.model';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 
 @Component({
@@ -11,54 +13,21 @@ import { PublishService } from 'src/app/services/dashboard/publish/publish.servi
 export class PublishComponent implements OnInit {
   private unsubscribe: Subscription[] = [];
 
+  selectedNews: string[] = [];
+
   newsToPublish: NEW[];
   rolesPassList: { id: string; name: string }[];
   newsCategories: { categoryID: string; name: string }[];
+  
   hasError: boolean;
 
   constructor(
     private publishService: PublishService,
-    private cdr: ChangeDetectorRef
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.getNewsToPublish();
-    this.getRolesPassList();
-    this.getNewsCategories();
-  }
-
-  getNewsCategories(): void {
-    this.hasError = false;
-    const getNewsCategoriesSubscr = this.publishService
-      .getNewsCategories()
-      .subscribe({
-        next: (data: { categoryID: string; name: string }[]) => {
-          this.newsCategories = data;
-          this.cdr.detectChanges();
-        },
-        error: (error: any) => {
-          console.log('NEWS_CATEGORIES', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getNewsCategoriesSubscr);
-  }
-
-  getRolesPassList(): void {
-    this.hasError = false;
-    const getRolesPassListSubscr = this.publishService
-      .getRolesPassList()
-      .subscribe({
-        next: (data: { id: string; name: string }[]) => {
-          this.rolesPassList = data;
-          this.cdr.detectChanges();
-        },
-        error: (error: any) => {
-          console.log('ROLES_PASSLIST', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getRolesPassListSubscr);
   }
 
   getNewsToPublish(): void {
@@ -67,7 +36,9 @@ export class PublishComponent implements OnInit {
       .getNewsToPublish()
       .subscribe({
         next: (data: { news: NEW[] }[]) => {
-          this.newsToPublish = data[0].news;
+          if (data) {
+            this.newsToPublish = data[0]?.news;
+          }
         },
         error: (error: any) => {
           console.log('[NEWS_TO_PUBLISH]', error);
@@ -75,6 +46,38 @@ export class PublishComponent implements OnInit {
         },
       });
     this.unsubscribe.push(getNewsToPublishSubscr);
+  }
+
+  publish() {
+    //publish new logic
+  }
+
+  restore() {
+    //restore new
+  }
+
+  receiveSelectedNews(data: string[]) {
+    this.selectedNews = data;
+  }
+
+  deleteNew(id?: string) {
+    this.hasError = false;
+    if (id) {
+      this.selectedNews.push(id);
+    }
+
+    const deleteNewSubscr = this.publishService
+      .deleteNew(this.selectedNews)
+      .subscribe({
+        next: (data: string) => {
+          this.toastr.success(data);
+        },
+        error: (error: any) => {
+          console.log('[DELETE]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(deleteNewSubscr);
   }
 
   ngOnDestroy() {

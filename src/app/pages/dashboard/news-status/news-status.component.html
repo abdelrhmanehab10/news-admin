@@ -1,10 +1,9 @@
 <app-tables-widget9
-  [news]="newsToPublish"
-  [publish]="publish"
-  [restore]="restore"
   [isCategories]="true"
   [isSubCategories]="true"
-  [isRolesPassList]="true"
+  [isNewsStatusCount]="true"
+  (searchEmitter)="(recieveSearchQuery)"
   (selectedNewsEmitter)="(receiveSelectedNews)"
+  (pageNumberEmitter)="(recievePageNumber)"
   class="card mb-5 mb-xl-8"
 ></app-tables-widget9>
