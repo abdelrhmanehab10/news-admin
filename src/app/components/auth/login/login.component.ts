@@ -16,6 +16,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     userName: 'admin123',
     password: 'admin123',
   };
+
   loginForm: FormGroup;
   hasError: boolean;
   returnUrl: string;

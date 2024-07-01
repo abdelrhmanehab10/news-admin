@@ -1,0 +1,243 @@
+<div class="card mb-5 mb-xl-10">
+  <!-- <div
+    class="card-header border-0 cursor-pointer"
+    role="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#kt_account_profile_details"
+    aria-expanded="true"
+    aria-controls="kt_account_profile_details"
+  >
+    <div class="card-title m-0">
+      <h3 class="fw-bolder m-0">Profile Details</h3>
+    </div>
+  </div> -->
+  <div id="kt_account_profile_details" class="collapse show">
+    <form [formGroup]="addNewForm" novalidate="" class="form">
+      <div class="card-body border-top p-9">
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">نوع المادة</span>
+          </label>
+          <div class="col-lg-8">
+            <select
+              class="form-select form-select-solid"
+              data-kt-select2="true"
+              data-placeholder="Select option"
+              data-allow-clear="true"
+              formControlName="contentType"
+            >
+              @for(item of contentTypes; track item; let idx = $index){
+              <option value="{{ item.typeId }}">{{ item.contentType1 }}</option>
+              }
+            </select>
+          </div>
+          <!-- <div class="col-lg-8">
+            <div
+              class="image-input image-input-outline"
+              data-kt-image-input="true"
+              [style.background-image]="'url(./assets/media/avatars/blank.png'"
+            >
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                [style.background-image]="
+                  'url(./assets/media/avatars/300-1.jpg'
+                "
+              ></div>
+            </div>
+          </div> -->
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">التصنيف</span>
+          </label>
+          <div class="col-lg-8">
+            <select class="form-select form-select-solid" name="sectionId">
+              <option value="1">اخبار</option>
+              <option value="2">موسمي</option>
+            </select>
+          </div>
+          <!-- <div class="col-lg-8">
+            <div
+              class="image-input image-input-outline"
+              data-kt-image-input="true"
+              [style.background-image]="'url(./assets/media/avatars/blank.png'"
+            >
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                [style.background-image]="
+                  'url(./assets/media/avatars/300-1.jpg'
+                "
+              ></div>
+            </div>
+          </div> -->
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">القسم</span>
+          </label>
+          <div class="col-lg-8">
+            <select class="form-select form-select-solid" name="catId">
+              <option value="1">اخبار</option>
+              <option value="2">موسمي</option>
+            </select>
+          </div>
+          <!-- <div class="col-lg-8">
+            <div
+              class="image-input image-input-outline"
+              data-kt-image-input="true"
+              [style.background-image]="'url(./assets/media/avatars/blank.png'"
+            >
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                [style.background-image]="
+                  'url(./assets/media/avatars/300-1.jpg'
+                "
+              ></div>
+            </div>
+          </div> -->
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">كتب</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              name="contactPhone"
+            />
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">العنوان</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              name="contactPhone"
+            />
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">عنوان تمهيدي</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <input
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              name="contactPhone"
+            />
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">مقدمة</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <textarea
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              name="contactPhone"
+            ></textarea>
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label required fw-bold fs-6"
+            >جسم الخبر</label
+          >
+          <!-- TODO: Implement tiny mce -->
+          <div class="col-lg-8 fv-row">
+            <ckeditor
+              [data]="editorData"
+              (change)="onChange($event)"
+            ></ckeditor>
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label required fw-bold fs-6"
+            >تاجز</label
+          >
+          <div class="col-lg-8 fv-row"></div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            >Communication</label
+          >
+          <div class="col-lg-8 fv-row">
+            <div class="d-flex align-items-center mt-3">
+              <label class="form-check form-check-inline form-check-solid me-5"
+                ><input
+                  class="form-check-input"
+                  name="communication[]"
+                  type="checkbox"
+                /><span class="fw-bold ps-2 fs-6">Email</span></label
+              ><label class="form-check form-check-inline form-check-solid"
+                ><input
+                  class="form-check-input"
+                  name="communication[]"
+                  type="checkbox"
+                /><span class="fw-bold ps-2 fs-6">Phone</span></label
+              >
+            </div>
+          </div>
+        </div>
+        <div class="row mb-0">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            >Allow Marketing</label
+          >
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer py-6 px-9">
+        @if (isLoading$ | async) {
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isLoading$ | async"
+        >
+          <span clas="indicator-progress" [style.display]="'block'">
+            انتظر قليلا...{{ " " }}
+            <span
+              class="spinner-border spinner-border-sm align-middle ms-2"
+            ></span>
+          </span>
+        </button>
+        }@else {
+        <div class="d-flex w-25 me-auto mb-3">
+          <select
+            class="form-select form-select-solid px-8 rounded-start-0 form-select-lg"
+            name="newsAction"
+          >
+            <option value="1">نشر مؤرخ</option>
+            <option value="2">حفظ وتمرير</option>
+            <option value="3">حفظ</option>
+            <option value="4">حفظ ونشر</option>
+          </select>
+          <button
+            type="button"
+            class="btn btn-primary p-2 rounded-end-0"
+            type="submit"
+            [disabled]="isLoading$ | async"
+          >
+            <app-keenicon name="left" class="fs-1 text-white"></app-keenicon>
+          </button>
+        </div>
+        <p class="text-muted text-right me-auto w-25">
+          يمكنك اختيار طريقة الحفظ, ثم الضغط علي السهم للتأكيد.
+        </p>
+        }
+      </div>
+    </form>
+  </div>
+</div>
