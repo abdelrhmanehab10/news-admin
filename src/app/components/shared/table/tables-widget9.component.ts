@@ -9,11 +9,10 @@ import { PublishService } from 'src/app/services/dashboard/publish/publish.servi
   templateUrl: './tables-widget9.component.html',
 })
 export class TablesWidget9Component {
-  private unsubscribe: Subscription[] = [];
-
   @Output() selectedNewsEmitter = new EventEmitter<string[]>();
   @Output() searchEmitter = new EventEmitter<string>();
   @Output() pageNumberEmitter = new EventEmitter<number>();
+  @Output() filterOptionEmitter = new EventEmitter<{}>();
 
   @Input() news: NEW[];
   @Input() publish: () => void;
@@ -22,8 +21,9 @@ export class TablesWidget9Component {
 
   @Input() isCategories: boolean = false;
   @Input() isSubCategories: boolean = false;
-  @Input() isRolesPassList: boolean = false;
-  @Input() isNewsStatusCount: boolean = false;
+  @Input() isRoles: boolean = false;
+  @Input() isStatus: boolean = false;
+  @Input() isSearch: boolean = false;
 
   hasError: boolean = false;
 
@@ -58,6 +58,11 @@ export class TablesWidget9Component {
     this.selectedNewsEmitter.emit(this.selectedNews);
   }
 
+  onFilter(e: any) {
+    this.searchQuery = e.target.value;
+    this.searchEmitter.emit(this.searchQuery);
+  }
+
   onSearch(e: any) {
     this.searchQuery = e.target.value;
     this.searchEmitter.emit(this.searchQuery);
@@ -74,7 +79,7 @@ export class TablesWidget9Component {
     this.pageNumberEmitter.emit(this.pageNumber);
   }
 
-  ngOnDestroy() {
-    this.unsubscribe.forEach((sb) => sb.unsubscribe());
+  recevieFilterOption(data: {}) {
+    this.filterOptionEmitter.emit(data);
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { NEW } from 'src/app/models/new.model';
@@ -10,7 +10,7 @@ import { PublishService } from 'src/app/services/dashboard/publish/publish.servi
   templateUrl: './publish.component.html',
   styleUrl: './publish.component.scss',
 })
-export class PublishComponent implements OnInit {
+export class PublishComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
   selectedNews: string[] = [];
@@ -18,7 +18,7 @@ export class PublishComponent implements OnInit {
   newsToPublish: NEW[];
   rolesPassList: { id: string; name: string }[];
   newsCategories: { categoryID: string; name: string }[];
-  
+
   hasError: boolean;
 
   constructor(

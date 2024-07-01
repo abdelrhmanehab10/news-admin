@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { NEW } from 'src/app/models/new.model';
+import { FilterOption, NEW } from 'src/app/models/new.model';
 import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-status.service';
 
 @Component({
@@ -8,17 +8,19 @@ import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-s
   templateUrl: './news-status.component.html',
   styleUrl: './news-status.component.scss',
 })
-export class NewsStatusComponent {
+export class NewsStatusComponent implements OnDestroy {
   private unsubscribe: Subscription[] = [];
 
   news: NEW[] = [];
   searchQuery: string = '';
   selectedNews: string[] = [];
   pageNumber: number = 1;
-  status: string = '';
-  mainType: string = '';
-  subType: string = '';
-
+  filterOption: FilterOption = {
+    category: '',
+    status: '',
+    role: '',
+    subCategory: '',
+  };
   hasError: boolean = false;
 
   constructor(private newsStatusService: NewsStatusService) {}
@@ -29,9 +31,9 @@ export class NewsStatusComponent {
       .getNews(
         this.pageNumber,
         this.searchQuery,
-        this.status,
-        this.mainType,
-        this.subType
+        this.filterOption.status,
+        this.filterOption.category,
+        this.filterOption.subCategory
       )
       .subscribe({
         next: (data: { news: NEW[] }[]) => {
@@ -57,5 +59,14 @@ export class NewsStatusComponent {
 
   recievePageNumber(data: number) {
     this.pageNumber = data;
+  }
+
+  recieveFilterOption(data: FilterOption) {
+    console.log(data);
+    this.filterOption = data;
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 }

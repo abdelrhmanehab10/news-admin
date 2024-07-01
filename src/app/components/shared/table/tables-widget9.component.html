@@ -1,7 +1,11 @@
 <!-- begin::Header -->
 
 <div class="card-header border-0 pt-5">
-  <div class="d-flex flex-nowrap align-items-center gap-5 w-100">
+  <div
+    class="d-flex flex-nowrap align-items-center gap-5 w-100"
+    [ngClass]="!isSearch ? 'justify-content-end' : ''"
+  >
+    @if(isSearch){
     <form class="w-100 position-relative" autoComplete="off">
       <app-keenicon
         name="magnifier"
@@ -14,6 +18,7 @@
         placeholder="ابحث بأستخدام اسم الخبر..."
       />
     </form>
+    }
     <div class="card-toolbar">
       <!-- begin::Menu -->
       <button
@@ -27,9 +32,10 @@
       </button>
       <app-dropdown-menu1
         [isCategories]="isCategories"
-        [isRolesPassList]="isRolesPassList"
+        [isRoles]="isRoles"
         [isSubCategories]="isSubCategories"
-        [isNewsStatusCount]="isNewsStatusCount"
+        [isStatus]="isStatus"
+        (filterOptionsEmitter)="(recevieFilterOption)"
       ></app-dropdown-menu1>
       <!-- end::Menu -->
     </div>
