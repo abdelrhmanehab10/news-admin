@@ -6,6 +6,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AddNewCardComponent } from './dashboard/add-new-card/add-new-card.component';
 import { CKEditorModule } from 'ckeditor4-angular';
+import { ModalComponent } from './shared/modal/modal.component';
+import { AddImageComponent } from './dashboard/modals/add-image/add-image.component';
+import { Card4Component } from '../_metronic/partials/content/cards/card4/card4.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +16,9 @@ import { CKEditorModule } from 'ckeditor4-angular';
     KeeniconComponent,
     DropdownMenu1Component,
     AddNewCardComponent,
+    ModalComponent,
+    AddImageComponent,
+    Card4Component,
   ],
   imports: [FormsModule, ReactiveFormsModule, CommonModule, CKEditorModule],
   exports: [
@@ -20,6 +26,9 @@ import { CKEditorModule } from 'ckeditor4-angular';
     KeeniconComponent,
     DropdownMenu1Component,
     AddNewCardComponent,
+    ModalComponent,
+    AddImageComponent,
+    Card4Component,
   ],
 })
 export class ComponentsModule {}

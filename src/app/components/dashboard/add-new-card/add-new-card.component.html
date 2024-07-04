@@ -15,12 +15,12 @@
     <form [formGroup]="addNewForm" novalidate="" class="form">
       <div class="card-body border-top p-9">
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">نوع المادة</span>
+          <label class="col-lg-2 col-form-label fw-bold fs-6">
+            نوع المادة
           </label>
-          <div class="col-lg-8">
+          <div class="col-lg-4">
             <select
-              class="form-select form-select-solid"
+              class="form-select w-fit form-select-solid"
               data-kt-select2="true"
               data-placeholder="Select option"
               data-allow-clear="true"
@@ -46,40 +46,35 @@
             </div>
           </div> -->
         </div>
+        <div class="separator my-3 opacity-75"></div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">التصنيف</span>
-          </label>
-          <div class="col-lg-8">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">التصنيف</label>
+          <div class="col-lg-4">
             <select class="form-select form-select-solid" name="sectionId">
               <option value="1">اخبار</option>
               <option value="2">موسمي</option>
             </select>
           </div>
-          <!-- <div class="col-lg-8">
-            <div
-              class="image-input image-input-outline"
-              data-kt-image-input="true"
-              [style.background-image]="'url(./assets/media/avatars/blank.png'"
-            >
-              <div
-                class="image-input-wrapper w-125px h-125px"
-                [style.background-image]="
-                  'url(./assets/media/avatars/300-1.jpg'
-                "
-              ></div>
-            </div>
-          </div> -->
-        </div>
-        <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">القسم</span>
-          </label>
-          <div class="col-lg-8">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">القسم</label>
+          <div class="col-lg-4">
             <select class="form-select form-select-solid" name="catId">
               <option value="1">اخبار</option>
               <option value="2">موسمي</option>
             </select>
+            <!-- <div class="col-lg-8">
+              <div
+                class="image-input image-input-outline"
+                data-kt-image-input="true"
+                [style.background-image]="'url(./assets/media/avatars/blank.png'"
+              >
+                <div
+                  class="image-input-wrapper w-125px h-125px"
+                  [style.background-image]="
+                    'url(./assets/media/avatars/300-1.jpg'
+                  "
+                ></div>
+              </div>
+            </div> -->
           </div>
           <!-- <div class="col-lg-8">
             <div
@@ -97,10 +92,10 @@
           </div> -->
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">
             <span class="required">كتب</span>
           </label>
-          <div class="col-lg-8 fv-row">
+          <div class="col-lg-10 fv-row">
             <input
               type="text"
               class="form-control form-control-lg form-control-solid"
@@ -109,10 +104,10 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">
             <span class="required">العنوان</span>
           </label>
-          <div class="col-lg-8 fv-row">
+          <div class="col-lg-10 fv-row">
             <input
               type="text"
               class="form-control form-control-lg form-control-solid"
@@ -121,10 +116,10 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
-            <span class="required">عنوان تمهيدي</span>
+          <label class="col-lg-2 col-form-label fw-bold fs-6">
+            عنوان تمهيدي
           </label>
-          <div class="col-lg-8 fv-row">
+          <div class="col-lg-10 fv-row">
             <input
               type="text"
               class="form-control form-control-lg form-control-solid"
@@ -133,10 +128,10 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6">
+          <label class="col-lg-2 col-form-label fw-bold fs-6">
             <span class="required">مقدمة</span>
           </label>
-          <div class="col-lg-8 fv-row">
+          <div class="col-lg-10 fv-row">
             <textarea
               type="text"
               class="form-control form-control-lg form-control-solid"
@@ -145,48 +140,149 @@
           </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6"
-            >جسم الخبر</label
-          >
+          <label class="col-lg-2 col-form-label required fw-bold fs-6">
+            جسم الخبر
+          </label>
           <!-- TODO: Implement tiny mce -->
-          <div class="col-lg-8 fv-row">
+          <div class="col-lg-10 fv-row">
             <ckeditor
               [data]="editorData"
               (change)="onChange($event)"
             ></ckeditor>
           </div>
         </div>
+        <div class="separator my-3 opacity-75"></div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label required fw-bold fs-6"
+          <label class="col-lg-2 col-form-label required fw-bold fs-6"
             >تاجز</label
           >
-          <div class="col-lg-8 fv-row"></div>
+          <div class="col-lg-10 fv-row">
+            <input
+              class="form-control"
+              value="tag1, tag2, tag3"
+              id="kt_tagify_1"
+            />
+          </div>
+        </div>
+        <div class="separator my-3 opacity-75"></div>
+
+        <div class="row mb-6">
+          <label class="col-lg-2 col-form-label required fw-bold fs-6">
+            الصورة الأولي
+          </label>
+          <div class="col-lg-10 fv-row">
+            <app-add-image></app-add-image>
+          </div>
         </div>
         <div class="row mb-6">
-          <label class="col-lg-4 col-form-label fw-bold fs-6"
-            >Communication</label
-          >
+          <label class="col-lg-4 col-form-label fw-bold fs-6 mt-2">
+            <span class="required">تعليق الصورة الأولي</span>
+          </label>
           <div class="col-lg-8 fv-row">
-            <div class="d-flex align-items-center mt-3">
-              <label class="form-check form-check-inline form-check-solid me-5"
-                ><input
-                  class="form-check-input"
-                  name="communication[]"
-                  type="checkbox"
-                /><span class="fw-bold ps-2 fs-6">Email</span></label
-              ><label class="form-check form-check-inline form-check-solid"
-                ><input
-                  class="form-check-input"
-                  name="communication[]"
-                  type="checkbox"
-                /><span class="fw-bold ps-2 fs-6">Phone</span></label
+            <input
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              name="PictureCaption1"
+            />
+          </div>
+        </div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">المرفقات</span>
+          </label>
+          <div class="col-lg-8 fv-row mb-6">
+            <!--begin::Image input placeholder-->
+
+            <!--end::Image input placeholder-->
+
+            <!--begin::Image input-->
+            <div
+              class="image-input image-input-outline"
+              data-kt-image-input="true"
+              style="
+                background-image: url(../../../../assets/media/svg/avatars/blank.svg);
+              "
+            >
+              <!--begin::Image preview wrapper-->
+              <div
+                class="image-input-wrapper w-125px h-125px"
+                [ngClass]="filePreview ? '' : 'image-input-placeholder'"
+                [ngStyle]="{
+                  'background-image': filePreview && 'url(' + filePreview + ')'
+                }"
+              ></div>
+              <!--end::Image preview wrapper-->
+
+              <!--begin::Edit button-->
+              <label
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="change"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Change avatar"
               >
+                <i class="ki-duotone ki-pencil fs-6"
+                  ><span class="path1"></span><span class="path2"></span
+                ></i>
+
+                <!--begin::Inputs-->
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  name="avatar"
+                  accept=".png, .jpg, .jpeg"
+                />
+                <input type="hidden" name="avatar_remove" />
+                <!--end::Inputs-->
+              </label>
+              <!--end::Edit button-->
+
+              <!--begin::Cancel button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="cancel"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Cancel avatar"
+              >
+                <i class="ki-outline ki-cross fs-3"></i>
+              </span>
+              <!--end::Cancel button-->
+
+              <!--begin::Remove button-->
+              <span
+                class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
+                data-kt-image-input-action="remove"
+                data-bs-toggle="tooltip"
+                data-bs-dismiss="click"
+                title="Remove avatar"
+                [ngClass]="selectedFile ? '' : 'd-none'"
+                (click)="removeSelectedImg()"
+              >
+                <i class="ki-outline ki-cross fs-3"></i>
+              </span>
+              <!--end::Remove button-->
+            </div>
+            <!--end::Image input-->
+          </div>
+          <div class="row mb-6">
+            <label class="col-lg-4 col-form-label required fw-bold fs-6"
+              >البوم المحتوي</label
+            >
+            <div class="col-lg-8">
+              <select class="form-select form-select-solid" name="catId">
+                @for(item of albums; track item;){
+                <option value="{{ item.galleryID }}">
+                  {{ item.galleryTitle }}
+                </option>
+                }
+              </select>
             </div>
           </div>
         </div>
-        <div class="row mb-0">
+        <div class="row mb-6">
           <label class="col-lg-4 col-form-label fw-bold fs-6"
-            >Allow Marketing</label
+            >محتوي فيديو</label
           >
           <div class="col-lg-8 d-flex align-items-center">
             <div class="form-check form-check-solid form-switch fv-row">
@@ -196,6 +292,128 @@
                 id="allowmarketing"
               /><label class="form-check-label"></label>
             </div>
+          </div>
+        </div>
+        <div class="separator my-3 opacity-75"></div>
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            <span class="required">ملاحظات</span>
+          </label>
+          <div class="col-lg-8 fv-row">
+            <textarea
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              name="contactPhone"
+            ></textarea>
+          </div>
+        </div>
+        <div class="separator my-3 opacity-75"></div>
+
+        <div class="row mb-6">
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            >شريط الاخبار
+          </label>
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            >الأولي - رئيسي
+          </label>
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            >الأولي - رئيسي2
+          </label>
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+          <label class="col-lg-4 col-form-label fw-bold fs-6"
+            >تثبيت الخبر
+          </label>
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">صور </label>
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            اخبار خاصة
+          </label>
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            رئيسية الباب
+          </label>
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+          <label class="col-lg-4 col-form-label fw-bold fs-6">
+            رئيسية القسم
+          </label>
+          <div class="col-lg-8 d-flex align-items-center">
+            <div class="form-check form-check-solid form-switch fv-row">
+              <input
+                class="form-check-input w-45px h-30px"
+                type="checkbox"
+                id="allowmarketing"
+              /><label class="form-check-label"></label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-6">
+          <!--begin::Label-->
+          <label class="col-lg-4 col-form-label fw-bold fs-6">نشر في</label>
+          <div class="col-lg-8 fv-row">
+            <input
+              class="form-control form-control-solid"
+              placeholder="Pick date rage"
+              id="kt_daterangepicker_2"
+            />
           </div>
         </div>
       </div>
