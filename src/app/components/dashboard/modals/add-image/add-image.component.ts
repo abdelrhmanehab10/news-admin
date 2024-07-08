@@ -127,15 +127,24 @@ export class AddImageComponent implements OnInit {
       .getGalleryImages({
         pageNumber: this.f.pageNumber.value,
         GalleryId: this.f.GalleryId.value,
-        GalleryTypeId: this.f.GetGalleryTypeId.value,
+        GalleryTypeId: this.f.GalleryTypeId.value,
         searchText: this.f.searchText.value,
       })
       .pipe(distinctUntilChanged())
       .subscribe({
-        next: (data: typeof this.images) => {
-          console.log(data);
+        next: (data: {
+          pageNumbers: number;
+          count: number;
+          images: {
+            id: string;
+            picName: string;
+            picPath: string;
+            picCaption: string;
+            addedDate: string;
+          }[];
+        }) => {
           if (data) {
-            this.images = data;
+            this.images = data.images;
             this.cdr.detectChanges();
           } else {
             this.images = [];

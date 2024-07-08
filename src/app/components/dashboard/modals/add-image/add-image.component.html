@@ -53,13 +53,15 @@
     </div>
   </div>
   <div class="row g-6 g-xl-9 mb-6 mb-xl-9">
+    @for(item of images; track item){
     <div class="col-12 col-sm-12 col-xl">
       <app-card4
-        icon="./assets/media/svg/files/folder-document.svg"
-        title="Finance"
-        description="7 files"
+        icon="{{ item.picPath }}"
+        title="{{ item.picName }}"
+        description="{{ item.picCaption }}"
       ></app-card4>
     </div>
+    }
   </div>
 </app-modal>
 <button
