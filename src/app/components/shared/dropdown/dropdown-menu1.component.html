@@ -76,7 +76,47 @@
       </select>
     </div>
   </div>
+  }@if(isOrderCategories){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الباب:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        (change)="
+          isSubCategories && onSelectedNewsOrderCategoriesChange($event)
+        "
+        formControlName="orderCategory"
+      >
+        <option></option>
+        @for(item of newsOrderCategories; track item; let idx = $index){
+        <option value="{{ item.id }}">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+  </div>
   }
+  <!-- @if(isOrderSubCategories && newsOrderSubCategories.length){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الباب الفرعي:</label>
+
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        formControlName="subCategory"
+      >
+        @for(item of newsSubCategories; track item; let idx = $index){
+        <option value="{{ item.sectionID }}">{{ item.secTitle }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  } -->
   <!-- <div class="mb-10">
     <label class="form-label fw-bold">Member Type:</label>
 

@@ -28,7 +28,7 @@ export class EditorNewsStateComponent implements OnDestroy {
   getMyNews() {
     this.hasError = false;
     const getMyNewsSubscr = this.editorNewsStatusService
-      .getMyNews(this.pageNumber, this.filterOption.status)
+      .getMyNews(this.pageNumber, this.filterOption.status as string)
       .subscribe({
         next: (data: { news: NEW[] }[]) => {
           if (data) {

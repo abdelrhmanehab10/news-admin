@@ -5,6 +5,7 @@ import { NewsStatusComponent } from './news-status/news-status.component';
 import { EditorNewsStateComponent } from './editor-news-state/editor-news-state.component';
 import { AddNewComponent } from './add-new/add-new.component';
 import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.component';
+import { OrderNewsComponent } from './order-news/order-news.component';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,10 @@ export const routes: Routes = [
       {
         path: 'add-new-with-id',
         component: AddNewWithIdComponent,
+      },
+      {
+        path: 'order-news',
+        component: OrderNewsComponent,
       },
     ],
   },

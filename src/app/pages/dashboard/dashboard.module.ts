@@ -8,6 +8,8 @@ import { NewsStatusComponent } from './news-status/news-status.component';
 import { EditorNewsStateComponent } from './editor-news-state/editor-news-state.component';
 import { AddNewComponent } from './add-new/add-new.component';
 import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.component';
+import { OrderNewsComponent } from './order-news/order-news.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -16,11 +18,13 @@ import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.compone
     EditorNewsStateComponent,
     AddNewComponent,
     AddNewWithIdComponent,
+    OrderNewsComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     ComponentsModule,
+    DragDropModule,
     // WidgetsModule, ModalsModule
   ],
 })

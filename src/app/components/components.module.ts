@@ -9,6 +9,8 @@ import { CKEditorModule } from 'ckeditor4-angular';
 import { ModalComponent } from './shared/modal/modal.component';
 import { AddImageComponent } from './dashboard/modals/add-image/add-image.component';
 import { Card4Component } from '../_metronic/partials/content/cards/card4/card4.component';
+import { ListComponent } from './shared/list/list.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -19,8 +21,15 @@ import { Card4Component } from '../_metronic/partials/content/cards/card4/card4.
     ModalComponent,
     AddImageComponent,
     Card4Component,
+    ListComponent,
   ],
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, CKEditorModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    CommonModule,
+    CKEditorModule,
+    DragDropModule,
+  ],
   exports: [
     TablesWidget9Component,
     KeeniconComponent,
@@ -29,6 +38,7 @@ import { Card4Component } from '../_metronic/partials/content/cards/card4/card4.
     ModalComponent,
     AddImageComponent,
     Card4Component,
+    ListComponent,
   ],
 })
 export class ComponentsModule {}

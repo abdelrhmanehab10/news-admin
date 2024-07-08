@@ -25,7 +25,37 @@ export class DashboardHTTPService {
     });
   }
 
+  getNewsOrderCategories(token: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<{
+      status: number;
+      data: { id: string; name: string }[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/OrderNews/GetNewsOrderSections`, {
+      headers: httpHeaders,
+    });
+  }
+
   getNewsSubCategories(token: string, id: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<{
+      status: number;
+      data: { sectionID: string; secTitle: string }[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/NewsCategory/GetNewsSubCategories?categoryId=${id}`, {
+      headers: httpHeaders,
+    });
+  }
+
+  getNewsOrderSubCategories(token: string, id: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });

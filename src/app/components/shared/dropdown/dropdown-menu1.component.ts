@@ -22,12 +22,16 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
   defaultFilterValues: {
     role: string;
     category: string;
+    orderCategory: string;
     subCategory: string;
+    orderSubCategory: string;
     status: string;
   } = {
     role: '',
     category: '',
+    orderCategory: '',
     subCategory: '',
+    orderSubCategory: '',
     status: '',
   };
 
@@ -44,12 +48,16 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
   //Filtration Methods
   @Input() isRoles: boolean = false;
   @Input() isCategories: boolean = false;
+  @Input() isOrderCategories: boolean = false;
   @Input() isSubCategories: boolean = false;
+  @Input() isOrderSubCategories: boolean = false;
   @Input() isStatus: boolean = false;
 
   rolesPassList: { id: string; name: string }[];
   newsCategories: { categoryID: string; name: string }[] = [];
+  newsOrderCategories: { id: string; name: string }[] = [];
   newsSubCategories: { sectionID: string; secTitle: string }[] = [];
+  newsOrderSubCategories: { sectionID: string; secTitle: string }[] = [];
   newsStatus: { id: string; name: string }[] = [];
 
   isError: boolean = false;
@@ -69,6 +77,10 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
     if (this.isCategories) {
       this.getNewsCategories();
     }
+
+    if (this.isOrderCategories) {
+      this.getNewsOrderCategories();
+    }
     this.initForm();
   }
 
@@ -80,7 +92,9 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
     this.filterForm = this.fb.group({
       role: [this.defaultFilterValues.role],
       category: [this.defaultFilterValues.category],
+      orderCategory: [this.defaultFilterValues.orderCategory],
       subCategory: [this.defaultFilterValues.subCategory],
+      orderSubCategory: [this.defaultFilterValues.orderSubCategory],
       status: [this.defaultFilterValues.status],
     });
   }
@@ -119,6 +133,42 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
     this.unsubscribe.push(getNewsCategoriesSubscr);
   }
 
+  getNewsOrderCategories(): void {
+    this.isError = false;
+    const getNewsOrderCategoriesSubscr = this.dashboardService
+      .getNewsOrderCategories()
+      .subscribe({
+        next: (data: typeof this.newsOrderCategories) => {
+          this.newsOrderCategories = data;
+          this.cdr.detectChanges();
+        },
+        error: (error: any) => {
+          console.log('NEWS_ORDER_CATEGORIES', error);
+          this.isError = true;
+        },
+      });
+    this.unsubscribe.push(getNewsOrderCategoriesSubscr);
+  }
+
+  onSelectedNewsOrderCategoriesChange(e: any) {
+    this.isError = false;
+
+    const getNewsSubCategoriesSubscr = this.dashboardService
+      .getNewsOrderSubCategories(e.target.value)
+      .pipe(distinctUntilChanged())
+      .subscribe({
+        next: (data: { sectionID: string; secTitle: string }[]) => {
+          this.newsSubCategories = data;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.log('NEWS_SUB_CATEGORIES', err);
+          this.isError = true;
+        },
+      });
+    this.unsubscribe.push(getNewsSubCategoriesSubscr);
+  }
+
   onSelectedNewsCategoriesChange(e: any) {
     this.isError = false;
 
@@ -144,6 +194,8 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
       status: this.f.status.value,
       role: this.f.role.value,
       subCategory: this.f.subCategory.value,
+      orderCategory: this.f.orderCategory.value,
+      orderSubCategory: this.f.orderSubCategory.value,
     });
   }
 

@@ -31,9 +31,9 @@ export class NewsStatusComponent implements OnDestroy {
       .getNews(
         this.pageNumber,
         this.searchQuery,
-        this.filterOption.status,
-        this.filterOption.category,
-        this.filterOption.subCategory
+        this.filterOption.status as string,
+        this.filterOption.category as string,
+        this.filterOption.subCategory as string
       )
       .subscribe({
         next: (data: { news: NEW[] }[]) => {
@@ -49,20 +49,7 @@ export class NewsStatusComponent implements OnDestroy {
     this.unsubscribe.push(getNewsSubscr);
   }
 
-  receiveSelectedNews(data: string[]) {
-    this.selectedNews = data;
-  }
-
-  recieveSearchQuery(data: string) {
-    this.searchQuery = data;
-  }
-
-  recievePageNumber(data: number) {
-    this.pageNumber = data;
-  }
-
   recieveFilterOption(data: FilterOption) {
-    console.log(data);
     this.filterOption = data;
   }
 

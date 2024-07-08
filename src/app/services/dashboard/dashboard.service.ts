@@ -24,6 +24,7 @@ export class DashboardService {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.isLoading$ = this.isLoadingSubject.asObservable();
   }
+
   getNewsCategories() {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
@@ -43,6 +44,27 @@ export class DashboardService {
     );
   }
 
+  getNewsOrderCategories() {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.dashboardHTTPService
+      .getNewsOrderCategories(auth.authToken)
+      .pipe(
+        map((data) => {
+          return data.data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
   getNewsSubCategories(id: string) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
@@ -52,6 +74,29 @@ export class DashboardService {
     this.isLoadingSubject.next(true);
     return this.dashboardHTTPService
       .getNewsSubCategories(auth.authToken, id)
+      .pipe(
+        map((data) => {
+          console.log(data);
+
+          return data.data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  getNewsOrderSubCategories(id: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.dashboardHTTPService
+      .getNewsOrderSubCategories(auth.authToken, id)
       .pipe(
         map((data) => {
           console.log(data);

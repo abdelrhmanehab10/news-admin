@@ -12,7 +12,7 @@ import { BaseTablesWidget2Component } from './base-tables/base-tables-widget2/ba
 import { BaseTablesWidget6Component } from './base-tables/base-tables-widget6/base-tables-widget6.component';
 // Lists
 import { ListsWidget1Component } from './lists/lists-widget1/lists-widget1.component';
-import { ListsWidget3Component } from './lists/lists-widget3/lists-widget3.component';
+// import { ListsWidget3Component } from './lists/lists-widget3/lists-widget3.component';
 import { ListsWidget4Component } from './lists/lists-widget4/lists-widget4.component';
 import { ListsWidget8Component } from './lists/lists-widget8/lists-widget8.component';
 // Mixed
@@ -97,7 +97,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
     BaseTablesWidget6Component,
     // Lists
     ListsWidget1Component,
-    ListsWidget3Component,
+    // ListsWidget3Component,
     ListsWidget4Component,
     ListsWidget8Component,
     // Mixed
@@ -185,7 +185,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
     BaseTablesWidget6Component,
     // Lists
     ListsWidget1Component,
-    ListsWidget3Component,
+    // ListsWidget3Component,
     ListsWidget4Component,
     ListsWidget8Component,
     // Mixed
