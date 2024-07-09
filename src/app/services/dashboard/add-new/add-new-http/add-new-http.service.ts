@@ -104,4 +104,34 @@ export class AddNewHTTPService {
       }
     );
   }
+
+  getDrafts(token: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<{
+      status: number;
+      data: NEW[] | null;
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/Draft/GetDrafts`, {
+      headers: httpHeaders,
+    });
+  }
+
+  getDraftById(token: string, id: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<{
+      status: number;
+      data: NEW[] | null;
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/Draft/GetDrafts?draftId=${id}`, {
+      headers: httpHeaders,
+    });
+  }
 }

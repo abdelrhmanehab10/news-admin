@@ -10,6 +10,7 @@ import { AddNewComponent } from './add-new/add-new.component';
 import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.component';
 import { OrderNewsComponent } from './order-news/order-news.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { AllVotesComponent } from './all-votes/all-votes.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     AddNewComponent,
     AddNewWithIdComponent,
     OrderNewsComponent,
+    AllVotesComponent,
   ],
   imports: [
     CommonModule,

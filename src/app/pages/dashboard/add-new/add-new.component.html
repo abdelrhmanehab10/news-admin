@@ -1,1 +1,16 @@
-<app-add-new-card></app-add-new-card>
+<app-add-new-card>
+  @if(drafts.length){
+  <div class="w-100">
+    <app-table [headerOptions]="headerOptions" [items]="drafts">
+      <h3 class="card-title fw-bolder text-gray-900">
+        يوجد درافت او اكثر اثناء العمل على اضافة خبر
+      </h3>
+      <button
+        class="btn btn-sm btn-primary d-flex align-items-center gap-3 me-2 py-0 px-3"
+      >
+        حذف الكل
+      </button>
+    </app-table>
+  </div>
+  }
+</app-add-new-card>

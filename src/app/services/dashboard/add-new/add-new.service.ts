@@ -132,4 +132,42 @@ export class AddNewService {
       finalize(() => this.isLoadingSubject.next(false))
     );
   }
+
+  getDrafts() {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.AddNewHTTPService.getDrafts(auth.authToken).pipe(
+      map((data) => {
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  getDraftById(id: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.AddNewHTTPService.getDraftById(auth.authToken, id).pipe(
+      map((data) => {
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
 }

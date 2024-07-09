@@ -1,8 +1,6 @@
-import {
-  Component,
-  // ViewChild
-} from '@angular/core';
-// import { ModalConfig, ModalComponent } from '../../_metronic/partials';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,14 +8,10 @@ import {
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
-  // modalConfig: ModalConfig = {
-  //   modalTitle: 'Modal title',
-  //   dismissButtonLabel: 'Submit',
-  //   closeButtonLabel: 'Cancel'
-  // };
-  // @ViewChild('modal') private modalComponent: ModalComponent;
-  // constructor() {}
-  // async openModal() {
-  //   return await this.modalComponent.open();
-  // }
+  private unsubscribe: Subscription[] = [];
+  hasError: boolean = false;
+  constructor(
+    private dashboardService: DashboardService,
+    private cdr: ChangeDetectorRef
+  ) {}
 }

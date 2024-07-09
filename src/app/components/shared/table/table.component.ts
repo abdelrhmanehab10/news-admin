@@ -1,35 +1,55 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { NEW } from 'src/app/models/new.model';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 
 @Component({
-  selector: 'app-tables-widget9',
-  templateUrl: './tables-widget9.component.html',
+  selector: 'app-table',
+  templateUrl: './table.component.html',
 })
-export class TablesWidget9Component {
+export class TableComponent {
+  hasError: boolean = false;
+
+  selectedItems: string[] = [];
+  searchQuery: string = '';
+  pageNumber: number = 1;
+
   @Output() selectedNewsEmitter = new EventEmitter<string[]>();
   @Output() searchEmitter = new EventEmitter<string>();
   @Output() pageNumberEmitter = new EventEmitter<number>();
   @Output() filterOptionEmitter = new EventEmitter<{}>();
 
-  @Input() news: NEW[];
+  @Input() items: any;
   @Input() publish: () => void;
   @Input() restore: () => void;
   @Input() deleteNew: (id: string) => void;
+  @Input() restoreDraft: (id: string) => void;
+
+  @Input() headerOptions: {
+    checkBox: boolean;
+    cols: string[];
+    actions: string[];
+  } = {
+    checkBox: true,
+    cols: ['العنوان', 'الوقت', 'التاريخ'],
+    actions: ['publish', 'restore', 'delete'],
+  };
 
   @Input() isCategories: boolean = false;
   @Input() isSubCategories: boolean = false;
   @Input() isRoles: boolean = false;
   @Input() isStatus: boolean = false;
   @Input() isSearch: boolean = false;
+  @Input() isDelete: boolean = false;
 
-  hasError: boolean = false;
+  @Input() searchPlaceholder: string = 'ابحث بأستخدام اسم الخبر...';
 
-  selectedNews: string[] = [];
-  searchQuery: string = '';
-  pageNumber: number = 1;
+  @Input() customBtns: {
+    content: string;
+    onClick: () => void;
+    bgColor: string;
+  }[] = [];
 
   convertToArabicTime(time: any) {
     let [hours, minutes] = time.split(':').map(Number);
@@ -54,8 +74,8 @@ export class TablesWidget9Component {
   }
 
   onSelect(e: any) {
-    this.selectedNews.push(e.target.id);
-    this.selectedNewsEmitter.emit(this.selectedNews);
+    this.selectedItems.push(e.target.id);
+    this.selectedNewsEmitter.emit(this.selectedItems);
   }
 
   onFilter(e: any) {

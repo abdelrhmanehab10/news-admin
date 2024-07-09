@@ -13,7 +13,7 @@ export class ListComponent {
     secTitle: string;
   }[];
 
-  colors = ['primary', 'success', 'danger', 'warning', 'info', 'dark'];
+  colors = ['primary', 'dark'];
 
   constructor() {}
 

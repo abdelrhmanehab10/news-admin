@@ -2,12 +2,12 @@
 // TinyMCE
 //
 
-
 // Base
-.tox-target{
-    display: none;
+.tox-target {
+  display: none;
 }
 
-.tox-tinymce{
-    @include border-radius($border-radius !important);
+.tox-tinymce {
+  @include border-radius($border-radius !important);
+  font-family: "Cairo", sans-serif;
 }

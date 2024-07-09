@@ -53,6 +53,7 @@ $tagify-input-padding-y-lg: $input-padding-y-lg - $tagify-tag-padding-y-lg;
     }
 
     .tagify__tag__removeBtn {
+      display: block;
       width: 0.6rem;
       height: 0.6rem;
       margin: 0 0.5rem 0 0;

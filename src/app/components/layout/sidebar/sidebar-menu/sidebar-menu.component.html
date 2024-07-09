@@ -10,50 +10,12 @@
   data-kt-scroll-offset="5px"
   data-kt-scroll-save-state="true"
 >
-  <!--begin::Menu-->
   <div
     class="menu menu-column menu-rounded menu-sub-indention fw-semibold fs-6"
     id="#kt_app_sidebar_menu"
     data-kt-menu="true"
     data-kt-menu-expand="false"
   >
-    <!-- Dashboard -->
-    <!-- <div class="menu-item">
-      <a
-        class="menu-link without-sub"
-        routerLink="/dashboard"
-        routerLinkActive="active"
-      >
-        <span class="menu-icon">
-          <app-keenicon name="element-11" class="fs-2"></app-keenicon>
-        </span>
-        <span class="menu-title" translate="MENU.DASHBOARD"></span>
-      </a>
-    </div> -->
-
-    <!-- Layout builder -->
-    <!-- <div class="menu-item">
-      <a
-        class="menu-link without-sub"
-        routerLink="/builder"
-        routerLinkActive="active"
-      >
-        <span class="menu-icon">
-          <app-keenicon name="switch" class="fs-2"></app-keenicon>
-        </span>
-        <span class="menu-title">Layout Builder</span>
-      </a>
-    </div> -->
-    <!-- Separator -->
-    <!-- <div class="menu-item">
-      <div class="menu-content pt-8 pb-2">
-        <span class="menu-section text-muted text-uppercase fs-8 ls-1"
-          >Crafted</span
-        >
-      </div>
-    </div> -->
-
-    <!-- Pages -->
     <div
       class="menu-item menu-accordion"
       data-kt-menu-trigger="click"
@@ -96,13 +58,16 @@
           </a>
         </div>
         <div class="menu-item">
-          <span class="menu-link" routerLink="/main-news">
+          <a
+            class="menu-link without-sub"
+            routerLinkActive="active"
+            routerLink="/dashboard/all-votes"
+          >
             <span class="menu-bullet">
               <span class="bullet bullet-dot"></span>
             </span>
             <span class="menu-title">استطلاع رأي</span>
-            <!-- <span class="menu-arrow"></span> -->
-          </span>
+          </a>
         </div>
         <div class="menu-item">
           <a
@@ -131,77 +96,10 @@
               <span class="bullet bullet-dot"></span>
             </span>
             <span class="menu-title">تعليقات القراء</span>
-            <!-- <span class="menu-arrow"></span> -->
           </span>
         </div>
-        <!-- <div
-            class="menu-sub menu-sub-accordion"
-            routerLinkActive="menu-active-bg"
-          >
-            <div class="menu-item">
-              <a
-                class="menu-link without-sub"
-                routerLinkActive="active"
-                routerLink="/crafted/pages/profile/overview"
-              >
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">Overview</span>
-              </a>
-            </div>
-            <div class="menu-item">
-              <a
-                class="menu-link without-sub"
-                routerLinkActive="active"
-                routerLink="/crafted/pages/profile/projects"
-              >
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">Projects</span>
-              </a>
-            </div>
-            <div class="menu-item">
-              <a
-                class="menu-link without-sub"
-                routerLinkActive="active"
-                routerLink="/crafted/pages/profile/campaigns"
-              >
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">Campaigns</span>
-              </a>
-            </div>
-            <div class="menu-item">
-              <a
-                class="menu-link without-sub"
-                routerLinkActive="active"
-                routerLink="/crafted/pages/profile/documents"
-              >
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">Documents</span>
-              </a>
-            </div>
-            <div class="menu-item">
-              <a
-                class="menu-link without-sub"
-                routerLinkActive="active"
-                routerLink="/crafted/pages/profile/connections"
-              >
-                <span class="menu-bullet">
-                  <span class="bullet bullet-dot"></span>
-                </span>
-                <span class="menu-title">Connections</span>
-              </a>
-            </div>
-          </div> -->
       </div>
     </div>
-    <!-- Accounts -->
     <div
       class="menu-item menu-accordion"
       data-kt-menu-trigger="click"
@@ -294,21 +192,8 @@
             <span class="menu-title">Tag Profiles</span>
           </a>
         </div>
-        <!-- <div class="menu-item">
-          <a
-            class="menu-link without-sub"
-            routerLinkActive="active"
-            routerLink="/crafted/account/settings"
-          >
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Settings </span>
-          </a>
-        </div> -->
       </div>
     </div>
-    <!-- Errors -->
     <div
       class="menu-item menu-accordion"
       data-kt-menu-trigger="click"
@@ -341,21 +226,8 @@
             <span class="menu-title">البومات الصور</span>
           </a>
         </div>
-        <!-- <div class="menu-item">
-          <a
-            class="menu-link without-sub"
-            routerLink="/error/500"
-            routerLinkActive="active"
-          >
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Error 500 </span>
-          </a>
-        </div> -->
       </div>
     </div>
-    <!-- Widgets -->
     <div
       class="menu-item menu-accordion"
       data-kt-menu-trigger="click"
@@ -404,29 +276,8 @@
             <span class="menu-title">ترتيب الصفحات</span>
           </a>
         </div>
-        <!-- <div class="menu-item">
-          <a
-            class="menu-link without-sub"
-            routerLinkActive="active"
-            routerLink="/crafted/widgets/statistics"
-          >
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Statistics </span>
-          </a>
-        </div> -->
       </div>
     </div>
-    <!-- Separator -->
-    <!-- <div class="menu-item">
-      <div class="menu-content pt-8 pb-2">
-        <span class="menu-section text-muted text-uppercase fs-8 ls-1"
-          >Apps</span
-        >
-      </div>
-    </div> -->
-    <!-- Chat -->
     <div
       class="menu-item menu-accordion"
       data-kt-menu-trigger="click"
@@ -459,108 +310,81 @@
             <span class="menu-title">ترتيب الكتاب</span>
           </a>
         </div>
-        <!-- <div class="menu-item">
-          <a
-            class="menu-link without-sub"
-            routerLinkActive="active"
-            routerLink="/apps/chat/drawer-chat"
+        <div
+          class="menu-item menu-accordion"
+          data-kt-menu-trigger="click"
+          routerLinkActive="here show"
+        >
+          <span class="menu-link">
+            <span class="menu-icon">
+              <app-keenicon name="code" class="fs-2"></app-keenicon>
+            </span>
+            <span class="menu-title">Ads Seo</span>
+            <span class="menu-arrow"></span>
+          </span>
+          <div
+            class="menu-sub menu-sub-accordion"
+            routerLinkActive="menu-active-bg"
           >
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
+            <div class="menu-item">
+              <a class="menu-link without-sub" routerLinkActive="active">
+                <span class="menu-bullet">
+                  <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">General Headers</span>
+              </a>
+            </div>
+            <div class="menu-item">
+              <a class="menu-link without-sub" routerLinkActive="active">
+                <span class="menu-bullet">
+                  <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Home Page Headers</span>
+              </a>
+            </div>
+            <div class="menu-item">
+              <a class="menu-link without-sub" routerLinkActive="active">
+                <span class="menu-bullet">
+                  <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Inner Pages Headers</span>
+              </a>
+            </div>
+            <div class="menu-item">
+              <a class="menu-link without-sub" routerLinkActive="active">
+                <span class="menu-bullet">
+                  <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Ads Text File Code</span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-item" routerLinkActive="here show">
+          <span class="menu-link">
+            <span class="menu-icon">
+              <app-keenicon name="printer" class="fs-2"></app-keenicon>
             </span>
-            <span class="menu-title">Drawer Chat </span>
-          </a>
-        </div> -->
+            <span class="menu-title">الأعداد المطبوعة</span>
+          </span>
+        </div>
+        <div class="menu-item" routerLinkActive="here show">
+          <span class="menu-link">
+            <span class="menu-icon">
+              <app-keenicon name="pin" class="fs-2"></app-keenicon>
+            </span>
+            <span class="menu-title">الصفحات الثابتة</span>
+          </span>
+        </div>
+        <div class="menu-item" routerLinkActive="here show">
+          <span class="menu-link">
+            <span class="menu-icon">
+              <app-keenicon name="notification-2" class="fs-2"></app-keenicon>
+            </span>
+            <span class="menu-title">ارسال اشعارات</span>
+          </span>
+        </div>
       </div>
-    </div>
-    <!-- Customers -->
-    <div
-      class="menu-item menu-accordion"
-      data-kt-menu-trigger="click"
-      routerLinkActive="here show"
-    >
-      <span class="menu-link">
-        <span class="menu-icon">
-          <app-keenicon name="code" class="fs-2"></app-keenicon>
-        </span>
-        <span class="menu-title">Ads Seo</span>
-        <span class="menu-arrow"></span>
-      </span>
-      <div
-        class="menu-sub menu-sub-accordion"
-        routerLinkActive="menu-active-bg"
-      >
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">General Headers</span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Home Page Headers</span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Inner Pages Headers</span>
-          </a>
-        </div>
-        <div class="menu-item">
-          <a class="menu-link without-sub" routerLinkActive="active">
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Ads Text File Code</span>
-          </a>
-        </div>
-        <!-- <div class="menu-item">
-          <a
-            class="menu-link without-sub"
-            routerLinkActive="active"
-            routerLink="/apps/permissions"
-          >
-            <span class="menu-bullet">
-              <span class="bullet bullet-dot"></span>
-            </span>
-            <span class="menu-title">Permissions </span>
-          </a>
-        </div> -->
-      </div>
-    </div>
-    <div class="menu-item" routerLinkActive="here show">
-      <span class="menu-link">
-        <span class="menu-icon">
-          <app-keenicon name="printer" class="fs-2"></app-keenicon>
-        </span>
-        <span class="menu-title">الأعداد المطبوعة</span>
-      </span>
-    </div>
-    <div class="menu-item" routerLinkActive="here show">
-      <span class="menu-link">
-        <span class="menu-icon">
-          <app-keenicon name="pin" class="fs-2"></app-keenicon>
-        </span>
-        <span class="menu-title">الصفحات الثابتة</span>
-      </span>
-    </div>
-    <div class="menu-item" routerLinkActive="here show">
-      <span class="menu-link">
-        <span class="menu-icon">
-          <app-keenicon name="notification-2" class="fs-2"></app-keenicon>
-        </span>
-        <span class="menu-title">ارسال اشعارات</span>
-      </span>
     </div>
   </div>
-  <!--end::Menu-->
 </div>
-<!--end::Menu wrapper-->

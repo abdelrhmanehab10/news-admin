@@ -18,18 +18,6 @@ const routes: Routes = [
         component: LoginComponent,
         data: { returnUrl: window.location.pathname },
       },
-      // {
-      //   path: 'registration',
-      //   component: RegistrationComponent,
-      // },
-      // {
-      //   path: 'forgot-password',
-      //   component: ForgotPasswordComponent,
-      // },
-      // {
-      //   path: 'logout',
-      //   component: LogoutComponent,
-      // },
       { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: '**', redirectTo: 'login', pathMatch: 'full' },
     ],

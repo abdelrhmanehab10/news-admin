@@ -16,6 +16,7 @@ import { FakeAPIService } from './_fake/fake-api.service';
 import { AuthService } from './pages/auth';
 import { ToastrModule } from 'ngx-toastr';
 import { DashboardModule } from './pages/dashboard/dashboard.module';
+import { EditorComponent } from '@tinymce/tinymce-angular';
 // #fake-end#
 
 function appInitializer(authService: AuthService) {

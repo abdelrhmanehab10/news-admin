@@ -10,13 +10,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { TempusDominus } from '@eonasdan/tempus-dominus';
 import Tagify from '@yaireo/tagify';
 import { CKEditor4 } from 'ckeditor4-angular';
-import { Observable, Subscription } from 'rxjs';
+import { distinctUntilChanged, Observable, Subscription } from 'rxjs';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 import $ from 'jquery';
 import moment from 'moment';
 import 'daterangepicker';
-import { ModalConfig } from 'src/app/models/modal';
-import { ModalComponent } from '../../shared/modal/modal.component';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
+import { EditorComponent } from '@tinymce/tinymce-angular';
+
 @Component({
   selector: 'app-add-new-card',
   templateUrl: './add-new-card.component.html',
@@ -25,18 +26,41 @@ import { ModalComponent } from '../../shared/modal/modal.component';
 export class AddNewCardComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
-  defaultNew: { contentType: string; image1Id: string } = {
+  defaultNew: {
+    contentType: string;
+    image1Id: string;
+    byLine: string;
+    Title: string;
+    SubTitle: string;
+    Story: string;
+    PictureCaption1: string;
+    Notes: string;
+  } = {
     contentType: '1',
     image1Id: '',
+    byLine: '',
+    Title: '',
+    SubTitle: '',
+    Story: '',
+    PictureCaption1: '',
+    Notes: '',
   };
-
+  init: EditorComponent['init'] = {
+    plugins: 'lists link image table code help wordcount',
+    directionality: 'rtl',
+    language: 'ar',
+  };
   addNewForm: FormGroup;
 
   isLoading$: Observable<boolean>;
 
   contentTypes: { typeId: string; contentType1: string }[] = [];
+  newsCategories: { categoryID: string; name: string; hide: boolean }[] = [];
+  newsSubCategories: { sectionID: string; secTitle: string }[] = [];
   albums: { galleryID: string; galleryTitle: string }[] = [];
-  editorData = '<p>Hello, world!</p>';
+  selectedAlbums: typeof this.albums = [];
+
+  editorData = '<p class="text-right">مرحبا بك</p>';
 
   hasError: boolean = false;
   selectedFile: File | null = null;
@@ -46,6 +70,7 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
 
   constructor(
     private addNewService: AddNewService,
+    private dashboardService: DashboardService,
     private fb: FormBuilder,
     private cdr: ChangeDetectorRef
   ) {
@@ -59,6 +84,8 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getContentTypes();
+    this.getNewsCategories();
+    this.onSelectedNewsCategoriesChange(this.newsCategories[0]);
     this.getGalleries();
     this.initForm();
   }
@@ -120,6 +147,42 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(getContentTypesSubscr);
   }
 
+  getNewsCategories(): void {
+    this.hasError = false;
+    const getNewsCategoriesSubscr = this.dashboardService
+      .getNewsCategories()
+      .subscribe({
+        next: (data: { categoryID: string; name: string; hide: boolean }[]) => {
+          this.newsCategories = data;
+          this.cdr.detectChanges();
+        },
+        error: (error: any) => {
+          console.log('NEWS_CATEGORIES', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(getNewsCategoriesSubscr);
+  }
+
+  onSelectedNewsCategoriesChange(e: any) {
+    this.hasError = false;
+    if (!e) return;
+    const getNewsSubCategoriesSubscr = this.dashboardService
+      .getNewsSubCategories(e.target.value)
+      .pipe(distinctUntilChanged())
+      .subscribe({
+        next: (data: { sectionID: string; secTitle: string }[]) => {
+          this.newsSubCategories = data;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.log('NEWS_SUB_CATEGORIES', err);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(getNewsSubCategoriesSubscr);
+  }
+
   get f() {
     return this.addNewForm.controls;
   }
@@ -128,6 +191,12 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
     this.addNewForm = this.fb.group({
       contentType: [this.defaultNew.contentType],
       image1Id: [this.defaultNew.image1Id],
+      byLine: [this.defaultNew.byLine],
+      Title: [this.defaultNew.Title],
+      SubTitle: [this.defaultNew.SubTitle],
+      Story: [this.defaultNew.Story],
+      PictureCaption1: [this.defaultNew.PictureCaption1],
+      Notes: [this.defaultNew.Notes],
     });
   }
 
@@ -155,6 +224,30 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
     this.selectedFile = null;
     this.filePreview = null;
     this.cdr.detectChanges();
+  }
+
+  onSelectAlbum(id: string) {
+    const selectedAlbum = this.albums.find((album) => album.galleryID == id);
+
+    if (
+      this.selectedAlbums.find(
+        (album) => album.galleryID === selectedAlbum?.galleryID
+      )
+    )
+      return;
+
+    this.selectedAlbums.push(
+      selectedAlbum as {
+        galleryID: string;
+        galleryTitle: string;
+      }
+    );
+  }
+
+  onRemoveAlbum(albumId: string) {
+    this.selectedAlbums = this.selectedAlbums.filter(
+      (album) => album.galleryID !== albumId
+    );
   }
 
   ngOnDestroy() {

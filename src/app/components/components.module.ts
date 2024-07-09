@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { TablesWidget9Component } from './shared/table/tables-widget9.component';
+import { TableComponent } from './shared/table/table.component';
 import { KeeniconComponent } from './shared/keenicon/keenicon.component';
 import { DropdownMenu1Component } from './shared/dropdown/dropdown-menu1.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -11,17 +11,20 @@ import { AddImageComponent } from './dashboard/modals/add-image/add-image.compon
 import { Card4Component } from '../_metronic/partials/content/cards/card4/card4.component';
 import { ListComponent } from './shared/list/list.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { UploadImageComponent } from './dashboard/modals/upload-image/upload-image.component';
+import { EditorComponent } from '@tinymce/tinymce-angular';
 
 @NgModule({
   declarations: [
-    TablesWidget9Component,
+    TableComponent,
     KeeniconComponent,
     DropdownMenu1Component,
     AddNewCardComponent,
     ModalComponent,
-    AddImageComponent,
     Card4Component,
     ListComponent,
+    AddImageComponent,
+    UploadImageComponent,
   ],
   imports: [
     FormsModule,
@@ -29,16 +32,18 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     CommonModule,
     CKEditorModule,
     DragDropModule,
+    EditorComponent,
   ],
   exports: [
-    TablesWidget9Component,
+    TableComponent,
     KeeniconComponent,
     DropdownMenu1Component,
     AddNewCardComponent,
     ModalComponent,
-    AddImageComponent,
     Card4Component,
     ListComponent,
+    AddImageComponent,
+    UploadImageComponent,
   ],
 })
 export class ComponentsModule {}
