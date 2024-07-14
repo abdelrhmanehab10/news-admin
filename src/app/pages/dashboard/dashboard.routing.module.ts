@@ -7,6 +7,7 @@ import { AddNewComponent } from './add-new/add-new.component';
 import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.component';
 import { OrderNewsComponent } from './order-news/order-news.component';
 import { AllVotesComponent } from './all-votes/all-votes.component';
+import { NewsCategoriesComponent } from '../newsCategory/news-categories/news-categories.component';
 
 export const routes: Routes = [
   {
@@ -44,6 +45,10 @@ export const routes: Routes = [
       {
         path: 'all-votes',
         component: AllVotesComponent,
+      },
+      {
+        path: 'categories',
+        component: NewsCategoriesComponent
       },
     ],
   },

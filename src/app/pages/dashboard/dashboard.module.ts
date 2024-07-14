@@ -11,6 +11,8 @@ import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.compone
 import { OrderNewsComponent } from './order-news/order-news.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AllVotesComponent } from './all-votes/all-votes.component';
+import { NewsCategoriesComponent } from '../newsCategory/news-categories/news-categories.component';
+import { NewsCategoryAddOrupdateComponent } from '../newsCategory/news-category-add-orupdate/news-category-add-orupdate.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +23,8 @@ import { AllVotesComponent } from './all-votes/all-votes.component';
     AddNewWithIdComponent,
     OrderNewsComponent,
     AllVotesComponent,
+    NewsCategoriesComponent,
+    NewsCategoryAddOrupdateComponent
   ],
   imports: [
     CommonModule,
