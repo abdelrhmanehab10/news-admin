@@ -8,6 +8,7 @@ import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.compone
 import { OrderNewsComponent } from './order-news/order-news.component';
 import { AllVotesComponent } from './all-votes/all-votes.component';
 import { SectionsComponent } from './sections/sections.component';
+import { NewsCategoriesComponent } from '../newsCategory/news-categories/news-categories.component';
 
 export const routes: Routes = [
   {
@@ -49,6 +50,10 @@ export const routes: Routes = [
       {
         path: 'sections',
         component: SectionsComponent,
+      },
+      {
+        path: 'categories',
+        component: NewsCategoriesComponent
       },
     ],
   },

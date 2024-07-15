@@ -15,7 +15,7 @@ export type UserType = UserModel | undefined;
 export class AuthService implements OnDestroy {
   // private fields
   private unsubscribe: Subscription[] = [];
-  private authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
+  public authLocalStorageToken = `${environment.appVersion}-${environment.USERDATA_KEY}`;
 
   // public fields
   currentUser$: Observable<UserType>;

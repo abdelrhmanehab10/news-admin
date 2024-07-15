@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  websiteUrl:"",
   appVersion: 'v8.2.4',
   USERDATA_KEY: 'authf649fc9a5f55',
   isMockEnabled: true,
