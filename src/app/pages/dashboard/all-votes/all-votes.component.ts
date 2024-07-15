@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { ModalConfig } from 'src/app/models/modal';
+import { ModalConfig } from 'src/app/models/modal.model';
 
 @Component({
   selector: 'app-all-votes',

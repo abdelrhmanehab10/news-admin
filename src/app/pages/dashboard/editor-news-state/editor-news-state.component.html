@@ -1,7 +1,7 @@
 <app-table
   [isStatus]="true"
-  (selectedNewsEmitter)="(receiveSelectedNews)"
-  (pageNumberEmitter)="(recievePageNumber)"
-  (filterOptionEmitter)="(recieveFilterOption)"
+  (selectedNewsEmitter)="receiveSelectedNews($event)"
+  (pageNumberEmitter)="recievePageNumber($event)"
+  (filterOptionEmitter)="recieveFilterOption($event)"
   class="card mb-5 mb-xl-8"
 ></app-table>

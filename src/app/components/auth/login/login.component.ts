@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserModel } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserModel } from 'src/app/models/user.model';
 
 @Component({
   selector: 'app-login',

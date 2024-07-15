@@ -6,12 +6,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './list.style.scss',
 })
 export class ListComponent {
-  @Input() items: {
-    newId: string;
-    publishDate: string;
-    title: string;
-    secTitle: string;
-  }[];
+  @Input() items: any[];
 
   colors = ['primary', 'dark'];
 

@@ -40,7 +40,7 @@ export class DashboardHTTPService {
     });
   }
 
-  getNewsSubCategories(token: string, id: string): Observable<any> {
+  getNewsSubCategories(token: string, id?: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });

@@ -25,7 +25,9 @@
       <button
         type="button"
         class="btn btn-primary"
-        (click)="dismiss()"
+        (click)="
+          modalConfig.customDismiss ? modalConfig.customDismiss() : dismiss()
+        "
         *ngIf="
           modalConfig.hideDismissButton === undefined ||
           !modalConfig.hideDismissButton()

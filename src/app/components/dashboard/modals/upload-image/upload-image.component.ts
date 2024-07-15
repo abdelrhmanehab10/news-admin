@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { ModalConfig } from 'src/app/models/modal';
+import { ModalConfig } from 'src/app/models/modal.model';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 
 @Component({

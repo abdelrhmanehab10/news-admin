@@ -1,0 +1,29 @@
+<div class="card card-xl-stretch mb-xl-8">
+  <!-- begin::Header -->
+  <div class="card-header justify-content-end border-0">
+    <!-- <h3 class="card-title fw-bolder text-gray-900">Todo</h3> -->
+    <div class="card-toolbar">
+      <!-- begin::Menu -->
+      <button
+        type="button"
+        class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        data-kt-menu-flip="top-end"
+      >
+        <app-keenicon name="category" class="fs-2"></app-keenicon>
+      </button>
+      <app-dropdown-menu1 [isCategories]="true"></app-dropdown-menu1>
+      <app-add-section></app-add-section>
+      <!-- end::Menu -->
+    </div>
+  </div>
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body pt-2">
+    <!-- begin::Item -->
+    <app-list [items]="items"></app-list>
+    <!-- end:Item -->
+  </div>
+  <!-- end::Body -->
+</div>

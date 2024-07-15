@@ -1,16 +1,4 @@
 <div class="card mb-5 mb-xl-10">
-  <!-- <div
-  class="card-header border-0 cursor-pointer"
-  role="button"
-  data-bs-toggle="collapse"
-  data-bs-target="#kt_account_profile_details"
-  aria-expanded="true"
-  aria-controls="kt_account_profile_details"
-  >
-  <div class="card-title m-0">
-      <h3 class="fw-bolder m-0">Profile Details</h3>
-    </div>
-  </div> -->
   <div class="card-header border-0 p-0 cursor-pointer">
     <div class="card-title m-0" style="padding: 0 2.25rem">
       <h3 class="fw-bolder m-0">أضافة مادة</h3>
@@ -18,7 +6,7 @@
     <ng-content></ng-content>
   </div>
   <div class="card-body border-top p-9">
-    <form [formGroup]="addNewForm" novalidate="" class="form">
+    <form [formGroup]="addNewForm" class="form">
       <div class="row mb-6">
         <label class="col-lg-2 col-form-label fw-bold fs-6"> نوع المادة </label>
         <div class="col-lg-4">
@@ -186,8 +174,18 @@
         <label class="col-lg-2 col-form-label required fw-bold fs-6">
           الصورة الأولي
         </label>
-        <div class="col-lg-10 fv-row d-flex gap-2">
-          <app-add-image></app-add-image>
+        <div class="col-lg-10 fv-row d-flex align-items-center gap-2">
+          @if(selectedImage){
+          <app-image
+            [selectedImage]="selectedImage"
+            (isSelectedImageRemovedEmitter)="
+              recieveIsSelectedSelectedImageRemoved($event)
+            "
+          ></app-image
+          >}
+          <app-add-image
+            (selectedImageEmitter)="recieveSelectedImage($event)"
+          ></app-add-image>
           <app-upload-image></app-upload-image>
         </div>
       </div>
@@ -220,79 +218,7 @@
           <span class="required">المرفقات</span>
         </label>
         <div class="col-lg-10 fv-row mb-6">
-          <!--begin::Image input placeholder-->
-
-          <!--end::Image input placeholder-->
-
-          <!--begin::Image input-->
-          <div
-            class="image-input image-input-outline"
-            data-kt-image-input="true"
-            style="
-              background-image: url(../../../../assets/media/svg/avatars/blank.svg);
-            "
-          >
-            <!--begin::Image preview wrapper-->
-            <div
-              class="image-input-wrapper w-125px h-125px"
-              [ngClass]="filePreview ? '' : 'image-input-placeholder'"
-              [ngStyle]="{
-                'background-image': filePreview && 'url(' + filePreview + ')'
-              }"
-            ></div>
-            <!--end::Image preview wrapper-->
-
-            <!--begin::Edit button-->
-            <label
-              class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-              data-kt-image-input-action="change"
-              data-bs-toggle="tooltip"
-              data-bs-dismiss="click"
-              title="Change avatar"
-            >
-              <i class="ki-duotone ki-pencil fs-6"
-                ><span class="path1"></span><span class="path2"></span
-              ></i>
-
-              <!--begin::Inputs-->
-              <input
-                type="file"
-                (change)="onFileSelected($event)"
-                name="avatar"
-                accept=".png, .jpg, .jpeg"
-              />
-              <input type="hidden" name="avatar_remove" />
-              <!--end::Inputs-->
-            </label>
-            <!--end::Edit button-->
-
-            <!--begin::Cancel button-->
-            <span
-              class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-              data-kt-image-input-action="cancel"
-              data-bs-toggle="tooltip"
-              data-bs-dismiss="click"
-              title="Cancel avatar"
-            >
-              <i class="ki-outline ki-cross fs-3"></i>
-            </span>
-            <!--end::Cancel button-->
-
-            <!--begin::Remove button-->
-            <span
-              class="btn btn-icon btn-circle btn-color-muted btn-active-color-primary w-25px h-25px bg-body shadow"
-              data-kt-image-input-action="remove"
-              data-bs-toggle="tooltip"
-              data-bs-dismiss="click"
-              title="Remove avatar"
-              [ngClass]="selectedFile ? '' : 'd-none'"
-              (click)="removeSelectedImg()"
-            >
-              <i class="ki-outline ki-cross fs-3"></i>
-            </span>
-            <!--end::Remove button-->
-          </div>
-          <!--end::Image input-->
+          <app-image></app-image>
         </div>
         <div class="row mb-6">
           <ul class="d-flex align-items-center gap-2">
@@ -479,6 +405,102 @@
         </div>
       </div>
       <div class="separator my-3 opacity-75"></div>
+      <div class="d-flex justify-content-center gap-3">
+        <div class="py-6">
+          @if (isLoading$ | async) {
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="isLoading$ | async"
+          >
+            <span clas="indicator-progress" [style.display]="'block'">
+              انتظر قليلا...{{ " " }}
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+          </button>
+          }@else {
+          <div class="text-center d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-primary"
+              type="submit"
+              [disabled]="isLoading$ | async"
+            >
+              نشر مؤرخ
+              <app-keenicon
+                name="notepad-bookmark"
+                class="fs-1 mx-1 text-white"
+              ></app-keenicon>
+            </button>
+          </div>
+          }
+        </div>
+        <div class="py-6">
+          @if (isLoading$ | async) {
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="isLoading$ | async"
+          >
+            <span clas="indicator-progress" [style.display]="'block'">
+              انتظر قليلا...{{ " " }}
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+          </button>
+          }@else {
+          <div class="text-center d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-primary"
+              type="submit"
+              [disabled]="isLoading$ | async"
+            >
+              حفظ وتمرير
+              <app-keenicon
+                name="file-left"
+                class="fs-1 mx-1 text-white"
+              ></app-keenicon>
+            </button>
+          </div>
+          }
+        </div>
+        <div class="py-6">
+          @if (isLoading$ | async) {
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="isLoading$ | async"
+          >
+            <span clas="indicator-progress" [style.display]="'block'">
+              انتظر قليلا...{{ " " }}
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+          </button>
+          }@else {
+          <div class="text-center d-flex justify-content-center">
+            <button
+              type="button"
+              class="btn btn-primary"
+              type="submit"
+              [disabled]="isLoading$ | async"
+            >
+              حفظ
+              <app-keenicon
+                name="file-up"
+                class="fs-1 mx-1 text-white"
+              ></app-keenicon>
+            </button>
+          </div>
+          }
+        </div>
+      </div>
+
       <div class="py-6">
         @if (isLoading$ | async) {
         <button
@@ -494,28 +516,20 @@
           </span>
         </button>
         }@else {
-        <div class="d-flex w-25 me-auto mb-3">
-          <select
-            class="form-select form-select-solid px-8 rounded-start-0 form-select-lg"
-            name="newsAction"
-          >
-            <option value="1">نشر مؤرخ</option>
-            <option value="2">حفظ وتمرير</option>
-            <option value="3">حفظ</option>
-            <option value="4">حفظ ونشر</option>
-          </select>
+        <div class="text-center d-flex justify-content-center">
           <button
             type="button"
-            class="btn btn-primary p-2 rounded-end-0"
+            class="btn btn-danger"
             type="submit"
             [disabled]="isLoading$ | async"
           >
-            <app-keenicon name="left" class="fs-1 text-white"></app-keenicon>
+            حفظ ونشر
+            <app-keenicon
+              name="file-added"
+              class="fs-1 mx-1 text-white"
+            ></app-keenicon>
           </button>
         </div>
-        <p class="text-muted text-right me-auto w-25">
-          يمكنك اختيار طريقة الحفظ, ثم الضغط علي السهم للتأكيد.
-        </p>
         }
       </div>
     </form>

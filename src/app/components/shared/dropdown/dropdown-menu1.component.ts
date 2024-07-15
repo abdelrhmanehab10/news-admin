@@ -75,7 +75,9 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
     }
 
     if (this.isCategories) {
-      this.getNewsCategories();
+      this.dashboardService.newsCategories$.subscribe((categories) => {
+        this.newsCategories = categories;
+      });
     }
 
     if (this.isOrderCategories) {
@@ -114,23 +116,6 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
         },
       });
     this.unsubscribe.push(getRolesPassListSubscr);
-  }
-
-  getNewsCategories(): void {
-    this.isError = false;
-    const getNewsCategoriesSubscr = this.dashboardService
-      .getNewsCategories()
-      .subscribe({
-        next: (data: { categoryID: string; name: string }[]) => {
-          this.newsCategories = data;
-          this.cdr.detectChanges();
-        },
-        error: (error: any) => {
-          console.log('NEWS_CATEGORIES', error);
-          this.isError = true;
-        },
-      });
-    this.unsubscribe.push(getNewsCategoriesSubscr);
   }
 
   getNewsOrderCategories(): void {

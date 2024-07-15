@@ -56,13 +56,16 @@ export class OrderNewsComponent implements OnInit {
 
   getNewsOrder() {
     this.hasError = false;
+
     const getNewsOrderSubscr = this.orderNews
-      .getOrderNews(this.filterOption.category ?? '1')
+      .getOrderNews(this.filterOption.orderCategory ?? '')
       .subscribe({
         next: (data: typeof this.items) => {
           if (data) {
             this.items = data;
             this.cdr.detectChanges();
+          } else {
+            this.items = [];
           }
         },
         error: (error: any) => {

@@ -3,9 +3,9 @@ import { Observable, BehaviorSubject, of, Subscription } from 'rxjs';
 import { map, catchError, switchMap, finalize } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
-import { UserModel } from 'src/app/models/user.model';
 import { AuthModel } from 'src/app/models/auth.model';
 import { AuthHTTPService } from 'src/app/services/auth/auth-http/auth-http.service';
+import { UserModel } from 'src/app/models/user.model';
 
 export type UserType = UserModel | undefined;
 

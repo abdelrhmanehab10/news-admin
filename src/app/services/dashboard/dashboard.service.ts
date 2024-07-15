@@ -17,6 +17,9 @@ export class DashboardService {
   isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
 
+  newsCategoriesSubject = new BehaviorSubject<any[]>([]);
+  newsCategories$ = this.newsCategoriesSubject.asObservable();
+
   constructor(
     private authService: AuthService,
     private dashboardHTTPService: DashboardHTTPService
@@ -34,6 +37,7 @@ export class DashboardService {
     this.isLoadingSubject.next(true);
     return this.dashboardHTTPService.getNewsCategories(auth.authToken).pipe(
       map((data) => {
+        this.newsCategoriesSubject.next(data.data);
         return data.data;
       }),
       catchError((err) => {

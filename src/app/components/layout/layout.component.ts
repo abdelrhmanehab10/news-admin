@@ -9,6 +9,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ILayout, LayoutType } from 'src/app/core/configs/config';
 import { NewStatusCount } from 'src/app/models/layout.model';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { LayoutInitService } from 'src/app/services/layout/layout-init.service';
 import { LayoutService } from 'src/app/services/layout/layout.service';
 
@@ -78,6 +79,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   constructor(
     private initService: LayoutInitService,
+    private dashboardService: DashboardService,
     private layout: LayoutService,
     private router: Router,
     private activatedRoute: ActivatedRoute
@@ -106,6 +108,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
         this.updateProps(config);
       });
     this.unsubscribe.push(subscr);
+    this.getNewsCategories();
   }
 
   updateProps(config: ILayout) {
@@ -412,6 +415,10 @@ export class LayoutComponent implements OnInit, OnDestroy {
         }
       }
     }, 0);
+  }
+
+  getNewsCategories(): void {
+    this.dashboardService.getNewsCategories().subscribe();
   }
 
   ngOnDestroy() {

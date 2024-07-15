@@ -36,7 +36,7 @@
             [isRoles]="isRoles"
             [isSubCategories]="isSubCategories"
             [isStatus]="isStatus"
-            (filterOptionsEmitter)="(recevieFilterOption)"
+            (filterOptionsEmitter)="(recevieFilterOption($event))"
           ></app-dropdown-menu1>
         </div>
         } @if(customBtns){ @for(btn of customBtns; track btn){

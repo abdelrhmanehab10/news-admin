@@ -1,4 +1,4 @@
-@for(item of items; track item; let idx = $index){
+@if(items.length){ @for(item of items; track item; let idx = $index){
 <div class="d-flex align-items-center mb-8" cdkDrag>
   <!-- begin::Bullet -->
   <span
@@ -8,8 +8,8 @@
   <!-- end::Bullet -->
   <!-- begin::Checkbox -->
   <!-- <div class="form-check form-check-custom form-check-solid mx-5">
-    <input class="form-check-input" type="checkbox" value="" />
-  </div> -->
+      <input class="form-check-input" type="checkbox" value="" />
+    </div> -->
   <!-- end::Checkbox -->
   <!-- begin::Description -->
   <div class="flex-grow-1">
@@ -27,4 +27,6 @@
     >{{ timeSinceInArabic(item.publishDate) }}</span
   >
 </div>
+} }@else {
+<p class="text-center text-gray-900 fw-bolder fs-6">لا يوجد بيانات</p>
 }

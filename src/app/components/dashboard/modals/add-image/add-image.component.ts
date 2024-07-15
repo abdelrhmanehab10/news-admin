@@ -1,8 +1,15 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { ModalConfig } from 'src/app/models/modal';
+import { ModalConfig } from 'src/app/models/modal.model';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 
 @Component({
@@ -23,6 +30,7 @@ export class AddImageComponent implements OnInit {
     searchText: '',
   };
 
+  selectedImage: {} = {};
   filterForm: FormGroup;
 
   private unsubscribe: Subscription[] = [];
@@ -46,6 +54,12 @@ export class AddImageComponent implements OnInit {
     dismissButtonLabel: 'تأكيد',
     closeButtonLabel: 'الغاء',
   };
+
+  @Output() selectedImageEmitter = new EventEmitter<{
+    icon: string;
+    title: string;
+    description: string;
+  }>();
 
   constructor(
     private fb: FormBuilder,
@@ -156,5 +170,14 @@ export class AddImageComponent implements OnInit {
         },
       });
     this.unsubscribe.push(getGalleryImagesSubscr);
+  }
+
+  recieveSelectedImage(data: {
+    icon: string;
+    title: string;
+    description: string;
+  }) {
+    this.selectedImageEmitter.emit(data);
+    this.modalComponent.close();
   }
 }

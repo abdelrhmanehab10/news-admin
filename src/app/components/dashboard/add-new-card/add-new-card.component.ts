@@ -7,9 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { TempusDominus } from '@eonasdan/tempus-dominus';
 import Tagify from '@yaireo/tagify';
-import { CKEditor4 } from 'ckeditor4-angular';
 import { distinctUntilChanged, Observable, Subscription } from 'rxjs';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 import $ from 'jquery';
@@ -45,11 +43,13 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
     PictureCaption1: '',
     Notes: '',
   };
+
   init: EditorComponent['init'] = {
     plugins: 'lists link image table code help wordcount',
     directionality: 'rtl',
     language: 'ar',
   };
+
   addNewForm: FormGroup;
 
   isLoading$: Observable<boolean>;
@@ -60,11 +60,13 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
   albums: { galleryID: string; galleryTitle: string }[] = [];
   selectedAlbums: typeof this.albums = [];
 
-  editorData = '<p class="text-right">مرحبا بك</p>';
-
   hasError: boolean = false;
-  selectedFile: File | null = null;
-  filePreview: string | ArrayBuffer | null | undefined = null;
+
+  selectedImage: {
+    icon: string;
+    title: string;
+    description: string;
+  } | null = null;
 
   @ViewChild('albumSelect') albumSelect: ElementRef;
 
@@ -77,15 +79,12 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
     this.isLoading$ = this.addNewService.isLoading$;
   }
 
-  public onChange(event: CKEditor4.EventInfo) {
-    this.editorData = event.editor.getData();
-    console.log(this.editorData);
-  }
-
   ngOnInit(): void {
     this.getContentTypes();
-    this.getNewsCategories();
-    this.onSelectedNewsCategoriesChange(this.newsCategories[0]);
+    this.dashboardService.newsCategories$.subscribe((categories) => {
+      this.newsCategories = categories;
+    });
+    this.onSelectedNewsCategoriesChange();
     this.getGalleries();
     this.initForm();
   }
@@ -147,24 +146,7 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(getContentTypesSubscr);
   }
 
-  getNewsCategories(): void {
-    this.hasError = false;
-    const getNewsCategoriesSubscr = this.dashboardService
-      .getNewsCategories()
-      .subscribe({
-        next: (data: { categoryID: string; name: string; hide: boolean }[]) => {
-          this.newsCategories = data;
-          this.cdr.detectChanges();
-        },
-        error: (error: any) => {
-          console.log('NEWS_CATEGORIES', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getNewsCategoriesSubscr);
-  }
-
-  onSelectedNewsCategoriesChange(e: any) {
+  onSelectedNewsCategoriesChange(e?: any) {
     this.hasError = false;
     if (!e) return;
     const getNewsSubCategoriesSubscr = this.dashboardService
@@ -202,30 +184,6 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
 
   onSaveNew() {}
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-      this.previewFile(this.selectedFile);
-      this.cdr.detectChanges();
-    }
-  }
-
-  previewFile(file: File): void {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.filePreview = e.target?.result;
-      this.cdr.detectChanges();
-    };
-    reader.readAsDataURL(file);
-  }
-
-  removeSelectedImg() {
-    this.selectedFile = null;
-    this.filePreview = null;
-    this.cdr.detectChanges();
-  }
-
   onSelectAlbum(id: string) {
     const selectedAlbum = this.albums.find((album) => album.galleryID == id);
 
@@ -252,5 +210,17 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
+  }
+
+  recieveSelectedImage(data: {
+    icon: string;
+    title: string;
+    description: string;
+  }) {
+    this.selectedImage = data;
+  }
+
+  recieveIsSelectedSelectedImageRemoved(data: boolean) {
+    this.selectedImage = data ? null : this.selectedImage;
   }
 }

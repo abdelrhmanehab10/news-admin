@@ -1,6 +1,6 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ModalConfig } from 'src/app/models/modal';
+import { ModalConfig } from 'src/app/models/modal.model';
 
 @Component({
   selector: 'app-modal',
