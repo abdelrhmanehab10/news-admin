@@ -79,7 +79,7 @@ export class UsersTable {
       authToken: 'auth-token-d2dff7b82f784de584b60964abbe45b9',
       refreshToken: 'auth-token-c999ccfe74aa40d0aa1a64c5e620c1a5',
       roles: [3], // Guest
-      pic: './assets/media/avatars/300-20.jpg',
+      // pic: './assets/media/avatars/300-20.jpg',
       fullname: 'Manu G',
       firstname: 'Manu',
       lastname: 'Ginobili',

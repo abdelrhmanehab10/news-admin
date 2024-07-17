@@ -152,6 +152,10 @@
     </div>
   </form>
 </app-modal>
-<button class="btn btn-primary mx-2" (click)="openModal()">
-  اضافة باب فرعي
+<button
+  class="btn btn-sm mx-2"
+  [ngClass]="btnStyle ? btnStyle : 'btn-primary'"
+  (click)="openModal()"
+>
+  {{ title }}
 </button>

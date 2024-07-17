@@ -418,7 +418,19 @@ export class LayoutComponent implements OnInit, OnDestroy {
   }
 
   getNewsCategories(): void {
-    this.dashboardService.getNewsCategories().subscribe();
+    this.hasError = false;
+    const getNewsCategoriesSubscr = this.dashboardService
+      .getNewsCategories()
+      .subscribe({
+        next: (data: any[]) => {
+          this.dashboardService.newsCategoriesSubject.next(data);
+        },
+        error: (error: any) => {
+          console.log('[NEWS_STATUS_COUNT]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(getNewsCategoriesSubscr);
   }
 
   ngOnDestroy() {

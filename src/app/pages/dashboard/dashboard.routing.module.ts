@@ -9,6 +9,9 @@ import { OrderNewsComponent } from './order-news/order-news.component';
 import { AllVotesComponent } from './all-votes/all-votes.component';
 import { SectionsComponent } from './sections/sections.component';
 import { NewsCategoriesComponent } from '../newsCategory/news-categories/news-categories.component';
+import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
+import { MainNewsComponent } from './main-news/main-news.component';
+import { CommentsComponent } from './comments/comments.component';
 
 export const routes: Routes = [
   {
@@ -22,6 +25,10 @@ export const routes: Routes = [
       {
         path: 'publish',
         component: PublishComponent,
+      },
+      {
+        path: 'main-news',
+        component: MainNewsComponent,
       },
       {
         path: 'news-status',
@@ -53,7 +60,19 @@ export const routes: Routes = [
       },
       {
         path: 'categories',
-        component: NewsCategoriesComponent
+        component: NewsCategoriesComponent,
+      },
+      {
+        path: 'urgent-news',
+        component: UrgentNewsComponent,
+      },
+      {
+        path: 'comments',
+        component: CommentsComponent,
+      },
+      {
+        path: 'deleted-news',
+        component: CommentsComponent,
       },
     ],
   },

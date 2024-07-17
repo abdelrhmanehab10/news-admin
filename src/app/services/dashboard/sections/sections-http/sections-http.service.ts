@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-const API_URL = `${environment.apiUrl}`;
+const API_URL = `${environment.apiUrl}/Section/`;
 
 @Injectable({
   providedIn: 'root',
@@ -24,17 +24,41 @@ export class SectionsHTTPService {
       }
     }
 
-    return this.http.post<any>(`${API_URL}/Section/AddMainSection`, formData, {
+    return this.http.post<any>(`${API_URL}AddMainSection`, formData, {
       headers: httpHeaders,
     });
   }
 
-  getAllSections(token: string): Observable<any> {
+  getAllSections(
+    token: string,
+    pageNumber: number,
+    category: number,
+    searchQuery?: string
+  ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
-    return this.http.get<any>(`${API_URL}/Section/GetAllSection`, {
+    return this.http.get<any>(
+      `${API_URL}GetAllSection?PageNumber=${pageNumber}&CatId=${category}${
+        searchQuery ? '&Search=' + searchQuery : ''
+      }`,
+      {
+        headers: httpHeaders,
+      }
+    );
+  }
+
+  deleteSections(token: string, sections: string[]): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    // formData.append()
+
+    return this.http.delete<any>(`${API_URL}DeleteSection`, {
       headers: httpHeaders,
     });
   }

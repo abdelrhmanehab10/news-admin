@@ -17,8 +17,11 @@ export class DashboardService {
   isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
 
-  newsCategoriesSubject = new BehaviorSubject<any[]>([]);
-  newsCategories$ = this.newsCategoriesSubject.asObservable();
+  newsCategories$: Observable<any[]>;
+  newsCategoriesSubject: BehaviorSubject<any[]>;
+
+  contentTypes$: Observable<any[]>;
+  contentTypesSubject: BehaviorSubject<any[]>;
 
   constructor(
     private authService: AuthService,
@@ -26,6 +29,32 @@ export class DashboardService {
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.isLoading$ = this.isLoadingSubject.asObservable();
+
+    this.newsCategoriesSubject = new BehaviorSubject<any[]>([]);
+    this.newsCategories$ = this.newsCategoriesSubject.asObservable();
+
+    this.contentTypesSubject = new BehaviorSubject<any[]>([]);
+    this.contentTypes$ = this.contentTypesSubject.asObservable();
+  }
+
+  getContentTypes() {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.dashboardHTTPService.getContentNews(auth.authToken).pipe(
+      map((data) => {
+        this.contentTypesSubject.next(data.data);
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
   }
 
   getNewsCategories() {
@@ -80,8 +109,6 @@ export class DashboardService {
       .getNewsSubCategories(auth.authToken, id)
       .pipe(
         map((data) => {
-          console.log(data);
-
           return data.data;
         }),
         catchError((err) => {
@@ -103,8 +130,6 @@ export class DashboardService {
       .getNewsOrderSubCategories(auth.authToken, id)
       .pipe(
         map((data) => {
-          console.log(data);
-
           return data.data;
         }),
         catchError((err) => {

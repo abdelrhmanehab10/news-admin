@@ -25,25 +25,6 @@ export class AddNewService {
     this.isLoading$ = this.isLoadingSubject.asObservable();
   }
 
-  getContentTypes() {
-    const auth = this.authService.getAuthFromLocalStorage();
-    if (!auth || !auth.authToken) {
-      return of(undefined);
-    }
-
-    this.isLoadingSubject.next(true);
-    return this.AddNewHTTPService.getContentNews(auth.authToken).pipe(
-      map((data) => {
-        return data.data;
-      }),
-      catchError((err) => {
-        console.error('err', err);
-        return of(undefined);
-      }),
-      finalize(() => this.isLoadingSubject.next(false))
-    );
-  }
-
   getGalleries() {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
@@ -143,6 +124,25 @@ export class AddNewService {
     return this.AddNewHTTPService.getDrafts(auth.authToken).pipe(
       map((data) => {
         return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  deleteAllDrafts() {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.AddNewHTTPService.deleteAllDrafts(auth.authToken).pipe(
+      map((data) => {
+        return data;
       }),
       catchError((err) => {
         console.error('err', err);

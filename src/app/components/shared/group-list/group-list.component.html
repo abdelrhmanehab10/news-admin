@@ -1,0 +1,109 @@
+<!-- begin::Timeline-->
+<div class="timeline-label">
+  <!-- begin::Item-->
+  @if(items && items.length){@for( item of items; track item ){
+  <div class="timeline-item align-items-center">
+    <!-- begin::Label-->
+    <div
+      class="timeline-label fw-bolder text-gray-800 my-7 fs-6"
+      style="writing-mode: vertical-lr"
+    >
+      {{ convertDateToArabicFormat(item.date) }}
+    </div>
+    <!-- end::Label-->
+    <!-- begin::Badge-->
+    <div class="timeline-badge align-self-start">
+      <i class="fa fa-genderless text-warning fs-1"></i>
+    </div>
+    <!-- end::Badge-->
+    <!-- begin::Text-->
+    <!-- <div class="fw-mormal timeline-content text-muted pe-3">
+        Outlines keep you honest. And keep structure
+      </div> -->
+    <!-- end::Text-->
+    <div class="w-100 my-7">
+      @for(subItem of item.news; track subItem){
+      <!-- begin::Label-->
+      <!-- <div class="timeline-label fw-bolder text-gray-800 fs-6">10:00</div> -->
+      <!-- end::Label-->
+      <!-- begin::Badge-->
+      <!-- <div class="timeline-badge">
+          <i class="fa fa-genderless text-success fs-1"></i>
+        </div> -->
+      <!-- end::Badge-->
+      <!-- begin::Content-->
+      <div
+        class="bg-gray-200 bg-hover-gray-300 px-2 py-4 rounded w-100 d-flex justify-content-between align-items-center mb-2"
+      >
+        <span class="fw-bolder text-gray-800 pe-3 w-475px">{{
+          subItem.title
+        }}</span>
+        <span class="fw-bolder text-gray-800 pe-3">{{
+          convertTimeToArabic12HourFormat(subItem.time)
+        }}</span>
+        <div class="d-flex">
+          <button
+            class="btn btn-sm btn-outline-dark border b d-flex align-items-center gap-3 me-2"
+          >
+            @if(isLoading){
+            <span class="indicator-progress" [style.display]="'block'">
+              جاري التحميل...
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+            }@else { ايقاف }
+          </button>
+          <button
+            class="btn btn-sm btn-outline-dark border b d-flex align-items-center gap-3 me-2"
+          >
+            @if(isLoading){
+            <span class="indicator-progress" [style.display]="'block'">
+              جاري التحميل...
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+            }@else { تعديل }
+          </button>
+          <button
+            class="btn btn-sm btn-icon btn-outline-light border b d-flex align-items-center gap-3 me-2"
+          >
+            @if(isLoading){
+            <span class="indicator-progress" [style.display]="'block'">
+              جاري التحميل...
+              <span
+                class="spinner-border spinner-border-sm align-middle ms-2"
+              ></span>
+            </span>
+            }@else {
+            <app-keenicon
+              name="cross"
+              class="fs-2 m-0 text-dark"
+            ></app-keenicon>
+            }
+          </button>
+        </div>
+      </div>
+      <!-- end::Content-->
+      }
+    </div>
+  </div>
+  <!-- end::Item-->
+  <!-- begin::Item-->
+  } }@else if(isLoading){
+  <span
+    clas="indicator-progress"
+    [style.textAlign]="'center'"
+    [style.display]="'block'"
+  >
+    <p class="mx-auto text-gray-900 fw-bolder fs-6 d-inline">
+      انتظر قليلا...{{ " " }}
+    </p>
+    <span class="spinner-border spinner-border-sm align-middle me-1"></span>
+  </span>
+  }@else{
+
+  <p class="text-center text-gray-900 fw-bolder fs-6">لا يوجد بيانات</p>
+  }
+</div>

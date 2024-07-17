@@ -29,7 +29,7 @@ export class ProjectsComponent implements OnInit {
   ];
 
   users5 = [
-    { name: 'Francis Mitcham', avatar: './assets/media/avatars/300-20.jpg' },
+    // { name: 'Francis Mitcham', avatar: './assets/media/avatars/300-20.jpg' },
     { name: 'Michelle Swanston', avatar: './assets/media/avatars/300-7.jpg' },
     { name: 'Susan Redwood', initials: 'S', color: 'primary' },
   ];
@@ -41,7 +41,7 @@ export class ProjectsComponent implements OnInit {
   ];
 
   users7 = [
-    { name: 'Meloday Macy', avatar: './assets/media/avatars/300-2.jpg' },
+    // { name: 'Meloday Macy', avatar: './assets/media/avatars/300-2.jpg' },
     { name: 'Rabbin Watterman', initials: 'S', color: 'success' },
   ];
 
@@ -52,7 +52,7 @@ export class ProjectsComponent implements OnInit {
   ];
 
   users9 = [
-    { name: 'Meloday Macy', avatar: './assets/media/avatars/300-2.jpg' },
+    // { name: 'Meloday Macy', avatar: './assets/media/avatars/300-2.jpg' },
     { name: 'Rabbin Watterman', initials: 'S', color: 'danger' },
   ];
 

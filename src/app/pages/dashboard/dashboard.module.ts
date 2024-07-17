@@ -13,6 +13,11 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AllVotesComponent } from './all-votes/all-votes.component';
 import { NewsCategoriesComponent } from '../newsCategory/news-categories/news-categories.component';
 import { NewsCategoryAddOrupdateComponent } from '../newsCategory/news-category-add-orupdate/news-category-add-orupdate.component';
+import { SectionsComponent } from './sections/sections.component';
+import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
+import { MainNewsComponent } from './main-news/main-news.component';
+import { CommentsComponent } from './comments/comments.component';
+import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
 
 @NgModule({
   declarations: [
@@ -22,9 +27,14 @@ import { NewsCategoryAddOrupdateComponent } from '../newsCategory/news-category-
     AddNewComponent,
     AddNewWithIdComponent,
     OrderNewsComponent,
+    SectionsComponent,
     AllVotesComponent,
     NewsCategoriesComponent,
-    NewsCategoryAddOrupdateComponent
+    NewsCategoryAddOrupdateComponent,
+    UrgentNewsComponent,
+    MainNewsComponent,
+    CommentsComponent,
+    DeletedNewsComponent,
   ],
   imports: [
     CommonModule,
@@ -35,5 +45,3 @@ import { NewsCategoryAddOrupdateComponent } from '../newsCategory/news-category-
   ],
 })
 export class DashboardModule {}
-
-

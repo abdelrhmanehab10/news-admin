@@ -8,7 +8,6 @@ import {
   NgbTooltipModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { TranslationModule } from '../../modules/i18n';
 import { LayoutComponent } from './layout.component';
 import { Routing } from 'src/app/pages/routing';
 import { HeaderComponent } from './header/header.component';
@@ -42,6 +41,7 @@ import { ThemeModeModule } from 'src/app/_metronic/partials/layout/theme-mode-sw
 import { SharedModule } from 'src/app/_metronic/shared/shared.module';
 import { NewsStatusCountComponent } from './news-status-count/news-status-count.component';
 import { ComponentsModule } from '../components.module';
+import { TranslationModule } from 'src/app/modules/i18n';
 
 const routes: Routes = [
   {

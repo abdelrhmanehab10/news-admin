@@ -79,7 +79,7 @@ export const environment = {
       title: 'Demo 9',
       description: 'Fancy Dashboard',
       published: false,
-      thumbnail: './assets/media/demos/demo9.png',
+      // thumbnail: './assets/media/demos/demo9.png',
     },
 
     demo10: {

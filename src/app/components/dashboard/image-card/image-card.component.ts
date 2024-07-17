@@ -7,10 +7,10 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-card',
-  templateUrl: './card.component.html',
+  selector: 'app-image-card',
+  templateUrl: './image-card.component.html',
 })
-export class CardComponent {
+export class ImageCardComponent {
   @Input() icon: string = '';
   @Input() title: string = '';
   @Input() description: string = '';

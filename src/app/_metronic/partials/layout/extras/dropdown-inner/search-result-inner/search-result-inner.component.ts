@@ -50,7 +50,7 @@ const resultModels: Array<ResultModel> = [
     'description': 'Marketing Manager'
   },
   {
-    'image': './assets/media/avatars/300-2.jpg',
+    // 'image': './assets/media/avatars/300-2.jpg',
     'title': 'Olivia Bold',
     'description': 'Software Engineer'
   },
@@ -60,7 +60,7 @@ const resultModels: Array<ResultModel> = [
     'description': 'UI/UX Designer'
   },
   {
-    'image': './assets/media/avatars/300-14.jpg',
+    // 'image': './assets/media/avatars/300-14.jpg',
     'title': 'Nick Pitola',
     'description': 'Art Director'
   },

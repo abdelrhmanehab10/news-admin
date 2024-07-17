@@ -12,21 +12,6 @@ const API_URL = `${environment.apiUrl}`;
 export class AddNewHTTPService {
   constructor(private http: HttpClient) {}
 
-  getContentNews(token: string): Observable<any> {
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<{
-      status: number;
-      data: NEW[];
-      message: string | null;
-      errors: string[] | null;
-    }>(`${API_URL}/ContentTypes/GetContentTypes`, {
-      headers: httpHeaders,
-    });
-  }
-
   getGalleries(token: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -116,6 +101,21 @@ export class AddNewHTTPService {
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/Draft/GetDrafts`, {
+      headers: httpHeaders,
+    });
+  }
+
+  deleteAllDrafts(token: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.delete<{
+      status: number;
+      data: NEW[] | null;
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/Draft/DeleteAllDrafts`, {
       headers: httpHeaders,
     });
   }

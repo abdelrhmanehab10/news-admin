@@ -30,10 +30,14 @@ export class TableComponent {
     checkBox: boolean;
     cols: string[];
     actions: string[];
+    search: boolean;
+    title?: string;
   } = {
     checkBox: true,
     cols: ['العنوان', 'الوقت', 'التاريخ'],
     actions: ['publish', 'restore', 'delete'],
+    search: false,
+    title: '',
   };
 
   @Input() isCategories: boolean = false;
@@ -42,6 +46,7 @@ export class TableComponent {
   @Input() isStatus: boolean = false;
   @Input() isSearch: boolean = false;
   @Input() isDelete: boolean = false;
+  @Input() isDraft: boolean = false;
 
   @Input() searchPlaceholder: string = 'ابحث بأستخدام اسم الخبر...';
 
@@ -71,6 +76,29 @@ export class TableComponent {
     const year = date.getFullYear();
 
     return `${day}/${month}/200${year}`;
+  }
+
+  timeSinceInArabic(dateString: string): string {
+    const targetDate = new Date(dateString);
+    const currentDate = new Date();
+    const timeDifference = currentDate.getTime() - targetDate.getTime();
+
+    const seconds = Math.floor(timeDifference / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (days > 0) {
+      return `منذ ${days} أيام`;
+    } else if (hours > 0) {
+      return `منذ ${hours} ساعات`;
+    } else if (minutes > 0) {
+      return `منذ ${minutes} دقائق`;
+    } else if (seconds > 0) {
+      return `منذ ${seconds} ثواني`;
+    } else {
+      return 'الآن';
+    }
   }
 
   onSelect(e: any) {

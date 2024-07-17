@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-list',
@@ -6,9 +6,12 @@ import { Component, Input } from '@angular/core';
   styleUrl: './list.style.scss',
 })
 export class ListComponent {
-  @Input() items: any[];
+  @Output() selectedItemsEmitter = new EventEmitter<string[]>();
 
-  colors = ['primary', 'dark'];
+  @Input() items: any[] = [];
+  @Input() isAllSectionSelected: boolean = false;
+  @Input() isLoading: boolean | null = false;
+  selectedItems: string[] = [];
 
   constructor() {}
 
@@ -33,5 +36,17 @@ export class ListComponent {
     } else {
       return 'الآن';
     }
+  }
+
+  toggleSelect(e: any) {
+    if (e.target.checked) {
+      this.selectedItems.push(e.target.value);
+    } else {
+      this.selectedItems = this.selectedItems.filter(
+        (id) => id === e.target.value
+      );
+    }
+
+    this.selectedItemsEmitter.emit(this.selectedItems);
   }
 }

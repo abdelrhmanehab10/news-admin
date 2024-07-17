@@ -1,21 +1,23 @@
 <div class="card mb-5 mb-xl-10">
   <div class="card-header border-0 p-0 cursor-pointer">
     <div class="card-title m-0" style="padding: 0 2.25rem">
-      <h3 class="fw-bolder m-0">أضافة مادة</h3>
+      <h3 class="fw-bolder mt-4">أضافة مادة</h3>
     </div>
     <ng-content></ng-content>
   </div>
   <div class="card-body border-top p-9">
     <form [formGroup]="addNewForm" class="form">
       <div class="row mb-6">
-        <label class="col-lg-2 col-form-label fw-bold fs-6"> نوع المادة </label>
+        <label class="col-lg-2 col-form-label fw-bold fs-6">
+          <span class="required">نوع المادة</span>
+        </label>
         <div class="col-lg-4">
           <select
             class="form-select w-fit form-select-solid"
             data-kt-select2="true"
             data-placeholder="Select option"
             data-allow-clear="true"
-            formControlName="contentType"
+            formControlName="NewsType"
           >
             @for(item of contentTypes; track item; let idx = $index){
             <option value="{{ item.typeId }}">{{ item.contentType1 }}</option>
@@ -25,12 +27,14 @@
       </div>
       <div class="separator my-3 opacity-75"></div>
       <div class="row mb-6">
-        <label class="col-lg-2 col-form-label fw-bold fs-6">التصنيف</label>
+        <label class="col-lg-2 col-form-label fw-bold fs-6">
+          <span class="required">التصنيف</span>
+        </label>
         <div class="col-lg-4">
           <select
             class="form-select form-select-solid"
             (change)="onSelectedNewsCategoriesChange($event)"
-            name="sectionId"
+            formControlName="sectionId"
           >
             <option value=""></option>
             @for(category of newsCategories; track category;){
@@ -41,9 +45,11 @@
             }}
           </select>
         </div>
-        <label class="col-lg-2 col-form-label fw-bold fs-6">القسم</label>
+        <label class="col-lg-2 col-form-label fw-bold fs-6">
+          <span class="required">القسم</span>
+        </label>
         <div class="col-lg-4">
-          <select class="form-select form-select-solid" name="catId">
+          <select class="form-select form-select-solid" formControlName="catId">
             @for(subCategory of newsSubCategories; track subCategory;){
             <option value="{{ subCategory.sectionID }}">
               {{ subCategory.secTitle }}
@@ -63,7 +69,7 @@
               class="form-control form-control-lg form-control-solid"
               [ngClass]="byLine.value.length ? 'rounded-start-0' : ''"
               #byLine
-              formControlName="byLine"
+              formControlName="ByLine"
             />
             @if(byLine.value.length){
             <span
@@ -133,16 +139,16 @@
             <textarea
               type="text"
               class="form-control form-control-lg form-control-solid"
-              [ngClass]="Story.value.length ? 'rounded-start-0' : ''"
-              formControlName="Story"
-              #Story
+              [ngClass]="Brief.value.length ? 'rounded-start-0' : ''"
+              formControlName="Brief"
+              #Brief
             ></textarea>
-            @if(Story.value.length){
+            @if(Brief.value.length){
             <span
               class="input-group-text rounded-end-0 rounded-start"
               id="basic-addon2"
             >
-              {{ Story.value.length }}
+              {{ Brief.value.length }}
             </span>
             }
           </div>
@@ -156,6 +162,7 @@
           <editor
             [init]="init"
             apiKey="ahxsnaz651emu6ebjchn1szpv76eega3bqmgh9womdkplffn"
+            formControlName="Story"
           />
         </div>
       </div>
@@ -165,7 +172,11 @@
           >تاجز</label
         >
         <div class="col-lg-10 fv-row">
-          <input class="form-control form-control-solid" id="kt_tagify_1" />
+          <input
+            class="form-control form-control-solid"
+            id="kt_tagify_1"
+            formControlName="Tags"
+          />
         </div>
       </div>
       <div class="separator my-3 opacity-75"></div>
@@ -218,7 +229,7 @@
           <span class="required">المرفقات</span>
         </label>
         <div class="col-lg-10 fv-row mb-6">
-          <app-image></app-image>
+          <app-image [formControlName]="''"></app-image>
         </div>
         <div class="row mb-6">
           <ul class="d-flex align-items-center gap-2">
@@ -269,7 +280,7 @@
             <input
               class="form-check-input w-45px h-30px"
               type="checkbox"
-              id="allowmarketing"
+              formControlName="ChkNewsTicker"
             /><label class="form-check-label"></label>
           </div>
         </div>
@@ -393,17 +404,7 @@
           </div>
         </div>
       </div>
-      <div class="row mb-6">
-        <!--begin::Label-->
-        <label class="col-lg-2 col-form-label fw-bold fs-6">نشر في</label>
-        <div class="col-lg-10 fv-row">
-          <input
-            class="form-control form-control-solid"
-            placeholder="Pick date rage"
-            id="kt_daterangepicker_2"
-          />
-        </div>
-      </div>
+      <app-date-input [label]="'نشر في'" [id]="'#add-new-date'"></app-date-input>
       <div class="separator my-3 opacity-75"></div>
       <div class="d-flex justify-content-center gap-3">
         <div class="py-6">

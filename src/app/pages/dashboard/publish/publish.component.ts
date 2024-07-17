@@ -19,6 +19,20 @@ export class PublishComponent implements OnInit, OnDestroy {
   rolesPassList: { id: string; name: string }[];
   newsCategories: { categoryID: string; name: string }[];
 
+  headerOptions: {
+    checkBox: boolean;
+    cols: string[];
+    actions: string[];
+    search: boolean;
+    title: string;
+  } = {
+    cols: ['title', 'date', 'time'],
+    checkBox: true,
+    actions: [''],
+    search: false,
+    title: 'نشر المحتوى',
+  };
+
   hasError: boolean;
 
   constructor(

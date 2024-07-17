@@ -1,6 +1,6 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { TranslationService } from '../../../../../../modules/i18n';
+import { TranslationService } from 'src/app/modules/i18n';
 import { AuthService, UserType } from 'src/app/pages/auth';
 
 @Component({

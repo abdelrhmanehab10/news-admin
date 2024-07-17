@@ -1,11 +1,16 @@
 <div class="card">
   <div class="card-header border-0">
+    @if (headerOptions.title) {
+    <div class="card-title m-0 py-2">
+      <h3 class="fw-bolder mt-4">{{ headerOptions.title }}</h3>
+    </div>
+    }
     <div
       class="d-flex flex-nowrap align-items-center gap-5 w-100"
-      [ngClass]="!isSearch ? 'justify-content-end' : ''"
+      [ngClass]="!isSearch ? 'justify-content-end' : 'justify-content-between'"
     >
-      @if(isSearch){
-      <form class="w-100 position-relative" autoComplete="off">
+      @if(headerOptions.search){
+      <form class="flex-grow-1 position-relative" autoComplete="off">
         <app-keenicon
           name="magnifier"
           class="fs-2 position-absolute top-50 start-0 ms-5 translate-middle-y"
@@ -19,7 +24,10 @@
       </form>
       }
 
-      <div class="d-flex align-items-center gap-2">
+      <div
+        class="d-flex align-items-center gap-2"
+        [ngClass]="isDraft ? 'justify-content-between w-100' : ''"
+      >
         @if(isCategories || isRoles || isSubCategories || isStatus){
         <div class="card-toolbar">
           <button
@@ -31,15 +39,17 @@
           >
             <app-keenicon name="category" class="fs-2"></app-keenicon>
           </button>
-          <app-dropdown-menu1
+          <app-dropdown-menu
             [isCategories]="isCategories"
             [isRoles]="isRoles"
             [isSubCategories]="isSubCategories"
             [isStatus]="isStatus"
-            (filterOptionsEmitter)="(recevieFilterOption($event))"
-          ></app-dropdown-menu1>
+            (filterOptionsEmitter)="recevieFilterOption($event)"
+          ></app-dropdown-menu>
         </div>
-        } @if(customBtns){ @for(btn of customBtns; track btn){
+        }
+        <ng-content></ng-content>
+        @if(customBtns){ @for(btn of customBtns; track btn){
         <button
           (click)="btn.onClick()"
           class="btn btn-sm d-flex flex-nowrap align-items-center"
@@ -48,7 +58,6 @@
           {{ btn.content }}
         </button>
         } }
-        <ng-content></ng-content>
       </div>
     </div>
   </div>
@@ -73,11 +82,15 @@
                 />
               </div>
             </th>
-            }
+            } @if(headerOptions.cols.includes('title')){
             <th class="min-w-150px">العنوان</th>
-            <!-- <th class="min-w-140px">باب</th> -->
+            } @if(headerOptions.cols.includes('time')){
             <th class="min-w-120px">الوقت</th>
+            } @if(headerOptions.cols.includes('date')){
             <th class="min-w-100px text-end pe-2">التاريخ</th>
+            } @if(headerOptions.cols.includes('dateWithTime')){
+            <th class="min-w-100px text-end pe-2">المدة المنقضية</th>
+            }
           </tr>
         </thead>
         <tbody>
@@ -100,9 +113,6 @@
             }
             <td>
               <div class="d-flex align-items-center">
-                <!-- <div class="symbol symbol-45px me-5">
-                <img src="./assets/media/avatars/300-14.jpg" alt="" />
-              </div> -->
                 <div class="d-flex justify-content-start flex-column">
                   <a
                     href="#"
@@ -110,17 +120,21 @@
                   >
                     {{ item.title }}
                   </a>
-                  <span class="text-muted fw-bold text-muted d-block fs-7">
-                    {{ item.category }}
-                  </span>
+                  @if(item.category){<span
+                    class="text-muted fw-bold text-muted d-block fs-7"
+                  >
+                    {{ item.category }} </span
+                  >}
                 </div>
               </div>
             </td>
+            @if(headerOptions.cols.includes('time')){
             <td>
               <span href="#" class="text-gray-900 fw-bolder d-block fs-7">
                 {{ convertToArabicTime(item.time) }}
               </span>
             </td>
+            } @if(headerOptions.cols.includes('date')){
             <td class="text-end">
               <div class="d-flex flex-column w-100">
                 <div class="d-flex flex-stack">
@@ -130,6 +144,17 @@
                 </div>
               </div>
             </td>
+            } @if(headerOptions.cols.includes('dateWithTime')){
+            <td class="text-end">
+              <div class="d-flex flex-column w-100">
+                <div class="d-flex flex-stack">
+                  <span class="text-gray-900 fs-7 fw-bolder">{{
+                    timeSinceInArabic(item.dateWithTime)
+                  }}</span>
+                </div>
+              </div>
+            </td>
+            }
             <td>
               <div class="d-flex justify-content-end flex-shrink-0">
                 <!-- <a

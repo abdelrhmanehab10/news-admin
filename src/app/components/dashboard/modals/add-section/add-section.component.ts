@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
@@ -33,8 +41,13 @@ export class AddSectionComponent implements OnInit {
   filterForm: FormGroup;
 
   private unsubscribe: Subscription[] = [];
+
   @ViewChild('modal') private modalComponent: ModalComponent;
 
+  @Output() onNewSectionAddedEmitter = new EventEmitter<boolean>();
+
+  @Input() title: string = 'أضافة باب فرعي';
+  @Input() btnStyle: string = '';
   hasError: boolean = false;
 
   isLoading$: Observable<boolean>;
@@ -60,8 +73,6 @@ export class AddSectionComponent implements OnInit {
   ) {
     this.isLoading$ = this.sectionsService.isLoading$;
     this.dashboardService.newsCategories$.subscribe((categories) => {
-      // console.log(categories);
-
       this.newsCategories = categories;
     });
   }
@@ -91,6 +102,7 @@ export class AddSectionComponent implements OnInit {
 
   addMainSection() {
     this.hasError = false;
+    this.onNewSectionAddedEmitter.emit(false);
     const addMainSectionSubscr = this.sectionsService
       .addMainSection({
         Description: this.f.Description.value,
@@ -103,9 +115,8 @@ export class AddSectionComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           if (data) {
-            console.log(data.message);
-
             this.toast.success(data.message);
+            this.onNewSectionAddedEmitter.emit(true);
           }
         },
         error: (error: any) => {

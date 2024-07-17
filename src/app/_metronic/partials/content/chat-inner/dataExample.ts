@@ -108,7 +108,7 @@ const defaultUserInfos: Array<UserInfoModel> = [
   },
   {
     name: 'Brian Cox',
-    avatar: 'avatars/300-25.jpg',
+    // avatar: 'avatars/300-25.jpg',
     email: 'brian@exchange.com',
     position: 'UI/UX Designer',
     online: false,

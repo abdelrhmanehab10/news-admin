@@ -9,16 +9,17 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Subscription, distinctUntilChanged, switchMap } from 'rxjs';
+import { Subscription, distinctUntilChanged } from 'rxjs';
 import { FilterOption } from 'src/app/models/new.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
+import { LayoutService } from 'src/app/services/layout/layout.service';
 
 @Component({
-  selector: 'app-dropdown-menu1',
-  templateUrl: './dropdown-menu1.component.html',
+  selector: 'app-dropdown-menu',
+  templateUrl: './dropdown-menu.component.html',
 })
-export class DropdownMenu1Component implements OnInit, OnDestroy {
+export class DropdownMenuComponent implements OnInit, OnDestroy {
   defaultFilterValues: {
     role: string;
     category: string;
@@ -26,6 +27,7 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
     subCategory: string;
     orderSubCategory: string;
     status: string;
+    type: string;
   } = {
     role: '',
     category: '',
@@ -33,6 +35,7 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
     subCategory: '',
     orderSubCategory: '',
     status: '',
+    type: '',
   };
 
   private unsubscribe: Subscription[] = [];
@@ -52,19 +55,21 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
   @Input() isSubCategories: boolean = false;
   @Input() isOrderSubCategories: boolean = false;
   @Input() isStatus: boolean = false;
+  @Input() isType: boolean = false;
 
   rolesPassList: { id: string; name: string }[];
   newsCategories: { categoryID: string; name: string }[] = [];
   newsOrderCategories: { id: string; name: string }[] = [];
   newsSubCategories: { sectionID: string; secTitle: string }[] = [];
   newsOrderSubCategories: { sectionID: string; secTitle: string }[] = [];
-  newsStatus: { id: string; name: string }[] = [];
+  newsStatus: { roleId: string; roleName: string }[] = [];
 
   isError: boolean = false;
 
   constructor(
     private publishService: PublishService,
     private dashboardService: DashboardService,
+    private layoutService: LayoutService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder
   ) {}
@@ -83,6 +88,13 @@ export class DropdownMenu1Component implements OnInit, OnDestroy {
     if (this.isOrderCategories) {
       this.getNewsOrderCategories();
     }
+
+    if (this.isStatus) {
+      this.layoutService.newsStatusCount$.subscribe((newsStatus) => {
+        this.newsStatus = newsStatus;
+      });
+    }
+
     this.initForm();
   }
 

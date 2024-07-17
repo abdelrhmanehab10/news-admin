@@ -55,12 +55,12 @@
   <div class="row g-6 g-xl-9 mb-6 mb-xl-9">
     @for(item of images; track item){
     <div class="col-12 col-sm-12 col-xl">
-      <app-card
+      <app-image-card
         icon="{{ item.picPath }}"
         title="{{ item.picName }}"
         description="{{ item.picCaption }}"
         (selectedImageEmitter)="recieveSelectedImage($event)"
-      ></app-card>
+      ></app-image-card>
     </div>
     }
   </div>

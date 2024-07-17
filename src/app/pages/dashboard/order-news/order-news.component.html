@@ -13,10 +13,10 @@
       >
         <app-keenicon name="category" class="fs-2"></app-keenicon>
       </button>
-      <app-dropdown-menu1
+      <app-dropdown-menu
         [isOrderCategories]="true"
         (filterOptionsEmitter)="recieveFilterOption($event)"
-      ></app-dropdown-menu1>
+      ></app-dropdown-menu>
       <button
         (click)="saveOrder()"
         class="btn btn-sm btn-primary d-flex align-items-center gap-3 me-2"
@@ -43,7 +43,10 @@
       [cdkDropListData]="items"
       (cdkDropListDropped)="drop($event)"
     >
-      <app-list [items]="items"></app-list>
+      <app-dragable-list
+        [items]="items"
+        [isLoading]="isLoading$ | async"
+      ></app-dragable-list>
     </div>
     <!-- end:Item -->
   </div>

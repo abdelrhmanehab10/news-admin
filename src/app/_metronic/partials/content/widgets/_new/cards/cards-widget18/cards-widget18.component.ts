@@ -18,7 +18,7 @@ export class CardsWidget18Component implements OnInit {
 
   constructor() {
     this.cards = [
-      { name: 'Melody Macy', src: './assets/media/avatars/300-2.jpg' },
+      // { name: 'Melody Macy', src: './assets/media/avatars/300-2.jpg' },
       { name: 'Michael Eberon', src: './assets/media/avatars/300-3.jpg' },
       { name: 'Susan Redwood', initials: 'S', state: 'primary' },
     ];

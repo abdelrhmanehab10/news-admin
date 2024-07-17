@@ -1,8 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { FilterOption } from 'src/app/models/new.model';
-import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { SectionsService } from 'src/app/services/dashboard/sections/sections.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-sections',
@@ -22,35 +21,70 @@ export class SectionsComponent implements OnInit {
     categoryId: number;
   }[] = [];
 
+  selectedSections: string[] = [];
+  pageNumber: number = 1;
+
   isLoading$: Observable<boolean>;
   hasError: boolean = false;
-
   constructor(
     private sectionsService: SectionsService,
+    private utilsService: UtilsService,
     private cdr: ChangeDetectorRef
   ) {
     this.isLoading$ = this.sectionsService.isLoading$;
   }
 
-  ngOnInit(): void {
-    this.getAllSection();
+  toggleSelectAll(e: any) {
+    this.utilsService.toggleSelectAll(e, this.selectedSections, this.items);
   }
 
-  getAllSection() {
+  ngOnInit(): void {
+    this.getAllSections();
+  }
+
+  getAllSections() {
     this.hasError = false;
+
     const getAllSectionSubscr = this.sectionsService
-      .getAllSections()
+      .getAllSections(this.pageNumber, 2)
       .subscribe({
         next: (data: any[]) => {
           this.items = data;
           this.cdr.detectChanges();
         },
         error: (error: any) => {
-          console.log('[DELETE]', error);
+          console.log('[GET_ALL_SECTIONS]', error);
           this.hasError = true;
         },
       });
     this.unsubscribe.push(getAllSectionSubscr);
+  }
+
+  // deleteSections() {
+  //   this.hasError = false;
+  //   const deleteSectionsSubscr = this.sectionsService
+  //     .deleteSections()
+  //     .subscribe({
+  //       next: (data: any[]) => {
+  //         this.items = data;
+  //         this.cdr.detectChanges();
+  //       },
+  //       error: (error: any) => {
+  //         console.log('[DELETE]', error);
+  //         this.hasError = true;
+  //       },
+  //     });
+  //   this.unsubscribe.push(deleteSectionsSubscr);
+  // }
+
+  recieveSelectedItems(data: string[]) {
+    this.selectedSections = data;
+  }
+
+  recieveIsNewSectionAdded(data: boolean) {
+    if (data) {
+      this.getAllSections();
+    }
   }
 
   ngOnDestroy() {

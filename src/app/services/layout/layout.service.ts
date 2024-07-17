@@ -85,6 +85,9 @@ export class LayoutService {
   isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
 
+  newsStatusCountSubject = new BehaviorSubject<any[]>([]);
+  newsStatusCount$ = this.newsStatusCountSubject.asObservable();
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private layoutHTTPService: LayoutHTTPService,
@@ -259,6 +262,7 @@ export class LayoutService {
     this.isLoadingSubject.next(true);
     return this.layoutHTTPService.getNewsStatusCount(auth.authToken).pipe(
       map((data) => {
+        this.newsStatusCountSubject.next(data.data);
         return data.data;
       }),
       catchError((err) => {

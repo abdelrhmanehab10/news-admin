@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { TranslationService } from './modules/i18n';
 // language list
 import { locale as enLang } from './modules/i18n/vocabs/en';
 import { locale as chLang } from './modules/i18n/vocabs/ch';
@@ -8,6 +7,7 @@ import { locale as jpLang } from './modules/i18n/vocabs/jp';
 import { locale as deLang } from './modules/i18n/vocabs/de';
 import { locale as frLang } from './modules/i18n/vocabs/fr';
 import { ThemeModeService } from './_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
+import { TranslationService } from './modules/i18n';
 
 @Component({
   // tslint:disable-next-line:component-selector

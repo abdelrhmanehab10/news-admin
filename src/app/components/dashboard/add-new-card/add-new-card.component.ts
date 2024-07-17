@@ -6,7 +6,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Tagify from '@yaireo/tagify';
 import { distinctUntilChanged, Observable, Subscription } from 'rxjs';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
@@ -25,23 +25,37 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
   defaultNew: {
-    contentType: string;
+    NewsType: string;
+    sectionId: string;
+    CatId: string;
     image1Id: string;
-    byLine: string;
+    ByLine: string;
     Title: string;
     SubTitle: string;
-    Story: string;
+    Brief: string;
     PictureCaption1: string;
     Notes: string;
+    Story: string;
+    Tags: string[];
+    ChkNewsTicker: boolean;
+    ChkTopNews: boolean;
+    ChkTopNewCategory: boolean;
   } = {
-    contentType: '1',
+    NewsType: '1',
+    sectionId: '',
+    CatId: '',
     image1Id: '',
-    byLine: '',
+    ByLine: '',
     Title: '',
     SubTitle: '',
-    Story: '',
+    Brief: '',
     PictureCaption1: '',
     Notes: '',
+    Story: '',
+    Tags: [],
+    ChkNewsTicker: false,
+    ChkTopNews: false,
+    ChkTopNewCategory: false,
   };
 
   init: EditorComponent['init'] = {
@@ -67,6 +81,8 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
     title: string;
     description: string;
   } | null = null;
+
+  selectedAttachment: File | null = null;
 
   @ViewChild('albumSelect') albumSelect: ElementRef;
 
@@ -129,7 +145,7 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
 
   getContentTypes() {
     this.hasError = false;
-    const getContentTypesSubscr = this.addNewService
+    const getContentTypesSubscr = this.dashboardService
       .getContentTypes()
       .subscribe({
         next: (data: typeof this.contentTypes) => {
@@ -171,14 +187,21 @@ export class AddNewCardComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.addNewForm = this.fb.group({
-      contentType: [this.defaultNew.contentType],
-      image1Id: [this.defaultNew.image1Id],
-      byLine: [this.defaultNew.byLine],
-      Title: [this.defaultNew.Title],
+      NewsType: [this.defaultNew.NewsType, Validators.required],
+      sectionId: [this.defaultNew.sectionId, Validators.required],
+      CatId: [this.defaultNew.CatId, Validators.required],
+      image1Id: [this.defaultNew.image1Id, Validators.required],
+      ByLine: [this.defaultNew.ByLine, Validators.required],
+      Title: [this.defaultNew.Title, Validators.required],
       SubTitle: [this.defaultNew.SubTitle],
-      Story: [this.defaultNew.Story],
-      PictureCaption1: [this.defaultNew.PictureCaption1],
+      Brief: [this.defaultNew.Brief],
+      Story: [this.defaultNew.Story, Validators.required],
+      PictureCaption1: [this.defaultNew.PictureCaption1, Validators.required],
       Notes: [this.defaultNew.Notes],
+      Tags: [this.defaultNew.Tags],
+      ChkNewsTicker: [this.defaultNew.ChkNewsTicker],
+      ChkTopNews: [this.defaultNew.ChkTopNews],
+      ChkTopNewCategory: [this.defaultNew.ChkTopNewCategory],
     });
   }
 

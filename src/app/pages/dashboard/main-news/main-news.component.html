@@ -1,1 +1,50 @@
-<p>main-news works!</p>
+<div class="card">
+  <!-- begin::Header -->
+  <div class="card-header border-0">
+    <!-- <h3 class="card-title fw-bolder text-gray-900">Todo</h3> -->
+    <div
+      class="d-flex flex-nowrap align-items-center justify-content-between gap-5 w-100"
+    >
+      <form class="flex-grow-1 position-relative" autoComplete="off">
+        <app-keenicon
+          name="magnifier"
+          class="fs-2 position-absolute top-50 start-0 ms-5 translate-middle-y"
+        ></app-keenicon>
+        <input
+          type="text"
+          class="form-control form-control-solid pe-5"
+          name="search"
+          placeholder=""
+        />
+      </form>
+      <div class="card-toolbar">
+        <!-- begin::Menu -->
+        <button
+          type="button"
+          class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
+          data-kt-menu-trigger="click"
+          data-kt-menu-placement="bottom-end"
+          data-kt-menu-flip="top-end"
+        >
+          <app-keenicon name="category" class="fs-2"></app-keenicon>
+        </button>
+        <app-dropdown-menu
+          [isCategories]="true"
+          [isSubCategories]="true"
+          [isType]="true"
+        ></app-dropdown-menu>
+        <!-- <app-add-urgent-new
+        (onNewUrgentContentAddedEmitter)="recieveIsUrgentContentAdded($event)"
+      ></app-add-urgent-new>
+      <app-choose-from-daily-news></app-choose-from-daily-news> -->
+        <!-- end::Menu -->
+      </div>
+    </div>
+  </div>
+
+  <!-- end::Header -->
+  <!-- begin::Body -->
+  <div class="card-body pt-2">
+    <app-group-list></app-group-list>
+  </div>
+</div>

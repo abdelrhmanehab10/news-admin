@@ -18,6 +18,7 @@ export class ImageComponent {
     title: string;
     description: string;
   } | null;
+  @Input() formControlName: string = '';
 
   @Output() isSelectedImageRemovedEmitter = new EventEmitter<boolean>();
 
