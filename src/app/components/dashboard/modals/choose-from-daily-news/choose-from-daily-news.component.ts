@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
+import { FilterOption } from 'src/app/models/components.model';
 import { ModalConfig } from 'src/app/models/modal.model';
 import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent-news.service';
 
@@ -28,8 +29,11 @@ export class ChooseFromDailyNewsComponent implements OnInit {
 
   selectedItems: string[] = [];
 
-  hasError: boolean = false;
+  filterOptions: FilterOption = {
+    isCategories: true,
+  };
 
+  hasError: boolean = false;
   isLoading$: Observable<boolean>;
 
   modalConfig: ModalConfig = {

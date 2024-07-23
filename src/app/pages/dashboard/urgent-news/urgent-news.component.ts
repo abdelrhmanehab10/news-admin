@@ -1,5 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
+import { FilterOption, ListOptions } from 'src/app/models/components.model';
 import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent-news.service';
 
 @Component({
@@ -17,9 +19,23 @@ export class UrgentNewsComponent implements OnInit {
   hasError: boolean = false;
   isLoading$: Observable<boolean>;
 
+  groupListOptions: ListOptions = {
+    isEdit: true,
+    isEnable: true,
+    isDelete: true,
+    edit: () => {},
+    enable: (id: string) => {},
+    delete: () => {},
+  };
+
+  filterOptions: FilterOption = {
+    isOrderSubCategories: true,
+  };
+
   constructor(
     private urgentNewsService: UrgentNewsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +58,24 @@ export class UrgentNewsComponent implements OnInit {
         },
       });
     this.unsubscribe.push(getUrgentNewsSubscr);
+  }
+
+  onEnable(editorId: string) {
+    this.hasError = false;
+    const toggleEnableUrgentNewSubscr = this.urgentNewsService
+      .toggleEnableUrgentNew(editorId)
+      .subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.toast.success(data.message);
+          }
+        },
+        error: (error: any) => {
+          console.log('[TOGGLE_ENABLE_EDITOR]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(toggleEnableUrgentNewSubscr);
   }
 
   recieveIsUrgentContentAdded(data: boolean) {

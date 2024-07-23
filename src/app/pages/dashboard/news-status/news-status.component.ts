@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FilterOption, NEW } from 'src/app/models/new.model';
+import { FilterOption, TableOption } from 'src/app/models/components.model';
+import { NEW } from 'src/app/models/new.model';
 import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-status.service';
 
 @Component({
@@ -16,10 +17,15 @@ export class NewsStatusComponent implements OnDestroy {
   selectedNews: string[] = [];
   pageNumber: number = 1;
   filterOption: FilterOption = {
-    category: '',
-    status: '',
-    role: '',
-    subCategory: '',
+    categoryId: '',
+    subCategoryId: '',
+    statusId: '',
+    roleId: '',
+  };
+  tableOptions: TableOption = {
+    isCategories: true,
+    isSubCategories: true,
+    isStatus: true,
   };
   hasError: boolean = false;
 
@@ -31,9 +37,9 @@ export class NewsStatusComponent implements OnDestroy {
       .getNews(
         this.pageNumber,
         this.searchQuery,
-        this.filterOption.status as string,
-        this.filterOption.category as string,
-        this.filterOption.subCategory as string
+        this.filterOption.statusId,
+        this.filterOption.categoryId,
+        this.filterOption.subCategoryId
       )
       .subscribe({
         next: (data: { news: NEW[] }[]) => {

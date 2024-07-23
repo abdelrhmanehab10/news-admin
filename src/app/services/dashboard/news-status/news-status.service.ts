@@ -27,10 +27,10 @@ export class NewsStatusService {
 
   getNews(
     pageNumber: number,
-    searchQuery: string,
-    status: string,
-    mainType: string,
-    subType: string
+    search: string,
+    statusId?: string,
+    categoryId?: string,
+    subCategoryId?: string
   ) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
@@ -42,10 +42,10 @@ export class NewsStatusService {
       .getNews(
         auth.authToken,
         pageNumber,
-        searchQuery,
-        status,
-        mainType,
-        subType
+        search,
+        statusId,
+        categoryId,
+        subCategoryId
       )
       .pipe(
         map((data) => {

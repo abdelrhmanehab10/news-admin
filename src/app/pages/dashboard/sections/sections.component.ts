@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
+import { FilterOption } from 'src/app/models/components.model';
 import { SectionsService } from 'src/app/services/dashboard/sections/sections.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -21,11 +22,13 @@ export class SectionsComponent implements OnInit {
     categoryId: number;
   }[] = [];
 
+  filterOptions: FilterOption = { isCategories: true };
   selectedSections: string[] = [];
   pageNumber: number = 1;
 
   isLoading$: Observable<boolean>;
   hasError: boolean = false;
+
   constructor(
     private sectionsService: SectionsService,
     private utilsService: UtilsService,

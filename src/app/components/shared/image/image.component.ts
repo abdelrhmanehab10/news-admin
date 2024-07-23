@@ -13,24 +13,20 @@ import {
 })
 export class ImageComponent {
   filePreview: string | ArrayBuffer | null | undefined = null;
-  @Input() selectedImage?: {
-    icon: string;
-    title: string;
-    description: string;
-  } | null;
+  @Input() selectedImage: any;
+
   @Input() formControlName: string = '';
 
-  @Output() isSelectedImageRemovedEmitter = new EventEmitter<boolean>();
-
-  selectedFile: File | null = null;
+  @Output() selectedImageEmitter = new EventEmitter<any>();
 
   constructor(private cdr: ChangeDetectorRef) {}
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-      this.previewFile(this.selectedFile);
+      this.selectedImage = input.files[0];
+      this.selectedImageEmitter.emit(input.files[0]);
+      this.previewFile(this.selectedImage);
       this.cdr.detectChanges();
     }
   }
@@ -45,9 +41,8 @@ export class ImageComponent {
   }
 
   removeSelectedImg() {
-    this.selectedFile = null;
     this.selectedImage = null;
-    this.isSelectedImageRemovedEmitter.emit(true);
+    this.selectedImageEmitter.emit(null);
     this.filePreview = null;
     this.cdr.detectChanges();
   }

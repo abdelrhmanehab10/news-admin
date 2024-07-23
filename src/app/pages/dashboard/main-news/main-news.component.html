@@ -1,7 +1,5 @@
 <div class="card">
-  <!-- begin::Header -->
   <div class="card-header border-0">
-    <!-- <h3 class="card-title fw-bolder text-gray-900">Todo</h3> -->
     <div
       class="d-flex flex-nowrap align-items-center justify-content-between gap-5 w-100"
     >
@@ -18,7 +16,6 @@
         />
       </form>
       <div class="card-toolbar">
-        <!-- begin::Menu -->
         <button
           type="button"
           class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
@@ -29,22 +26,25 @@
           <app-keenicon name="category" class="fs-2"></app-keenicon>
         </button>
         <app-dropdown-menu
-          [isCategories]="true"
-          [isSubCategories]="true"
-          [isType]="true"
+          [filterOptions]="filterOption"
+          (filterOptionsEmitter)="recieveFilterOption($event)"
         ></app-dropdown-menu>
-        <!-- <app-add-urgent-new
-        (onNewUrgentContentAddedEmitter)="recieveIsUrgentContentAdded($event)"
-      ></app-add-urgent-new>
-      <app-choose-from-daily-news></app-choose-from-daily-news> -->
-        <!-- end::Menu -->
       </div>
     </div>
   </div>
-
-  <!-- end::Header -->
-  <!-- begin::Body -->
   <div class="card-body pt-2">
-    <app-group-list></app-group-list>
+    <app-group-list
+      [groupListOptions]="groupListOptions"
+      [items]="items"
+      [isLoading]="isLoading$ | async"
+    ></app-group-list>
   </div>
+  @if(pagination){
+  <div class="card-footer pt-5">
+    <app-pagination
+      (pageChange)="recieveChangedPage($event)"
+      [pagination]="pagination"
+    ></app-pagination>
+  </div>
+  }
 </div>

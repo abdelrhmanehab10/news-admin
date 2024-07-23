@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TableOption } from 'src/app/models/components.model';
 
 @Component({
   selector: 'app-comments',
@@ -6,17 +7,9 @@ import { Component } from '@angular/core';
   styleUrl: './comments.component.scss',
 })
 export class CommentsComponent {
-  headerOptions: {
-    checkBox: boolean;
-    cols: string[];
-    actions: string[];
-    search: boolean;
-    title: string;
-  } = {
-    cols: ['title', 'date', 'time'],
-    checkBox: true,
-    actions: [''],
-    search: false,
+  tableOptions: TableOption = {
+    isCheckbox: true,
+    isSearch: false,
     title: 'تعليقات القراء',
   };
 }

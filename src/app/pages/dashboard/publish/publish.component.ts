@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import { FilterOption, TableOption } from 'src/app/models/components.model';
 import { NEW } from 'src/app/models/new.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
@@ -31,6 +32,12 @@ export class PublishComponent implements OnInit, OnDestroy {
     actions: [''],
     search: false,
     title: 'نشر المحتوى',
+  };
+
+  filterOptions: FilterOption = {
+    isCategories: true,
+    isSubCategories: true,
+    isRoles: true,
   };
 
   hasError: boolean;

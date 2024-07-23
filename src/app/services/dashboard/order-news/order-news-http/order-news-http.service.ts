@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FilterOption, NEW } from 'src/app/models/new.model';
+import { NEW } from 'src/app/models/new.model';
 import { environment } from 'src/environments/environment';
 
 const API_URL = `${environment.apiUrl}`;
@@ -12,7 +12,7 @@ const API_URL = `${environment.apiUrl}`;
 export class OrderNewsHTTPService {
   constructor(private http: HttpClient) {}
 
-  getOrderNews(token: string, categoryId: string): Observable<any> {
+  getOrderNews(token: string, categoryId?: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -35,8 +35,8 @@ export class OrderNewsHTTPService {
   saveOrder(
     token: string,
     newsOrder: string[],
-    categoryId: string,
-    sectionId: string
+    categoryId?: string,
+    subCategoryId?: string
   ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -48,8 +48,13 @@ export class OrderNewsHTTPService {
       formData.append('Ids', id);
     });
 
-    formData.append('categoryId', categoryId);
-    formData.append('sectionId', sectionId);
+    if (categoryId) {
+      formData.append('categoryId', categoryId);
+    }
+
+    if (subCategoryId) {
+      formData.append('sectionId', subCategoryId);
+    }
 
     return this.http.put<{
       status: number;

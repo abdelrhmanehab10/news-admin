@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FilterOption, NEW } from 'src/app/models/new.model';
+import { NEW } from 'src/app/models/new.model';
 import { environment } from 'src/environments/environment';
 
 const API_URL = `${environment.apiUrl}`;
@@ -15,7 +15,7 @@ export class EditorNewsStatusHTTPService {
   getMyNews(
     token: string,
     pageNumber: number,
-    status: string
+    statusId?: string
   ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -28,7 +28,7 @@ export class EditorNewsStatusHTTPService {
       errors: string[] | null;
     }>(
       `${API_URL}/News/GetMyNews?pageNumber=${pageNumber ?? 1}${
-        status ? '&newsStatus=' + status : ''
+        statusId ? '&newsStatus=' + statusId : ''
       }`,
       {
         headers: httpHeaders,

@@ -1,6 +1,11 @@
 import { Component, EventEmitter, input, Input, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
+import {
+  CustomButton,
+  FilterOption,
+  TableOption,
+} from 'src/app/models/components.model';
 import { NEW } from 'src/app/models/new.model';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 
@@ -13,48 +18,36 @@ export class TableComponent {
 
   selectedItems: string[] = [];
   searchQuery: string = '';
-  pageNumber: number = 1;
 
   @Output() selectedNewsEmitter = new EventEmitter<string[]>();
   @Output() searchEmitter = new EventEmitter<string>();
-  @Output() pageNumberEmitter = new EventEmitter<number>();
   @Output() filterOptionEmitter = new EventEmitter<{}>();
 
   @Input() items: any;
-  @Input() publish: () => void;
-  @Input() restore: () => void;
-  @Input() deleteNew: (id: string) => void;
-  @Input() restoreDraft: (id: string) => void;
 
-  @Input() headerOptions: {
-    checkBox: boolean;
-    cols: string[];
-    actions: string[];
-    search: boolean;
-    title?: string;
-  } = {
-    checkBox: true,
-    cols: ['العنوان', 'الوقت', 'التاريخ'],
-    actions: ['publish', 'restore', 'delete'],
-    search: false,
+  @Input() tableOptions: TableOption = {
+    isCheckbox: false,
+    isSearch: false,
+    isDelete: false,
+    isDraft: false,
+
     title: '',
+    searchPlaceholder: '',
+    headerCols: [
+      { title: 'العنوان', width: 150 },
+      { title: 'الوقت', width: 120 },
+      { title: 'التاريخ', width: 100 },
+    ],
+    actions: [
+      { title: 'publish', click: () => {}, icon: 'file-added' },
+      { title: 'restore', click: () => {}, icon: 'arrow-zigzag' },
+      { title: 'delete', click: () => {}, icon: 'trash' },
+    ],
   };
 
-  @Input() isCategories: boolean = false;
-  @Input() isSubCategories: boolean = false;
-  @Input() isRoles: boolean = false;
-  @Input() isStatus: boolean = false;
-  @Input() isSearch: boolean = false;
-  @Input() isDelete: boolean = false;
-  @Input() isDraft: boolean = false;
+  @Input() filterOptions: FilterOption;
 
-  @Input() searchPlaceholder: string = 'ابحث بأستخدام اسم الخبر...';
-
-  @Input() customBtns: {
-    content: string;
-    onClick: () => void;
-    bgColor: string;
-  }[] = [];
+  @Input() customBtns: CustomButton[] = [];
 
   convertToArabicTime(time: any) {
     let [hours, minutes] = time.split(':').map(Number);
@@ -114,17 +107,6 @@ export class TableComponent {
   onSearch(e: any) {
     this.searchQuery = e.target.value;
     this.searchEmitter.emit(this.searchQuery);
-  }
-
-  onPageChange(e: any) {
-    if (e.target.classList.includes('next')) {
-      this.pageNumber++;
-    } else if (e.target.classList.includes('previous')) {
-      this.pageNumber--;
-    } else {
-      this.pageNumber = e.target.value;
-    }
-    this.pageNumberEmitter.emit(this.pageNumber);
   }
 
   recevieFilterOption(data: {}) {

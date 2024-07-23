@@ -6,7 +6,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { Observable, Subscription } from 'rxjs';
 import { OrderNewsService } from 'src/app/services/dashboard/order-news/order-news.service';
-import { FilterOption } from 'src/app/models/new.model';
+import { FilterOption } from 'src/app/models/components.model';
 
 @Component({
   selector: 'app-order-news',
@@ -21,7 +21,9 @@ export class OrderNewsComponent implements OnInit {
     secTitle: string;
   }[] = [];
   itemsIds = this.items?.map((item) => item.newId);
-  filterOption: FilterOption = {};
+  filterOption: FilterOption = {
+    isOrderCategories: true,
+  };
 
   hasError: boolean = false;
   isLoading$: Observable<boolean>;
@@ -58,7 +60,7 @@ export class OrderNewsComponent implements OnInit {
     this.hasError = false;
 
     const getNewsOrderSubscr = this.orderNews
-      .getOrderNews(this.filterOption.orderCategory ?? '')
+      .getOrderNews(this.filterOption.orderCategoryId)
       .subscribe({
         next: (data: typeof this.items) => {
           if (data) {
@@ -82,10 +84,8 @@ export class OrderNewsComponent implements OnInit {
     const saveOrderSubscr = this.orderNews
       .saveOrder(
         itemsIds,
-        this.filterOption.orderCategory ? this.filterOption.orderCategory : '1',
-        this.filterOption.orderSubCategory
-          ? this.filterOption.orderSubCategory
-          : '1'
+        this.filterOption.orderCategoryId,
+        this.filterOption.orderSubCategoryId
       )
       .subscribe({
         next: (data: typeof this.items) => {

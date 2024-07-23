@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FilterOption, NEW } from 'src/app/models/new.model';
+import { NEW } from 'src/app/models/new.model';
 import { environment } from 'src/environments/environment';
 
 const API_URL = `${environment.apiUrl}`;
@@ -88,6 +88,136 @@ export class AddNewHTTPService {
         headers: httpHeaders,
       }
     );
+  }
+
+  addImage(
+    token: string,
+    subCategoryId?: string,
+    Caption?: string,
+    CHKWaterMark?: boolean,
+    ImageUrl?: string,
+    Width?: number,
+    Hieght?: number,
+    XAccess?: number,
+    YAccess?: number,
+    Image?: File
+  ) {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const data: { [key: string]: any } = {
+      subCategoryId,
+      Caption,
+      CHKWaterMark,
+      ImageUrl,
+      Width,
+      Hieght,
+      XAccess,
+      YAccess,
+      Image,
+    };
+
+    const formData = new FormData();
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        formData.append(key, data[key].toString());
+      }
+    }
+
+    return this.http.post<{
+      status: number;
+      data: NEW[] | null;
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/Image/AddImage`, formData, {
+      headers: httpHeaders,
+    });
+  }
+
+  addNew(
+    token: string,
+    newsAction?: number,
+    sectionId?: number,
+    catId?: number,
+    NewsType?: number,
+    Title?: string,
+    SubTitle?: string,
+    Story?: string,
+    Brief?: string,
+    Tags?: string[],
+    image1Id?: number,
+    image2Id?: number,
+    PictureCaption1?: string,
+    PicCaption2?: string,
+    ByLine?: string,
+    Notes?: string,
+    ContentAlbumIds?: string[],
+    ChkNewsTicker?: boolean,
+    ChkTopNews?: boolean,
+    ChkTopNewCategory?: boolean,
+    ChkReadNow?: boolean,
+    ChkImportantNews?: boolean,
+    ChkFilesNews?: boolean,
+    ChkTopNewSection?: boolean,
+    ChkIsVideo?: boolean,
+    ChkIsInstall?: boolean,
+    ChkIsAkbhbarKhassa?: boolean,
+    ChkIsImage?: boolean,
+    PublishDate?: string
+  ) {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const data: { [key: string]: any } = {
+      newsAction,
+      sectionId,
+      catId,
+      NewsType,
+      Title,
+      SubTitle,
+      Story,
+      Brief,
+      Tags,
+      image1Id,
+      image2Id,
+      PictureCaption1,
+      PicCaption2,
+      ByLine,
+      Notes,
+      ContentAlbumIds,
+      ChkNewsTicker,
+      ChkTopNews,
+      ChkTopNewCategory,
+      ChkReadNow,
+      ChkImportantNews,
+      ChkFilesNews,
+      ChkTopNewSection,
+      ChkIsVideo,
+      ChkIsInstall,
+      ChkIsAkbhbarKhassa,
+      ChkIsImage,
+      PublishDate,
+    };
+
+    const formData = new FormData();
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        formData.append(key, data[key].toString());
+      }
+    }
+
+    return this.http.post<{
+      status: number;
+      data: NEW[] | null;
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/News/AddNews`, formData, {
+      headers: httpHeaders,
+    });
   }
 
   getDrafts(token: string): Observable<any> {

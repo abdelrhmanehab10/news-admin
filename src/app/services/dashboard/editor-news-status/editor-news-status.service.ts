@@ -9,7 +9,6 @@ import {
   of,
 } from 'rxjs';
 import { EditorNewsStatusHTTPService } from './editor-news-status-http/editor-news-status-http.service';
-import { FilterOption } from 'src/app/models/new.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +25,7 @@ export class EditorNewsStatusService {
     this.isLoading$ = this.isLoadingSubject.asObservable();
   }
 
-  getMyNews(pageNumber: number, status: string) {
+  getMyNews(pageNumber: number, statusId?: string) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
@@ -34,7 +33,7 @@ export class EditorNewsStatusService {
 
     this.isLoadingSubject.next(true);
     return this.editorNewsStatusHTTPService
-      .getMyNews(auth.authToken, pageNumber, status)
+      .getMyNews(auth.authToken, pageNumber, statusId)
       .pipe(
         map((data) => {
           return data.data;

@@ -50,16 +50,37 @@ export class VoteService {
     );
   }
 
-  getAllVotes() {
+  getAllVotes(search?: string, categoryId?: string) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
     }
 
     this.isLoadingSubject.next(true);
-    return this.voteHTTPService.getAllVotes(auth.authToken).pipe(
+    return this.voteHTTPService
+      .getAllVotes(auth.authToken, search, categoryId)
+      .pipe(
+        map((data) => {
+          return data.data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  deleteVotes(ids: string[]) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.voteHTTPService.deleteVotes(auth.authToken, ids).pipe(
       map((data) => {
-        return data.data;
+        return data;
       }),
       catchError((err) => {
         console.error('err', err);

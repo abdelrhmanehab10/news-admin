@@ -25,7 +25,7 @@ export class OrderNewsService {
     this.isLoading$ = this.isLoadingSubject.asObservable();
   }
 
-  getOrderNews(categoryId: string) {
+  getOrderNews(categoryId?: string) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
@@ -47,7 +47,7 @@ export class OrderNewsService {
     );
   }
 
-  saveOrder(newsOrder: string[], categoryId: string, sectionId: string) {
+  saveOrder(newsOrder: string[], categoryId?: string, subCategoryId?: string) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
@@ -58,7 +58,7 @@ export class OrderNewsService {
       auth.authToken,
       newsOrder,
       categoryId,
-      sectionId
+      subCategoryId
     ).pipe(
       map((data) => {
         return data.data;

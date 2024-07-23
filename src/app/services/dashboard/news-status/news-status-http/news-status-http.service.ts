@@ -16,9 +16,9 @@ export class NewsStatusHTTPService {
     token: string,
     pageNumber: number,
     searchQuery: string,
-    status: string,
-    mainType: string,
-    subType: string
+    statusId?: string,
+    categoryId?: string,
+    subCategoryId?: string
   ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -32,9 +32,9 @@ export class NewsStatusHTTPService {
     }>(
       `${API_URL}/News/GetNews?pageNumber=${pageNumber ?? 1}${
         searchQuery ? '&Serach=' + searchQuery : ''
-      }${status ? '&Status=' + status : ''}${
-        mainType ? '&MainType=' + mainType : ''
-      }${subType ? '&subType=' + subType : ''}`,
+      }${statusId ? '&Status=' + statusId : ''}${
+        categoryId ? '&MainType=' + categoryId : ''
+      }${subCategoryId ? '&subType=' + subCategoryId : ''}`,
       {
         headers: httpHeaders,
       }

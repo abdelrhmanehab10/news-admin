@@ -36,4 +36,22 @@ export class UrgentNewsHTTPService {
       headers: httpHeaders,
     });
   }
+
+  toggleEnableUrgentNew(token: string, urgentNewId: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+    formData.append('EditorId', urgentNewId);
+
+    return this.http.put<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}DisbleOrEnableUrgentNew`, formData, {
+      headers: httpHeaders,
+    });
+  }
 }

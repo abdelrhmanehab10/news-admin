@@ -13,17 +13,17 @@
       >
         <app-keenicon name="category" class="fs-2"></app-keenicon>
       </button>
-      <app-dropdown-menu [isOrderCategories]="true"></app-dropdown-menu>
+      <app-dropdown-menu [filterOptions]="filterOptions"></app-dropdown-menu>
       <app-add-urgent-new
         (onNewUrgentContentAddedEmitter)="recieveIsUrgentContentAdded($event)"
       ></app-add-urgent-new>
       <app-choose-from-daily-news></app-choose-from-daily-news>
-      <!-- end::Menu -->
     </div>
   </div>
-  <!-- end::Header -->
-  <!-- begin::Body -->
   <div class="card-body pt-2">
-    <app-group-list [items]="items"></app-group-list>
+    <app-group-list
+      [groupListOptions]="groupListOptions"
+      [items]="items"
+    ></app-group-list>
   </div>
 </div>

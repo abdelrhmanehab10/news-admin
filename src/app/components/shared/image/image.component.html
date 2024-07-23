@@ -59,7 +59,7 @@
     data-bs-toggle="tooltip"
     data-bs-dismiss="click"
     title="Remove avatar"
-    [ngClass]="selectedFile || selectedImage ? '' : 'd-none'"
+    [ngClass]="selectedImage ? '' : 'd-none'"
     (click)="removeSelectedImg()"
   >
     <i class="ki-outline ki-cross fs-3"></i>

@@ -153,9 +153,8 @@
   </form>
 </app-modal>
 <button
-  class="btn btn-sm mx-2"
-  [ngClass]="btnStyle ? btnStyle : 'btn-primary'"
-  (click)="openModal()"
+  class="btn btn-sm btn-outline-dark border b d-flex align-items-center gap-3 me-2"
+  (click)="onOpen()"
 >
   {{ title }}
 </button>

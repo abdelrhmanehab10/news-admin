@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription, distinctUntilChanged } from 'rxjs';
-import { FilterOption } from 'src/app/models/new.model';
+import { FilterOption } from 'src/app/models/components.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 import { LayoutService } from 'src/app/services/layout/layout.service';
@@ -49,16 +49,10 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
   @Output() filterOptionsEmitter = new EventEmitter<FilterOption>();
 
   //Filtration Methods
-  @Input() isRoles: boolean = false;
-  @Input() isCategories: boolean = false;
-  @Input() isOrderCategories: boolean = false;
-  @Input() isSubCategories: boolean = false;
-  @Input() isOrderSubCategories: boolean = false;
-  @Input() isStatus: boolean = false;
-  @Input() isType: boolean = false;
+  @Input() filterOptions: FilterOption;
 
   rolesPassList: { id: string; name: string }[];
-  newsCategories: { categoryID: string; name: string }[] = [];
+  categories: { categoryID: string; name: string }[] = [];
   newsOrderCategories: { id: string; name: string }[] = [];
   newsSubCategories: { sectionID: string; secTitle: string }[] = [];
   newsOrderSubCategories: { sectionID: string; secTitle: string }[] = [];
@@ -75,21 +69,21 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    if (this.isRoles) {
+    if (this.filterOptions.isRoles) {
       this.getRolesPassList();
     }
 
-    if (this.isCategories) {
-      this.dashboardService.newsCategories$.subscribe((categories) => {
-        this.newsCategories = categories;
+    if (this.filterOptions.isCategories) {
+      this.dashboardService.categories$.subscribe((categories) => {
+        this.categories = categories;
       });
     }
 
-    if (this.isOrderCategories) {
+    if (this.filterOptions.isOrderCategories) {
       this.getNewsOrderCategories();
     }
 
-    if (this.isStatus) {
+    if (this.filterOptions.isStatus) {
       this.layoutService.newsStatusCount$.subscribe((newsStatus) => {
         this.newsStatus = newsStatus;
       });
@@ -187,12 +181,13 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
 
   onFilter() {
     this.filterOptionsEmitter.emit({
-      category: this.f.category.value,
-      status: this.f.status.value,
-      role: this.f.role.value,
-      subCategory: this.f.subCategory.value,
-      orderCategory: this.f.orderCategory.value,
-      orderSubCategory: this.f.orderSubCategory.value,
+      isCategories: this.filterOptions.isCategories,
+      categoryId: this.f.category.value,
+      statusId: this.f.status.value,
+      roleId: this.f.role.value,
+      subCategoryId: this.f.subCategory.value,
+      orderCategoryId: this.f.orderCategory.value,
+      orderSubCategoryId: this.f.orderSubCategory.value,
     });
   }
 

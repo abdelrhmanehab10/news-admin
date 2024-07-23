@@ -72,7 +72,7 @@ export class AddVoteComponent implements OnInit {
     private toast: ToastrService
   ) {
     this.isLoading$ = this.sectionsService.isLoading$;
-    this.dashboardService.newsCategories$.subscribe((categories) => {
+    this.dashboardService.categories$.subscribe((categories) => {
       this.newsCategories = categories;
     });
   }

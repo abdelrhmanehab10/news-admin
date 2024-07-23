@@ -11,24 +11,25 @@ import {
   templateUrl: './image-card.component.html',
 })
 export class ImageCardComponent {
-  @Input() icon: string = '';
-  @Input() title: string = '';
-  @Input() description: string = '';
+  @Input() image: {
+    icon: string;
+    title: string;
+    description: string;
+    id: number;
+    addedDate: string;
+  };
   @HostBinding('class') class = 'card h-100';
 
   @Output() selectedImageEmitter = new EventEmitter<{
     icon: string;
     title: string;
     description: string;
+    id: number;
   }>();
 
   constructor() {}
 
   onSelect() {
-    this.selectedImageEmitter.emit({
-      icon: this.icon,
-      title: this.title,
-      description: this.description,
-    });
+    this.selectedImageEmitter.emit(this.image);
   }
 }

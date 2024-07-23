@@ -1,11 +1,6 @@
 <app-table
   [items]="newsToPublish"
-  [publish]="publish"
-  [restore]="restore"
-  [isCategories]="true"
-  [isSubCategories]="true"
-  [isRoles]="true"
   (selectedNewsEmitter)="receiveSelectedNews($event)"
-  [headerOptions]="headerOptions"
+  [filterOptions]="filterOptions"
   class="card mb-5 mb-xl-8"
 ></app-table>

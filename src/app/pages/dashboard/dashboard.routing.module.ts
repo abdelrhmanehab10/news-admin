@@ -12,6 +12,8 @@ import { NewsCategoriesComponent } from '../newsCategory/news-categories/news-ca
 import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
 import { MainNewsComponent } from './main-news/main-news.component';
 import { CommentsComponent } from './comments/comments.component';
+import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
+import { EditorsComponent } from './editors/editors.component';
 
 export const routes: Routes = [
   {
@@ -72,7 +74,11 @@ export const routes: Routes = [
       },
       {
         path: 'deleted-news',
-        component: CommentsComponent,
+        component: DeletedNewsComponent,
+      },
+      {
+        path: 'editors',
+        component: EditorsComponent,
       },
     ],
   },

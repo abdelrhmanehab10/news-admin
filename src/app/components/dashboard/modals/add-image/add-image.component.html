@@ -6,6 +6,7 @@
         data-kt-select2="true"
         data-placeholder="Select option"
         data-allow-clear="true"
+        formControlName="GalleryTypeId"
         (change)="getGalleryByType($event)"
       >
         @for(item of galleryTypes; track item; let idx = $index;){
@@ -56,9 +57,7 @@
     @for(item of images; track item){
     <div class="col-12 col-sm-12 col-xl">
       <app-image-card
-        icon="{{ item.picPath }}"
-        title="{{ item.picName }}"
-        description="{{ item.picCaption }}"
+        [image]="item"
         (selectedImageEmitter)="recieveSelectedImage($event)"
       ></app-image-card>
     </div>

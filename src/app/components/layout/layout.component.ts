@@ -8,6 +8,7 @@ import {
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ILayout, LayoutType } from 'src/app/core/configs/config';
+import { ContentType } from 'src/app/models/data.model';
 import { NewStatusCount } from 'src/app/models/layout.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { LayoutInitService } from 'src/app/services/layout/layout-init.service';
@@ -108,7 +109,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
         this.updateProps(config);
       });
     this.unsubscribe.push(subscr);
-    this.getNewsCategories();
+    this.getCategories();
+    this.getContentTypes();
   }
 
   updateProps(config: ILayout) {
@@ -417,13 +419,29 @@ export class LayoutComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  getNewsCategories(): void {
+  getCategories(): void {
     this.hasError = false;
     const getNewsCategoriesSubscr = this.dashboardService
-      .getNewsCategories()
+      .getCategories()
       .subscribe({
         next: (data: any[]) => {
-          this.dashboardService.newsCategoriesSubject.next(data);
+          this.dashboardService.categoriesSubject.next(data);
+        },
+        error: (error: any) => {
+          console.log('[NEWS_STATUS_COUNT]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(getNewsCategoriesSubscr);
+  }
+
+  getContentTypes(): void {
+    this.hasError = false;
+    const getNewsCategoriesSubscr = this.dashboardService
+      .getContentTypes()
+      .subscribe({
+        next: (data: ContentType[]) => {
+          this.dashboardService.contentTypesSubject.next(data);
         },
         error: (error: any) => {
           console.log('[NEWS_STATUS_COUNT]', error);

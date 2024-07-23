@@ -67,24 +67,24 @@ export class UrgentNewsService {
       );
   }
 
-  // addUrgentNewsFromDailyNews(urgentContent: { Title: string; isUrgentNew: boolean }) {
-  //   const auth = this.authService.getAuthFromLocalStorage();
-  //   if (!auth || !auth.authToken) {
-  //     return of(undefined);
-  //   }
+  toggleEnableUrgentNew(newId: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
 
-  //   this.isLoadingSubject.next(true);
-  //   return this.urgentNewsHTTPService
-  //     .addUrgentContent(auth.authToken, urgentContent)
-  //     .pipe(
-  //       map((data) => {
-  //         return data;
-  //       }),
-  //       catchError((err) => {
-  //         console.error('err', err);
-  //         return of(undefined);
-  //       }),
-  //       finalize(() => this.isLoadingSubject.next(false))
-  //     );
-  // }
+    this.isLoadingSubject.next(true);
+    return this.urgentNewsHTTPService
+      .toggleEnableUrgentNew(auth.authToken, newId)
+      .pipe(
+        map((data) => {
+          return data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
 }

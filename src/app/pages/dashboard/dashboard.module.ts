@@ -18,6 +18,8 @@ import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
 import { MainNewsComponent } from './main-news/main-news.component';
 import { CommentsComponent } from './comments/comments.component';
 import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { EditorsComponent } from './editors/editors.component';
 
 @NgModule({
   declarations: [
@@ -35,12 +37,14 @@ import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
     MainNewsComponent,
     CommentsComponent,
     DeletedNewsComponent,
+    EditorsComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
     ComponentsModule,
     DragDropModule,
+    ReactiveFormsModule,
     // WidgetsModule, ModalsModule
   ],
 })

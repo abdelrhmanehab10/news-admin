@@ -17,8 +17,8 @@ export class DashboardService {
   isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
 
-  newsCategories$: Observable<any[]>;
-  newsCategoriesSubject: BehaviorSubject<any[]>;
+  categories$: Observable<any[]>;
+  categoriesSubject: BehaviorSubject<any[]>;
 
   contentTypes$: Observable<any[]>;
   contentTypesSubject: BehaviorSubject<any[]>;
@@ -30,8 +30,8 @@ export class DashboardService {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.isLoading$ = this.isLoadingSubject.asObservable();
 
-    this.newsCategoriesSubject = new BehaviorSubject<any[]>([]);
-    this.newsCategories$ = this.newsCategoriesSubject.asObservable();
+    this.categoriesSubject = new BehaviorSubject<any[]>([]);
+    this.categories$ = this.categoriesSubject.asObservable();
 
     this.contentTypesSubject = new BehaviorSubject<any[]>([]);
     this.contentTypes$ = this.contentTypesSubject.asObservable();
@@ -57,16 +57,16 @@ export class DashboardService {
     );
   }
 
-  getNewsCategories() {
+  getCategories() {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
     }
 
     this.isLoadingSubject.next(true);
-    return this.dashboardHTTPService.getNewsCategories(auth.authToken).pipe(
+    return this.dashboardHTTPService.getCategories(auth.authToken).pipe(
       map((data) => {
-        this.newsCategoriesSubject.next(data.data);
+        this.categoriesSubject.next(data.data);
         return data.data;
       }),
       catchError((err) => {

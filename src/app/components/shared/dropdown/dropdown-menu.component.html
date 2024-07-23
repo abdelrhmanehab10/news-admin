@@ -5,7 +5,7 @@
 <div class="separator border-gray-200"></div>
 
 <form [formGroup]="filterForm" (ngSubmit)="onFilter()" class="px-7 py-5">
-  @if(isStatus){
+  @if(filterOptions.isStatus){
   <div class="mb-10">
     <label class="form-label fw-bold">المرحلة:</label>
     <div>
@@ -22,7 +22,7 @@
       </select>
     </div>
   </div>
-  } @if(isRoles){
+  } @if(filterOptions.isRoles){
   <div class="mb-10">
     <label class="form-label fw-bold">الدور:</label>
     <div>
@@ -39,7 +39,7 @@
       </select>
     </div>
   </div>
-  } @if(isCategories){
+  } @if(filterOptions.isCategories){
   <div class="mb-10">
     <label class="form-label fw-bold">الباب:</label>
     <div>
@@ -48,17 +48,20 @@
         data-kt-select2="true"
         data-placeholder="Select option"
         data-allow-clear="true"
-        (change)="isSubCategories && onSelectedNewsCategoriesChange($event)"
+        (change)="
+          filterOptions.isSubCategories &&
+            onSelectedNewsCategoriesChange($event)
+        "
         formControlName="category"
       >
         <option></option>
-        @for(item of newsCategories; track item; let idx = $index){
+        @for(item of categories; track item; let idx = $index){
         <option value="{{ item.categoryID }}">{{ item.name }}</option>
         }
       </select>
     </div>
   </div>
-  } @if(isSubCategories && newsSubCategories.length){
+  } @if(filterOptions.isSubCategories && newsSubCategories.length){
   <div class="mb-10">
     <label class="form-label fw-bold">الباب الفرعي:</label>
 
@@ -76,7 +79,7 @@
       </select>
     </div>
   </div>
-  }@if(isOrderCategories){
+  }@if(filterOptions.isOrderCategories){
   <div class="mb-10">
     <label class="form-label fw-bold">الباب:</label>
     <div>
@@ -86,7 +89,8 @@
         data-placeholder="Select option"
         data-allow-clear="true"
         (change)="
-          isSubCategories && onSelectedNewsOrderCategoriesChange($event)
+          filterOptions.isSubCategories &&
+            onSelectedNewsOrderCategoriesChange($event)
         "
         formControlName="orderCategory"
       >

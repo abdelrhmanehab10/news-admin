@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ListOptions } from 'src/app/models/components.model';
 
 @Component({
   selector: 'app-list',
@@ -11,6 +12,18 @@ export class ListComponent {
   @Input() items: any[] = [];
   @Input() isAllSectionSelected: boolean = false;
   @Input() isLoading: boolean | null = false;
+  @Input() isCheckList: boolean = false;
+
+  @Input() listOptions: ListOptions = {
+    isCheckList: false,
+    isEdit: false,
+    isEnable: false,
+    isDelete: false,
+    edit: () => {},
+    enable: (editorId: string) => {},
+    delete: () => {},
+  };
+
   selectedItems: string[] = [];
 
   constructor() {}
@@ -39,6 +52,8 @@ export class ListComponent {
   }
 
   toggleSelect(e: any) {
+    console.log(e.target.checked);
+
     if (e.target.checked) {
       this.selectedItems.push(e.target.value);
     } else {

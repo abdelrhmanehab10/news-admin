@@ -1,15 +1,18 @@
-import { NgModule } from '@angular/core';
+import { forwardRef, NgModule } from '@angular/core';
 
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import {
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule, DatePipe } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { EditorComponent } from '@tinymce/tinymce-angular';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './auth/login/login.component';
 import { TableComponent } from './shared/table/table.component';
 import { KeeniconComponent } from './shared/keenicon/keenicon.component';
 import { DropdownMenuComponent } from './shared/dropdown/dropdown-menu.component';
-import { AddNewCardComponent } from './dashboard/add-new-card/add-new-card.component';
 import { ModalComponent } from './shared/modal/modal.component';
 import { Card4Component } from '../_metronic/partials/content/cards/card4/card4.component';
 import { DragableListComponent } from './shared/dragable-list/dragable-list.component';
@@ -23,7 +26,17 @@ import { GroupListComponent } from './shared/group-list/group-list.component';
 import { AddUrgentContentComponent } from './dashboard/modals/add-urgent-new/add-urgent-content.component';
 import { ChooseFromDailyNewsComponent } from './dashboard/modals/choose-from-daily-news/choose-from-daily-news.component';
 import { AddVoteComponent } from './dashboard/modals/add-vote/add-vote.component';
-import { DateInputComponent } from './shared/date-input/date-input.component';
+import { PaginationComponent } from './shared/pagination/pagination.component';
+import { AddEditorComponent } from './dashboard/modals/add-editor/add-editor.component';
+import { TinyMCEEditorComponent } from './shared/tiny-mce-editor/tiny-mce-editor.component';
+import { TagsInputComponent } from './shared/tags-input/tags-input.component';
+import { ImageCropperComponent } from 'ngx-image-cropper';
+import { DateTimePickerComponent } from './shared/date-time-input/date-time-picker.component';
+import { BrowserModule } from '@angular/platform-browser';
+import {
+  OwlDateTimeModule,
+  OwlNativeDateTimeModule,
+} from '@danielmoncada/angular-datetime-picker';
 
 @NgModule({
   declarations: [
@@ -31,7 +44,6 @@ import { DateInputComponent } from './shared/date-input/date-input.component';
     TableComponent,
     KeeniconComponent,
     DropdownMenuComponent,
-    AddNewCardComponent,
     ModalComponent,
     Card4Component,
     DragableListComponent,
@@ -45,21 +57,27 @@ import { DateInputComponent } from './shared/date-input/date-input.component';
     AddUrgentContentComponent,
     ChooseFromDailyNewsComponent,
     AddVoteComponent,
-    DateInputComponent,
+    PaginationComponent,
+    AddEditorComponent,
+    TinyMCEEditorComponent,
+    TagsInputComponent,
+    DateTimePickerComponent,
   ],
   imports: [
+    ImageCropperComponent,
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
     DragDropModule,
     EditorComponent,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
     NgbDatepickerModule,
   ],
   exports: [
     TableComponent,
     KeeniconComponent,
     DropdownMenuComponent,
-    AddNewCardComponent,
     ModalComponent,
     Card4Component,
     DragableListComponent,
@@ -73,7 +91,19 @@ import { DateInputComponent } from './shared/date-input/date-input.component';
     AddUrgentContentComponent,
     ChooseFromDailyNewsComponent,
     AddVoteComponent,
-    DateInputComponent,
+    PaginationComponent,
+    AddEditorComponent,
+    TinyMCEEditorComponent,
+    TagsInputComponent,
+    DateTimePickerComponent,
+  ],
+  providers: [
+    DatePipe,
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DateTimePickerComponent),
+      multi: true,
+    },
   ],
 })
 export class ComponentsModule {}

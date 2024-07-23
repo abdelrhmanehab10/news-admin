@@ -30,13 +30,37 @@ export class VoteHTTPService {
     });
   }
 
-  getAllVotes(token: string): Observable<any> {
+  getAllVotes(
+    token: string,
+    search?: string,
+    categoryId?: string
+  ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
-    return this.http.get<any>(`${API_URL}GetAllVotes`, {
+    return this.http.get<any>(
+      `${API_URL}GetAllVotes${search ? `?search=${search}` : ''}${
+        categoryId ? (search ? '&' : '?') + 'SectionId=' + categoryId : ''
+      }`,
+      {
+        headers: httpHeaders,
+      }
+    );
+  }
+
+  deleteVotes(token: string, ids: string[]): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    ids.forEach((id) => formData.append('id', id));
+
+    return this.http.delete<any>(`${API_URL}DeleteVote`, {
       headers: httpHeaders,
+      body: formData,
     });
   }
 }

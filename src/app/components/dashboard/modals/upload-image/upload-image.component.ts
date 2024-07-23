@@ -1,25 +1,28 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
 import { ModalConfig } from 'src/app/models/modal.model';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
+import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-upload-image',
   templateUrl: './upload-image.component.html',
   styleUrl: './upload-image.component.scss',
 })
-export class UploadImageComponent implements OnInit {
-  defaultUploadImageForm: {
-    GalleryTypeId: string;
-    GalleryId: string;
-  } = {
-    GalleryId: '',
-    GalleryTypeId: '',
-  };
-
+export class UploadImageComponent implements OnInit, OnDestroy {
   uploadImageForm: FormGroup;
+  imageChangedEvent: Event | null = null;
+  croppedImage: SafeUrl = '';
 
   private unsubscribe: Subscription[] = [];
   @ViewChild('modal') private modalComponent: ModalComponent;
@@ -35,21 +38,30 @@ export class UploadImageComponent implements OnInit {
     modalTitle: 'رفع صورة',
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'الغاء',
+    customDismiss: () => {
+      if (!this.uploadImageForm.invalid) {
+        this.addImage();
+        this.modalComponent.dismiss();
+      }
+    },
   };
 
-  selectedFile: File | null = null;
+  image: File | undefined = undefined;
+  imageUrl: string = '';
   filePreview: string | ArrayBuffer | null | undefined = null;
 
   constructor(
     private fb: FormBuilder,
     private addNewService: AddNewService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toast: ToastrService,
+    private sanitizer: DomSanitizer
   ) {
     this.isLoading$ = this.addNewService.isLoading$;
   }
 
   ngOnInit(): void {
-    this.initForm();
+    this.initUploadImageForm();
     this.getGalleryTypes();
     this.getGalleryByType();
   }
@@ -58,10 +70,11 @@ export class UploadImageComponent implements OnInit {
     return this.uploadImageForm.controls;
   }
 
-  initForm() {
+  initUploadImageForm() {
     this.uploadImageForm = this.fb.group({
-      GalleryTypeId: [this.defaultUploadImageForm.GalleryTypeId],
-      GalleryId: [this.defaultUploadImageForm.GalleryId],
+      subCategoryId: ['', [Validators.required]],
+      Caption: ['', [Validators.required]],
+      CHKWaterMark: [false],
     });
   }
 
@@ -111,27 +124,58 @@ export class UploadImageComponent implements OnInit {
     this.unsubscribe.push(getGalleryByTypeSubscr);
   }
 
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-      this.previewFile(this.selectedFile);
-      this.cdr.detectChanges();
-    }
+  addImage() {
+    this.hasError = false;
+    const addImageSubscr = this.addNewService
+      .addImage(
+        this.f.subCategoryId.value,
+        this.f.Caption.value,
+        this.f.CHKWaterMark.value,
+        this.imageUrl,
+        0,
+        0,
+        0,
+        0,
+        this.image
+      )
+      .subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.toast.success(data);
+          }
+        },
+        error: (error: any) => {
+          console.log('[ADD_IMAGE]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(addImageSubscr);
   }
 
-  previewFile(file: File): void {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.filePreview = e.target?.result;
-      this.cdr.detectChanges();
-    };
-    reader.readAsDataURL(file);
+  fileChangeEvent(event: Event): void {
+    this.imageChangedEvent = event;
+  }
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(
+      event.objectUrl as string
+    );
+    // event.blob can be used to upload the cropped image
+  }
+  imageLoaded(image: LoadedImage) {
+    // show cropper
+  }
+  cropperReady() {
+    // cropper ready
+  }
+  loadImageFailed() {
+    // show message
   }
 
-  removeSelectedImg() {
-    this.selectedFile = null;
-    this.filePreview = null;
-    this.cdr.detectChanges();
+  recieveImage(data: any) {
+    this.image = data;
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 }

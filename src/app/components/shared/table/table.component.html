@@ -1,15 +1,17 @@
 <div class="card">
   <div class="card-header border-0">
-    @if (headerOptions.title) {
     <div class="card-title m-0 py-2">
-      <h3 class="fw-bolder mt-4">{{ headerOptions.title }}</h3>
+      <h3 class="fw-bolder mt-4">{{ tableOptions.title }}</h3>
     </div>
-    }
     <div
       class="d-flex flex-nowrap align-items-center gap-5 w-100"
-      [ngClass]="!isSearch ? 'justify-content-end' : 'justify-content-between'"
+      [ngClass]="
+        !tableOptions.isSearch
+          ? 'justify-content-end'
+          : 'justify-content-between'
+      "
     >
-      @if(headerOptions.search){
+      @if(tableOptions.isSearch){
       <form class="flex-grow-1 position-relative" autoComplete="off">
         <app-keenicon
           name="magnifier"
@@ -19,16 +21,17 @@
           type="text"
           class="form-control form-control-solid pe-5"
           name="search"
-          placeholder="{{ searchPlaceholder }}"
+          placeholder="{{ tableOptions.searchPlaceholder }}"
         />
       </form>
       }
 
       <div
         class="d-flex align-items-center gap-2"
-        [ngClass]="isDraft ? 'justify-content-between w-100' : ''"
+        [ngClass]="tableOptions.isDraft ? 'justify-content-between w-100' : ''"
       >
-        @if(isCategories || isRoles || isSubCategories || isStatus){
+        @if(tableOptions.isCategories || tableOptions.isRoles ||
+        tableOptions.isSubCategories || tableOptions.isStatus){
         <div class="card-toolbar">
           <button
             type="button"
@@ -40,10 +43,7 @@
             <app-keenicon name="category" class="fs-2"></app-keenicon>
           </button>
           <app-dropdown-menu
-            [isCategories]="isCategories"
-            [isRoles]="isRoles"
-            [isSubCategories]="isSubCategories"
-            [isStatus]="isStatus"
+            [filterOptions]="filterOptions"
             (filterOptionsEmitter)="recevieFilterOption($event)"
           ></app-dropdown-menu>
         </div>
@@ -51,7 +51,7 @@
         <ng-content></ng-content>
         @if(customBtns){ @for(btn of customBtns; track btn){
         <button
-          (click)="btn.onClick()"
+          (click)="btn.click()"
           class="btn btn-sm d-flex flex-nowrap align-items-center"
           [ngClass]="'btn-' + btn.bgColor"
         >
@@ -68,7 +68,7 @@
       >
         <thead>
           <tr class="fw-bolder text-muted">
-            @if(headerOptions.checkBox){
+            @if(tableOptions.isCheckbox){
             <th class="w-25px">
               <div
                 class="form-check form-check-sm form-check-custom form-check-solid"
@@ -82,14 +82,8 @@
                 />
               </div>
             </th>
-            } @if(headerOptions.cols.includes('title')){
-            <th class="min-w-150px">العنوان</th>
-            } @if(headerOptions.cols.includes('time')){
-            <th class="min-w-120px">الوقت</th>
-            } @if(headerOptions.cols.includes('date')){
-            <th class="min-w-100px text-end pe-2">التاريخ</th>
-            } @if(headerOptions.cols.includes('dateWithTime')){
-            <th class="min-w-100px text-end pe-2">المدة المنقضية</th>
+            } @for(col of tableOptions.headerCols; track col){
+            <th [style.minWidth]="col.width">{{ col.title }}</th>
             }
           </tr>
         </thead>
@@ -97,7 +91,7 @@
           @if(items&&items.length){ @for(item of items; track item; let idx =
           $index; let count = $count){
           <tr>
-            @if(headerOptions.checkBox){
+            @if(tableOptions.isCheckbox){
             <td>
               <div
                 class="form-check form-check-sm form-check-custom form-check-solid"
@@ -128,13 +122,13 @@
                 </div>
               </div>
             </td>
-            @if(headerOptions.cols.includes('time')){
+            @if(item.time){
             <td>
               <span href="#" class="text-gray-900 fw-bolder d-block fs-7">
                 {{ convertToArabicTime(item.time) }}
               </span>
             </td>
-            } @if(headerOptions.cols.includes('date')){
+            } @if(item.date){
             <td class="text-end">
               <div class="d-flex flex-column w-100">
                 <div class="d-flex flex-stack">
@@ -144,7 +138,7 @@
                 </div>
               </div>
             </td>
-            } @if(headerOptions.cols.includes('dateWithTime')){
+            } @if(item.dateWithTime){
             <td class="text-end">
               <div class="d-flex flex-column w-100">
                 <div class="d-flex flex-stack">
@@ -157,59 +151,14 @@
             }
             <td>
               <div class="d-flex justify-content-end flex-shrink-0">
-                <!-- <a
-                href="#"
-                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-              >
-                <app-keenicon name="switch" class="fs-3"></app-keenicon>
-              </a>
-              <a
-                href="#"
-                class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-              >
-                <app-keenicon name="pencil" class="fs-3"></app-keenicon>
-              </a> -->
-                @if(headerOptions.actions.includes('publish')){
+                @for(action of tableOptions.actions; track action){
                 <button
-                  (click)="publish()"
+                  (click)="action.click()"
                   class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm mx-1"
                 >
                   <app-keenicon
-                    name="file-added"
-                    title="نشر"
-                    class="fs-3"
-                  ></app-keenicon>
-                </button>
-                } @if(headerOptions.actions.includes('restore')){
-                <button
-                  (click)="restore()"
-                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm mx-1"
-                >
-                  <app-keenicon
-                    name="arrow-zigzag"
-                    title="اعادة"
-                    class="fs-3"
-                  ></app-keenicon>
-                </button>
-                } @if(headerOptions.actions.includes('delete')){
-                <button
-                  (click)="deleteNew(item.id)"
-                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm mx-1"
-                >
-                  <app-keenicon
-                    name="trash"
-                    title="حذف"
-                    class="fs-3"
-                  ></app-keenicon>
-                </button>
-                } @if(headerOptions.actions.includes('restoreDraft')){
-                <button
-                  (click)="restoreDraft(item.id)"
-                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm mx-1"
-                >
-                  <app-keenicon
-                    name="arrow-zigzag"
-                    title="استرجاع"
+                    [name]="action.icon"
+                    [title]="action.title"
                     class="fs-3"
                   ></app-keenicon>
                 </button>
@@ -225,33 +174,7 @@
           </tr>
           }
         </tbody>
-
-        <!-- end::Table body -->
       </table>
-      @if(items){
-      <div class="d-flex flex-stack flex-wrap pt-10">
-        <div class="fs-6 fw-bold text-gray-700">
-          صفحة 1 من صفحة 1 من {{ items.length }} اخبار
-        </div>
-
-        <ul class="pagination">
-          <li (click)="onPageChange($event)" class="page-item next">
-            <a class="page-link cursor-pointer">
-              <i class="next"></i>
-            </a>
-          </li>
-          <!-- [TODO]: for loop to display available pages -->
-          <li (click)="onPageChange($event)" class="page-item active">
-            <a class="page-link cursor-pointer"> 1 </a>
-          </li>
-          <li (click)="onPageChange($event)" class="page-item previous">
-            <a class="page-link cursor-pointer">
-              <i class="previous"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-      }
     </div>
   </div>
 </div>

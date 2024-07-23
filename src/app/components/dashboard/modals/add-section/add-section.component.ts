@@ -21,7 +21,18 @@ import { SectionsService } from 'src/app/services/dashboard/sections/sections.se
   styleUrl: './add-section.component.scss',
 })
 export class AddSectionComponent implements OnInit {
-  defaultSection: {
+  sectionForm: FormGroup;
+  filterForm: FormGroup;
+
+  private unsubscribe: Subscription[] = [];
+
+  @ViewChild('modal') private modalComponent: ModalComponent;
+
+  @Output() onNewSectionAddedEmitter = new EventEmitter<boolean>();
+
+  @Input() title: string = 'أضافة باب فرعي';
+  @Input() btnStyle: string = '';
+  @Input() section: {
     SecTitle: string;
     Hide: boolean;
     WeeklySection: boolean;
@@ -37,17 +48,22 @@ export class AddSectionComponent implements OnInit {
     CategoryId: null,
   };
 
-  sectionForm: FormGroup;
-  filterForm: FormGroup;
+  defaultSection: {
+    SecTitle: string;
+    Hide: boolean;
+    WeeklySection: boolean;
+    Keywords: string;
+    Description: string;
+    CategoryId: number | null;
+  } = {
+    SecTitle: this.section?.SecTitle ?? '',
+    Hide: this.section?.Hide ?? false,
+    WeeklySection: this.section?.WeeklySection ?? false,
+    Keywords: this.section?.Keywords ?? '',
+    Description: this.section?.Description ?? '',
+    CategoryId: this.section?.CategoryId ?? null,
+  };
 
-  private unsubscribe: Subscription[] = [];
-
-  @ViewChild('modal') private modalComponent: ModalComponent;
-
-  @Output() onNewSectionAddedEmitter = new EventEmitter<boolean>();
-
-  @Input() title: string = 'أضافة باب فرعي';
-  @Input() btnStyle: string = '';
   hasError: boolean = false;
 
   isLoading$: Observable<boolean>;
@@ -72,7 +88,7 @@ export class AddSectionComponent implements OnInit {
     private toast: ToastrService
   ) {
     this.isLoading$ = this.sectionsService.isLoading$;
-    this.dashboardService.newsCategories$.subscribe((categories) => {
+    this.dashboardService.categories$.subscribe((categories) => {
       this.newsCategories = categories;
     });
   }
@@ -94,6 +110,13 @@ export class AddSectionComponent implements OnInit {
       Hide: [this.defaultSection.Hide],
       WeeklySection: [this.defaultSection.WeeklySection],
     });
+  }
+
+  onOpen() {
+    this.defaultSection = this.section;
+    console.log(this.defaultSection);
+
+    this.openModal();
   }
 
   async openModal() {

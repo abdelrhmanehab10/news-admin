@@ -39,10 +39,10 @@ export class AddImageComponent implements OnInit {
   galleryTypes: { galleryTypeID: string; galleryTypeTitle: string }[] = [];
   gallery: { galleryID: string; galleryTitle: string }[] = [];
   images: {
-    id: string;
-    picName: string;
-    picPath: string;
-    picCaption: string;
+    id: number;
+    title: string;
+    icon: string;
+    description: string;
     addedDate: string;
   }[] = [];
   hasError: boolean = false;
@@ -56,6 +56,7 @@ export class AddImageComponent implements OnInit {
   };
 
   @Output() selectedImageEmitter = new EventEmitter<{
+    id: number;
     icon: string;
     title: string;
     description: string;
@@ -150,7 +151,7 @@ export class AddImageComponent implements OnInit {
           pageNumbers: number;
           count: number;
           images: {
-            id: string;
+            id: number;
             picName: string;
             picPath: string;
             picCaption: string;
@@ -158,7 +159,14 @@ export class AddImageComponent implements OnInit {
           }[];
         }) => {
           if (data) {
-            this.images = data.images;
+            const items = data.images.map((img) => ({
+              id: img.id,
+              icon: img.picPath,
+              title: img.picName,
+              description: img.picCaption,
+              addedDate: img.addedDate,
+            }));
+            this.images = items;
             this.cdr.detectChanges();
           } else {
             this.images = [];
@@ -176,6 +184,7 @@ export class AddImageComponent implements OnInit {
     icon: string;
     title: string;
     description: string;
+    id: number;
   }) {
     this.selectedImageEmitter.emit(data);
     this.modalComponent.close();

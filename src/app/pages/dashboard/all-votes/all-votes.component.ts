@@ -1,5 +1,12 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  Observable,
+  Subscription,
+} from 'rxjs';
+import { FilterOption, ListOptions } from 'src/app/models/components.model';
 import { ModalConfig } from 'src/app/models/modal.model';
 import { VoteService } from 'src/app/services/dashboard/vote/vote.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
@@ -12,15 +19,10 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 export class AllVotesComponent {
   private unsubscribe: Subscription[] = [];
 
-  items: {
-    sectionId: number;
-    secTitle: string;
-    hide: boolean;
-    weeklySection: boolean;
-    keywords: string;
-    description: string;
-    categoryId: number;
-  }[] = [];
+  items: any[] = [];
+  search = '';
+
+  searchForm: FormGroup;
 
   selectedVotes: string[] = [];
 
@@ -56,12 +58,28 @@ export class AllVotesComponent {
     closeButtonLabel: 'الغاء',
   };
 
+  listOptions: ListOptions = {
+    isCheckList: true,
+    isEdit: false,
+    isEnable: true,
+    isDelete: false,
+    edit: () => {},
+    enable: (editorId: string) => {},
+    delete: () => {},
+  };
+
+  filterOptions: FilterOption = {
+    isCategories: true,
+    categoryId: '',
+  };
+
   hasError: boolean = false;
   isLoading$: Observable<boolean>;
 
   constructor(
     private utilsService: UtilsService,
     private voteService: VoteService,
+    private fb: FormBuilder,
     private cdr: ChangeDetectorRef
   ) {
     this.isLoading$ = this.voteService.isLoading$;
@@ -69,28 +87,82 @@ export class AllVotesComponent {
 
   ngOnInit(): void {
     this.getAllVotes();
+
+    this.initForm();
+    this.onSearch();
   }
 
-  deleteVotes() {}
+  onSearch() {
+    this.searchForm
+      .get('search')
+      ?.valueChanges.pipe(
+        debounceTime(300), // Adjust the debounce time as needed
+        distinctUntilChanged()
+      )
+      .subscribe((value: string) => {
+        this.search = value;
+        this.getAllVotes(this.search, this.filterOptions.categoryId);
+      });
+  }
 
-  getAllVotes() {
+  initForm() {
+    this.searchForm = this.fb.group({
+      search: [''],
+    });
+  }
+
+  deleteVotes() {
     this.hasError = false;
 
-    const getAllVotesSubscr = this.voteService.getAllVotes().subscribe({
-      next: (data: any[]) => {
-        this.items = data;
-        this.cdr.detectChanges();
-      },
-      error: (error: any) => {
-        console.log('[GET_ALL_VOTES]', error);
-        this.hasError = true;
-      },
-    });
+    const deleteVotesSubscr = this.voteService
+      .deleteVotes(this.selectedVotes)
+      .subscribe({
+        next: (data: any[]) => {
+          const items = data.map((item) => ({
+            name: item.pollBody,
+            sectionId: item.pollId,
+            active: item.activated,
+          }));
+          this.items = items;
+          this.cdr.detectChanges();
+        },
+        error: (error: any) => {
+          console.log('[DELETE_VOTES]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(deleteVotesSubscr);
+  }
+
+  getAllVotes(search?: string, categoryId?: string) {
+    this.hasError = false;
+
+    const getAllVotesSubscr = this.voteService
+      .getAllVotes(search, categoryId)
+      .subscribe({
+        next: (data: any[]) => {
+          const items = data.map((item) => ({
+            name: item.pollBody,
+            sectionId: item.pollId,
+            active: item.activated,
+          }));
+          this.items = items;
+          this.cdr.detectChanges();
+        },
+        error: (error: any) => {
+          console.log('[GET_ALL_VOTES]', error);
+          this.hasError = true;
+        },
+      });
     this.unsubscribe.push(getAllVotesSubscr);
   }
 
   toggleSelectAll(e: any) {
-    this.utilsService.toggleSelectAll(e, this.selectedVotes, this.items);
+    this.selectedVotes = this.utilsService.toggleSelectAll(
+      e,
+      this.selectedVotes,
+      this.items
+    );
   }
 
   recieveIsVoteAdded(data: boolean) {
@@ -101,6 +173,11 @@ export class AllVotesComponent {
 
   recieveSelectedItems(data: string[]) {
     this.selectedVotes = data;
+  }
+
+  recieveFilterOptions(data: FilterOption) {
+    this.filterOptions = data;
+    this.getAllVotes(this.search, data.categoryId);
   }
 
   ngOnDestroy() {

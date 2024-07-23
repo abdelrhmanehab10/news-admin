@@ -14,7 +14,7 @@
         <app-keenicon name="category" class="fs-2"></app-keenicon>
       </button>
       <app-dropdown-menu
-        [isOrderCategories]="true"
+        [filterOptions]="filterOption"
         (filterOptionsEmitter)="recieveFilterOption($event)"
       ></app-dropdown-menu>
       <button
