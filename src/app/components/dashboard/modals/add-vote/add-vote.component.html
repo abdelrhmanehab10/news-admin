@@ -54,29 +54,31 @@
         </div>
       </ng-container>
     </ng-template>
-    @for(control of voteOptions.controls; track control; let i = $index){
-    <div class="row mb-6">
-      <label class="col-lg-2 col-form-label required fw-bold fs-6"
-        >الأختيار رقم {{ i + 1 }}</label
-      >
-      <div class="d-flex align-items-center gap-2 col-lg-8">
-        <input
-          type="text"
-          class="form-control form-control-lg form-control-solid"
-          [formControlName]="i + 1"
-          [ngClass]="i + 1 === voteOptions.length ? 'flex-shrink-1' : ''"
-        />
-        @if(i + 1 === voteOptions.length){
-        <button (click)="addVoteOption()" class="btn bg-primary btn-icon">
-          <app-keenicon name="plus" class="fs-2 text-white"></app-keenicon>
-        </button>
-        @if(i + 1 > 2){
-        <button (click)="removeVoteOption(i)" class="btn bg-danger btn-icon">
-          <app-keenicon
-            name="minus"
-            class="fs-2 text-white"
-          ></app-keenicon></button
-        >} }
+    <div formArrayName="voteOptions">
+      @for(control of voteOptions.controls; track control; let i = $index){
+      <div class="row mb-6">
+        <label class="col-lg-2 col-form-label required fw-bold fs-6"
+          >الأختيار رقم {{ i + 1 }}</label
+        >
+        <div class="d-flex align-items-center gap-2 col-lg-8">
+          <input
+            type="text"
+            class="form-control form-control-lg form-control-solid"
+            [formControlName]="i"
+            [ngClass]="i + 1 === voteOptions.length ? 'flex-shrink-1' : ''"
+          />
+          @if(i + 1 === voteOptions.length){
+          <button (click)="addVoteOption()" class="btn bg-primary btn-icon">
+            <app-keenicon name="plus" class="fs-2 text-white"></app-keenicon>
+          </button>
+          @if(i + 1 > 2){
+          <button (click)="removeVoteOption(i)" class="btn bg-danger btn-icon">
+            <app-keenicon
+              name="minus"
+              class="fs-2 text-white"
+            ></app-keenicon></button
+          >} }
+        </div>
         <ng-container
           [ngTemplateOutlet]="formError"
           [ngTemplateOutletContext]="{
@@ -85,51 +87,41 @@
             control: control
           }"
         ></ng-container>
+        @if(i + 1 === voteOptions.length){
+        <p class="col-10 me-auto mt-1 text-muted fw-semibold me-1">
+          يمكنك اضافة اختيار اخر بالضغط علي الزر زائد @if(i+1>2){, ويمكنك ازالة
+          الأختيار بالضغط عالزر ناقص. }
+        </p>
+        }
       </div>
-      @if(i + 1 === voteOptions.length){
-      <p class="col-10 me-auto mt-1 text-muted fw-semibold me-1">
-        يمكنك اضافة اختيار اخر بالضغط علي الزر زائد @if(i+1>2){, ويمكنك ازالة
-        الأختيار بالضغط عالزر ناقص. }
-      </p>
+      <ng-template
+        #formError
+        let-control="control"
+        let-message="message"
+        let-validation="validation"
+      >
+        <ng-container
+          *ngIf="
+            control.hasError(validation) && (control.dirty || control.touched)
+          "
+        >
+          <div class="fv-plugins-message-container col-lg-10 me-auto">
+            <span role="alert" class="text-danger">
+              {{ message }}
+            </span>
+          </div>
+        </ng-container>
+      </ng-template>
       }
     </div>
-    <ng-template
-      #formError
-      let-control="control"
-      let-message="message"
-      let-validation="validation"
-    >
-      <ng-container
-        *ngIf="
-          control.hasError(validation) && (control.dirty || control.touched)
-        "
-      >
-        <div class="fv-plugins-message-container">
-          <span role="alert" class="text-danger">
-            {{ message }}
-          </span>
-        </div>
-      </ng-container>
-    </ng-template>
-    }
     <div class="row mb-6">
       <label class="col-lg-2 col-form-label required fw-bold fs-6"
         >تاريخ البداية</label
       >
       <div class="col-lg-8 d-flex">
-        <button
-          class="btn btn-outline-secondary bi bi-calendar3 rounded-start-0"
-          (click)="d.toggle()"
-          type="button"
-        ></button>
-        <input
-          class="form-control rounded-end-0"
-          placeholder="اليوم-الشهر-السنة"
-          name="dp"
-          [(ngModel)]="model"
-          ngbDatepicker
-          #d="ngbDatepicker"
-        />
+        <app-date-time-picker
+          (dateEmitter)="recieveStartDate($event)"
+        ></app-date-time-picker>
       </div>
     </div>
     <div class="row mb-6">
@@ -137,19 +129,9 @@
         >تاريخ النهاية</label
       >
       <div class="col-lg-8 d-flex">
-        <button
-          class="btn btn-outline-secondary bi bi-calendar3 rounded-start-0"
-          (click)="d.toggle()"
-          type="button"
-        ></button>
-        <input
-          class="form-control rounded-end-0"
-          placeholder="اليوم-الشهر-السنة"
-          name="dp"
-          [(ngModel)]="model"
-          ngbDatepicker
-          #d="ngbDatepicker"
-        />
+        <app-date-time-picker
+          (dateEmitter)="recieveEndDate($event)"
+        ></app-date-time-picker>
       </div>
     </div>
   </form>

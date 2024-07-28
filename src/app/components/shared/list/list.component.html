@@ -33,8 +33,8 @@ $index){
     >}
     <span class="fw-bold d-block">{{ item.secTitle }}</span>
   </div>
-  @if(listOptions.isEnable){<button
-    (click)="listOptions.enable(item.editorId)"
+  @if(listOptions.isEnable && listOptions.enable){<button
+    (click)="listOptions.enable(item.sectionId)"
     class="btn btn-sm btn-outline-dark border b d-flex align-items-center gap-3 me-2"
   >
     {{ item.active ? "ايقاف" : "تفعيل" }}</button
@@ -42,7 +42,7 @@ $index){
     [title]="'تعديل'"
     [btnStyle]="'btn-light'"
   ></app-add-section
-  >} @if(listOptions.isDelete){<button
+  >} @if(listOptions.isDelete && listOptions.delete){<button
     (click)="listOptions.delete()"
     class="btn btn-sm btn-icon btn-outline-light border b d-flex align-items-center gap-3 me-2"
   >

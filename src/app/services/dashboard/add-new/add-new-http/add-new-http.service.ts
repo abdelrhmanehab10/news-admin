@@ -206,7 +206,12 @@ export class AddNewHTTPService {
 
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
-        formData.append(key, data[key].toString());
+        const value = data[key];
+        if (Array.isArray(value)) {
+          value.forEach((item: any) => formData.append(key, item));
+        } else {
+          formData.append(key, value.toString());
+        }
       }
     }
 

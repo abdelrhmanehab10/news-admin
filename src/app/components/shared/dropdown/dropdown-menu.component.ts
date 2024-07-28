@@ -20,24 +20,6 @@ import { LayoutService } from 'src/app/services/layout/layout.service';
   templateUrl: './dropdown-menu.component.html',
 })
 export class DropdownMenuComponent implements OnInit, OnDestroy {
-  defaultFilterValues: {
-    role: string;
-    category: string;
-    orderCategory: string;
-    subCategory: string;
-    orderSubCategory: string;
-    status: string;
-    type: string;
-  } = {
-    role: '',
-    category: '',
-    orderCategory: '',
-    subCategory: '',
-    orderSubCategory: '',
-    status: '',
-    type: '',
-  };
-
   private unsubscribe: Subscription[] = [];
 
   filterForm: FormGroup;
@@ -98,12 +80,12 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.filterForm = this.fb.group({
-      role: [this.defaultFilterValues.role],
-      category: [this.defaultFilterValues.category],
-      orderCategory: [this.defaultFilterValues.orderCategory],
-      subCategory: [this.defaultFilterValues.subCategory],
-      orderSubCategory: [this.defaultFilterValues.orderSubCategory],
-      status: [this.defaultFilterValues.status],
+      role: [''],
+      category: [''],
+      orderCategory: [''],
+      subCategory: [''],
+      orderSubCategory: [''],
+      status: [''],
     });
   }
 
@@ -168,6 +150,8 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
       .pipe(distinctUntilChanged())
       .subscribe({
         next: (data: { sectionID: string; secTitle: string }[]) => {
+          console.log(data);
+
           this.newsSubCategories = data;
           this.cdr.detectChanges();
         },
@@ -182,6 +166,12 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
   onFilter() {
     this.filterOptionsEmitter.emit({
       isCategories: this.filterOptions.isCategories,
+      isSubCategories: this.filterOptions.isSubCategories,
+      isOrderCategories: this.filterOptions.isOrderCategories,
+      isOrderSubCategories: this.filterOptions.isOrderSubCategories,
+      isRoles: this.filterOptions.isRoles,
+      isStatus: this.filterOptions.isStatus,
+      isType: this.filterOptions.isType,
       categoryId: this.f.category.value,
       statusId: this.f.status.value,
       roleId: this.f.role.value,

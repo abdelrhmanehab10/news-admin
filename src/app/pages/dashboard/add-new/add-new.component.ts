@@ -221,6 +221,8 @@ export class AddNewComponent implements OnInit {
   }
 
   recieveTags(data: string[]) {
+    console.log(data);
+
     this.tags = data;
   }
 

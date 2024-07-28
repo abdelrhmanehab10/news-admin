@@ -1,11 +1,11 @@
 export interface ListOptions {
-  isEdit: boolean;
-  isEnable: boolean;
-  isDelete: boolean;
+  isEdit?: boolean;
+  isEnable?: boolean;
+  isDelete?: boolean;
   isCheckList?: boolean;
-  edit: () => void;
-  enable: (id: string) => void;
-  delete: (id?: string) => void;
+  edit?: () => void;
+  enable?: (id: string) => void;
+  delete?: (id?: string) => void;
 }
 
 export interface Pagination {

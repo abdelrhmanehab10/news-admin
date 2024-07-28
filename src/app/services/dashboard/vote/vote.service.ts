@@ -28,9 +28,9 @@ export class VoteService {
   addVote(vote: {
     sectionId: string;
     pollBody: string;
-    startDate: Date;
-    endDate: Date;
-    voteOptions: { optionBody: string }[];
+    startDate: string;
+    endDate: string;
+    voteOptions: string[];
   }) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
@@ -80,7 +80,26 @@ export class VoteService {
     this.isLoadingSubject.next(true);
     return this.voteHTTPService.deleteVotes(auth.authToken, ids).pipe(
       map((data) => {
-        return data;
+        return data.message;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  activeVote(id: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.voteHTTPService.activeVote(auth.authToken, id).pipe(
+      map((data) => {
+        return data.message;
       }),
       catchError((err) => {
         console.error('err', err);

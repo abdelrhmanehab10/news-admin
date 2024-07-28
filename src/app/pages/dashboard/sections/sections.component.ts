@@ -38,7 +38,7 @@ export class SectionsComponent implements OnInit {
   }
 
   toggleSelectAll(e: any) {
-    this.utilsService.toggleSelectAll(e, this.selectedSections, this.items);
+    this.selectedSections = this.utilsService.toggleSelectAll(e, this.items);
   }
 
   ngOnInit(): void {

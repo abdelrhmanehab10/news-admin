@@ -48,7 +48,7 @@
           (filterOptionsEmitter)="recieveFilterOptions($event)"
         ></app-dropdown-menu>
         <app-add-vote [title]="'أضافة أستطلاع'"></app-add-vote>
-        <button class="btn btn-danger btn-sm mx-2">حذف</button>
+        <button (click)="deleteVotes()" class="btn btn-danger btn-sm mx-2">حذف</button>
       </div>
     </div>
   </div>

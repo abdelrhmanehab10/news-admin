@@ -13,7 +13,12 @@ const API_URL = `${environment.apiUrl}`;
 export class PublishHTTPService {
   constructor(private http: HttpClient) {}
 
-  getNewsToPublish(token: string): Observable<any> {
+  getNewsToPublish(
+    token: string,
+    search?: string,
+    categoryId?: string,
+    subCategoryId?: string
+  ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -23,9 +28,14 @@ export class PublishHTTPService {
       data: NEW[];
       message: string | null;
       errors: string[] | null;
-    }>(`${API_URL}/PublishNews/GetNewsToPublish`, {
-      headers: httpHeaders,
-    });
+    }>(
+      `${API_URL}/PublishNews/GetNewsToPublish?Search=${search ?? ''}${
+        categoryId ? '&CategoryId=' + categoryId : ''
+      }${subCategoryId ? '&SectionId=' + subCategoryId : ''}`,
+      {
+        headers: httpHeaders,
+      }
+    );
   }
 
   getRolesPassList(token: string): Observable<any> {
@@ -62,6 +72,52 @@ export class PublishHTTPService {
     }>(`${API_URL}/PublishNews/DeleteNews`, {
       headers: httpHeaders,
       body: formData,
+    });
+  }
+
+  publishNews(token: string, ids: string[]): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    ids.forEach((id) => {
+      formData.append(`NewsIDs`, id);
+    });
+
+    return this.http.post<{
+      status: number;
+      data: NEW[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/PublishNews/PublishNews`, formData, {
+      headers: httpHeaders,
+    });
+  }
+
+  returnNews(
+    token: string,
+    newsStatus: string,
+    newsIds: string[]
+  ): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+    formData.append('NewStatus', newsStatus);
+    newsIds.forEach((id) => {
+      formData.append(`NewsIDs`, id);
+    });
+
+    return this.http.put<{
+      status: number;
+      data: NEW[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/PublishNews/ReturnNews`, formData, {
+      headers: httpHeaders,
     });
   }
 }

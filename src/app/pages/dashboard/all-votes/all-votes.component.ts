@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -64,7 +65,9 @@ export class AllVotesComponent {
     isEnable: true,
     isDelete: false,
     edit: () => {},
-    enable: (editorId: string) => {},
+    enable: (id: string) => {
+      this.activeVote(id);
+    },
     delete: () => {},
   };
 
@@ -80,7 +83,8 @@ export class AllVotesComponent {
     private utilsService: UtilsService,
     private voteService: VoteService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toast: ToastrService
   ) {
     this.isLoading$ = this.voteService.isLoading$;
   }
@@ -95,10 +99,7 @@ export class AllVotesComponent {
   onSearch() {
     this.searchForm
       .get('search')
-      ?.valueChanges.pipe(
-        debounceTime(300), // Adjust the debounce time as needed
-        distinctUntilChanged()
-      )
+      ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((value: string) => {
         this.search = value;
         this.getAllVotes(this.search, this.filterOptions.categoryId);
@@ -117,14 +118,11 @@ export class AllVotesComponent {
     const deleteVotesSubscr = this.voteService
       .deleteVotes(this.selectedVotes)
       .subscribe({
-        next: (data: any[]) => {
-          const items = data.map((item) => ({
-            name: item.pollBody,
-            sectionId: item.pollId,
-            active: item.activated,
-          }));
-          this.items = items;
-          this.cdr.detectChanges();
+        next: (data: string) => {
+          if (data) {
+            this.toast.error(data);
+            this.getAllVotes();
+          }
         },
         error: (error: any) => {
           console.log('[DELETE_VOTES]', error);
@@ -160,9 +158,26 @@ export class AllVotesComponent {
   toggleSelectAll(e: any) {
     this.selectedVotes = this.utilsService.toggleSelectAll(
       e,
-      this.selectedVotes,
       this.items
     );
+  }
+
+  activeVote(id: string) {
+    this.hasError = false;
+
+    const activeVoteSubscr = this.voteService.activeVote(id).subscribe({
+      next: (data: string) => {
+        if (data) {
+          this.toast.success(data);
+          this.getAllVotes();
+        }
+      },
+      error: (error: any) => {
+        console.log('[ACTIVE_VOTES]', error);
+        this.hasError = true;
+      },
+    });
+    this.unsubscribe.push(activeVoteSubscr);
   }
 
   recieveIsVoteAdded(data: boolean) {

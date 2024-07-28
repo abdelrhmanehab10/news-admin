@@ -18,6 +18,8 @@ export class SectionsHTTPService {
 
     const formData = new FormData();
 
+    console.log(data);
+
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
         formData.append(key, data[key].toString());

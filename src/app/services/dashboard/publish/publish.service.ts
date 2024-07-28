@@ -25,23 +25,29 @@ export class PublishService {
     this.isLoading$ = this.isLoadingSubject.asObservable();
   }
 
-  getNewsToPublish() {
+  getNewsToPublish(
+    search?: string,
+    categoryId?: string,
+    subCategoryId?: string
+  ) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
     }
 
     this.isLoadingSubject.next(true);
-    return this.publishHTTPService.getNewsToPublish(auth.authToken).pipe(
-      map((data) => {
-        return data.data;
-      }),
-      catchError((err) => {
-        console.error('err', err);
-        return of(undefined);
-      }),
-      finalize(() => this.isLoadingSubject.next(false))
-    );
+    return this.publishHTTPService
+      .getNewsToPublish(auth.authToken, search, categoryId, subCategoryId)
+      .pipe(
+        map((data) => {
+          return data.data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 
   getRolesPassList() {
@@ -80,5 +86,45 @@ export class PublishService {
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
+  }
+
+  publishNews(ids: string[]) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.publishHTTPService.publishNews(auth.authToken, ids).pipe(
+      map((data) => {
+        return data.message;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  returnNews(newsStatus: string, newsIds: string[]) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.publishHTTPService
+      .returnNews(auth.authToken, newsStatus, newsIds)
+      .pipe(
+        map((data) => {
+          return data.message;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
   }
 }

@@ -8,11 +8,14 @@
       <label
         class="checkbox checkbox-xl checkbox-inline ms-2 d-flex align-items-center"
       >
-        <!-- <input
+        <input
+          class="form-check-input"
           type="checkbox"
           (change)="toggleSelectAll($event)"
-          [checked]="items.length === selectedSections.length"
-        /> -->
+          [checked]="items.length === selectedItems.length"
+          data-kt-check="true"
+          data-kt-check-target=".widget-9-check"
+        />
         <span class="me-2">الكل</span>
       </label>
       <div class="card-toolbar">
@@ -37,14 +40,7 @@
     <!-- end::Header -->
     <!-- begin::Body -->
     <div class="card-body pt-2">
-      <!-- begin::Item -->
-      <!-- <app-list
-        [items]="items"
-        [isAllSectionSelected]="items.length === selectedSections.length"
-        (selectedItemsEmitter)="recieveSelectedItems($event)"
-        [isLoading]="isLoading$ | async"
-      ></app-list> -->
-      <!-- end:Item -->
+      <app-group-list [items]="items"></app-group-list>
     </div>
     <!-- end::Body -->
   </div>

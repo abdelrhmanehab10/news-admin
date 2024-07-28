@@ -25,7 +25,7 @@ export class SectionsService {
     this.isLoading$ = this.isLoadingSubject.asObservable();
   }
 
-  addMainSection(data: {}) {
+  addMainSection(data: { [key: string]: any }) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);

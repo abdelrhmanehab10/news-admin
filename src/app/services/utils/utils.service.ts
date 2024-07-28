@@ -7,9 +7,9 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export class UtilsService {
   constructor() {}
 
-  toggleSelectAll(e: any, selectedItems: string[], items: any[]) {
+  toggleSelectAll(e: any, items: any[]) {
     if (e.target.checked) {
-      return items.map((item) => String(item.sectionId));
+      return items.map((item) => String(item.id));
     } else {
       return [];
     }

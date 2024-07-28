@@ -16,9 +16,9 @@ export class VoteHTTPService {
     vote: {
       sectionId: string;
       pollBody: string;
-      startDate: Date;
-      endDate: Date;
-      voteOptions: { optionBody: string }[];
+      startDate: string;
+      endDate: string;
+      voteOptions: string[];
     }
   ): Observable<any> {
     const httpHeaders = new HttpHeaders({
@@ -62,5 +62,19 @@ export class VoteHTTPService {
       headers: httpHeaders,
       body: formData,
     });
+  }
+
+  activeVote(token: string, id: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.put<any>(
+      `${API_URL}ActiveVote?Id=${id}`,
+      {},
+      {
+        headers: httpHeaders,
+      }
+    );
   }
 }

@@ -334,7 +334,7 @@
           >تاجز</label
         >
         <div class="col-lg-10 fv-row">
-          <app-tags-input></app-tags-input>
+          <app-tags-input (tagsEmitter)="recieveTags($event)"></app-tags-input>
         </div>
       </div>
       <div class="separator my-3 opacity-75"></div>

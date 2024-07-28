@@ -13,6 +13,7 @@ import { ModalComponent } from 'src/app/components/shared/modal/modal.component'
 import { FilterOption } from 'src/app/models/components.model';
 import { ModalConfig } from 'src/app/models/modal.model';
 import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent-news.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-choose-from-daily-news',
@@ -26,7 +27,7 @@ export class ChooseFromDailyNewsComponent implements OnInit {
 
   @Output() onUrgentNewsChoosedFromDailyNewsEmitter =
     new EventEmitter<boolean>();
-
+  items: any[] = [];
   selectedItems: string[] = [];
 
   filterOptions: FilterOption = {
@@ -48,7 +49,8 @@ export class ChooseFromDailyNewsComponent implements OnInit {
 
   constructor(
     private urgentNewsService: UrgentNewsService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private utilsService: UtilsService
   ) {
     this.isLoading$ = this.urgentNewsService.isLoading$;
   }
@@ -57,6 +59,30 @@ export class ChooseFromDailyNewsComponent implements OnInit {
 
   async openModal() {
     return await this.modalComponent.open();
+  }
+
+  toggleSelectAll(e: any) {
+    this.selectedItems = this.utilsService.toggleSelectAll(e, this.items);
+  }
+
+  getDailyNews() {
+    this.hasError = false;
+    this.onUrgentNewsChoosedFromDailyNewsEmitter.emit(false);
+    const addUrgentContentSubscr = this.urgentNewsService
+      .addUrgentContent()
+      .subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.toast.success(data.message);
+            this.onUrgentNewsChoosedFromDailyNewsEmitter.emit(true);
+          }
+        },
+        error: (error: any) => {
+          console.log('[ADD_URGENT_NEWS_FROM_DAILY]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(addUrgentContentSubscr);
   }
 
   // addUrgentNewsFromDailyNews() {

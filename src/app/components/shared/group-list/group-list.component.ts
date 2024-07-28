@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DateTimeFormatOptions } from '@eonasdan/tempus-dominus';
 import { ListOptions } from 'src/app/models/components.model';
 
@@ -7,9 +7,14 @@ import { ListOptions } from 'src/app/models/components.model';
   templateUrl: './group-list.component.html',
 })
 export class GroupListComponent {
+  @Output() selectedItemsEmitter = new EventEmitter<string[]>();
+
   @Input() items: any[] = [];
   @Input() isLoading: boolean | null = null;
+  @Input() isAllSectionSelected: boolean = false;
   @Input() groupListOptions: ListOptions;
+
+  selectedItems: string[] = [];
 
   constructor() {}
 
@@ -42,5 +47,17 @@ export class GroupListComponent {
     const formattedTime = `[${formattedHour}:${formattedMinutes} ${period}]`;
 
     return formattedTime;
+  }
+
+  toggleSelect(e: any) {
+    if (e.target.checked) {
+      this.selectedItems.push(e.target.value);
+    } else {
+      this.selectedItems = this.selectedItems.filter(
+        (id) => id !== e.target.value
+      );
+    }
+
+    this.selectedItemsEmitter.emit(this.selectedItems);
   }
 }

@@ -15,6 +15,7 @@ import { ModalComponent } from 'src/app/components/shared/modal/modal.component'
 import { ModalConfig } from 'src/app/models/modal.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { SectionsService } from 'src/app/services/dashboard/sections/sections.service';
+import { VoteService } from 'src/app/services/dashboard/vote/vote.service';
 
 @Component({
   selector: 'app-add-vote',
@@ -23,19 +24,6 @@ import { SectionsService } from 'src/app/services/dashboard/sections/sections.se
 })
 export class AddVoteComponent implements OnInit {
   model: NgbDateStruct;
-
-  defaultSection: {
-    sectionId: number | null;
-    pollBody: string;
-    voteOptions: string[];
-    // startDate: Date | null;
-    // endDate: Date | null;
-  } = {
-    sectionId: null,
-    pollBody: '',
-    voteOptions: [],
-    // startDate: Date(),
-  };
 
   voteForm: FormGroup;
   filterForm: FormGroup;
@@ -52,14 +40,15 @@ export class AddVoteComponent implements OnInit {
 
   isLoading$: Observable<boolean>;
   newsCategories: any[] = [];
-
+  startDate: string;
+  endDate: string;
   modalConfig: ModalConfig = {
     modalTitle: 'أضافة باب فرعي',
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'اغلاق',
     customDismiss: () => {
       if (!this.voteForm.invalid) {
-        this.addMainSection();
+        this.addVote();
         this.modalComponent.close();
       }
     },
@@ -67,11 +56,11 @@ export class AddVoteComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private sectionsService: SectionsService,
+    private voteService: VoteService,
     private dashboardService: DashboardService,
     private toast: ToastrService
   ) {
-    this.isLoading$ = this.sectionsService.isLoading$;
+    this.isLoading$ = this.voteService.isLoading$;
     this.dashboardService.categories$.subscribe((categories) => {
       this.newsCategories = categories;
     });
@@ -87,8 +76,8 @@ export class AddVoteComponent implements OnInit {
 
   initForm() {
     this.voteForm = this.fb.group({
-      sectionId: [this.defaultSection.sectionId, Validators.required],
-      pollBody: [this.defaultSection.pollBody, Validators.required],
+      sectionId: ['', Validators.required],
+      pollBody: ['', Validators.required],
       voteOptions: this.fb.array([
         this.fb.control('', Validators.required),
         this.fb.control('', Validators.required),
@@ -112,11 +101,17 @@ export class AddVoteComponent implements OnInit {
     this.voteOptions.removeAt(index);
   }
 
-  addMainSection() {
+  addVote() {
     this.hasError = false;
     this.onNewSectionAddedEmitter.emit(false);
-    const addMainSectionSubscr = this.sectionsService
-      .addMainSection({})
+    const addVoteSubscr = this.voteService
+      .addVote({
+        sectionId: this.f.sectionId.value,
+        pollBody: this.f.pollBody.value,
+        startDate: this.startDate,
+        endDate: this.endDate,
+        voteOptions: this.voteOptions.controls.map((control) => control.value),
+      })
       .subscribe({
         next: (data: any) => {
           if (data) {
@@ -125,11 +120,19 @@ export class AddVoteComponent implements OnInit {
           }
         },
         error: (error: any) => {
-          console.log('[ADD_MAIN_SECTION]', error);
+          console.log('[ADD_VOTE]', error);
           this.hasError = true;
         },
       });
-    this.unsubscribe.push(addMainSectionSubscr);
+    this.unsubscribe.push(addVoteSubscr);
+  }
+
+  recieveStartDate(date: any) {
+    this.startDate = date;
+  }
+
+  recieveEndDate(date: any) {
+    this.endDate = date;
   }
 
   ngOnDestroy() {
