@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
-import { FilterOption } from 'src/app/models/components.model';
+import { FilterOption, ListOptions } from 'src/app/models/components.model';
 import { SectionsService } from 'src/app/services/dashboard/sections/sections.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -23,6 +24,11 @@ export class SectionsComponent implements OnInit {
   }[] = [];
 
   filterOptions: FilterOption = { isCategories: true };
+  listOptions: ListOptions = {
+    isCheckList: true,
+    isEdit: true,
+    edit: () => {},
+  };
   selectedSections: string[] = [];
   pageNumber: number = 1;
 
@@ -32,7 +38,8 @@ export class SectionsComponent implements OnInit {
   constructor(
     private sectionsService: SectionsService,
     private utilsService: UtilsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toast: ToastrService
   ) {
     this.isLoading$ = this.sectionsService.isLoading$;
   }
@@ -63,22 +70,26 @@ export class SectionsComponent implements OnInit {
     this.unsubscribe.push(getAllSectionSubscr);
   }
 
-  // deleteSections() {
-  //   this.hasError = false;
-  //   const deleteSectionsSubscr = this.sectionsService
-  //     .deleteSections()
-  //     .subscribe({
-  //       next: (data: any[]) => {
-  //         this.items = data;
-  //         this.cdr.detectChanges();
-  //       },
-  //       error: (error: any) => {
-  //         console.log('[DELETE]', error);
-  //         this.hasError = true;
-  //       },
-  //     });
-  //   this.unsubscribe.push(deleteSectionsSubscr);
-  // }
+  deleteSections() {
+    this.hasError = false;
+
+    const deleteSectionsSubscr = this.sectionsService
+      .deleteSections(this.selectedSections)
+      .subscribe({
+        next: (data: string) => {
+          if (data) {
+            this.toast.error(data);
+            this.selectedSections = [];
+            this.getAllSections();
+          }
+        },
+        error: (error: any) => {
+          console.log('[DELETE]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(deleteSectionsSubscr);
+  }
 
   recieveSelectedItems(data: string[]) {
     this.selectedSections = data;

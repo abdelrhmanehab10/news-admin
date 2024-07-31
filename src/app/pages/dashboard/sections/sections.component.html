@@ -25,7 +25,7 @@
       <app-add-section
         (onNewSectionAddedEmitter)="recieveIsNewSectionAdded($event)"
       ></app-add-section>
-      <button class="btn btn-danger btn-sm mx-2">حذف</button>
+      <button (click)="deleteSections()" class="btn btn-danger btn-sm mx-2">حذف</button>
     </div>
   </div>
   <div class="card-body pt-2">
@@ -34,6 +34,7 @@
       [isAllSectionSelected]="items.length === selectedSections.length"
       (selectedItemsEmitter)="recieveSelectedItems($event)"
       [isLoading]="isLoading$ | async"
+      [listOptions]="listOptions"
     ></app-list>
   </div>
 </div>

@@ -1,5 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { EditorComponent } from '@tinymce/tinymce-angular';
 import { ToastrService } from 'ngx-toastr';
 import { distinctUntilChanged, Observable, Subscription } from 'rxjs';
 import { CustomButton, TableOption } from 'src/app/models/components.model';
@@ -7,10 +13,14 @@ import {
   Album,
   Category,
   ContentType,
+  ContentTypeSetting,
   SubCategory,
+  ValidationRule,
 } from 'src/app/models/data.model';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
+import { EditorsService } from 'src/app/services/dashboard/editors/editors.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-new',
@@ -25,31 +35,28 @@ export class AddNewComponent implements OnInit {
   isLoading$: Observable<boolean>;
   hasError: boolean = false;
 
+  contentTypesSetting: ContentTypeSetting[] = [];
+
   contentTypes: ContentType[] = [];
-  subCategories: SubCategory[] = [];
   categories: Category[] = [];
+  subCategories: SubCategory[] = [];
   albums: Album[] = [];
-  drafts: any[] = [];
+  editors: any[] = [];
+
+  contentTypeID: number = 1;
 
   selectedAlbums: Album[] = [];
   selectedImage: any = null;
+  restoredDraft: any;
   attachment: any = null;
-  img2Id: number = 0;
-  picCaption2: string = '';
   Story: string = '';
   tags: string[] = [];
   date: string = '';
-  tableOptions: TableOption = {
-    isDraft: true,
-    title: 'يوجد درافت او اكثر اثناء العمل على اضافة خبر',
-  };
-  customBtnsOptions: CustomButton[] = [
-    { content: 'حذف الكل', bgColor: 'danger', click: this.deleteAllDrafts },
-  ];
 
   constructor(
     private dashboardService: DashboardService,
     private addNewService: AddNewService,
+    private editorsService: EditorsService,
     private cdr: ChangeDetectorRef,
     private toast: ToastrService,
     private fb: FormBuilder
@@ -58,15 +65,29 @@ export class AddNewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initAddNewForm();
-    this.getDrafts();
+    this.initAddNewForm(this.contentTypeID, this.contentTypesSetting);
+    this.getContentTypeSetting();
     this.getGalleries();
+    this.getAllEditors();
     this.dashboardService.contentTypes$.subscribe((conetntTypes) => {
       this.contentTypes = conetntTypes;
     });
     this.dashboardService.categories$.subscribe((categories) => {
       this.categories = categories;
     });
+  }
+
+  //TinyMCE
+  TINY_MCE_API_KEY: string = environment.TINY_MCE_API_KEY;
+  init: EditorComponent['init'] = {
+    plugins: 'lists link image table code help wordcount',
+    directionality: 'rtl',
+    language: 'ar',
+  };
+
+  onNewsTypeChange(e: any) {
+    this.contentTypeID = e.target.value;
+    this.initAddNewForm(this.contentTypeID, this.contentTypesSetting);
   }
 
   onCategoryChange(e: any) {
@@ -89,7 +110,7 @@ export class AddNewComponent implements OnInit {
 
   getGalleries() {
     this.hasError = false;
-    const addNewSubscr = this.addNewService.getGalleries().subscribe({
+    const getGalleriesSubscr = this.addNewService.getGalleries().subscribe({
       next: (data: any) => {
         if (data) {
           this.albums = data;
@@ -97,23 +118,70 @@ export class AddNewComponent implements OnInit {
         }
       },
       error: (error: any) => {
-        console.log('[ADD_NEW]', error);
+        console.log('[GET_GALLERIES]', error);
         this.hasError = true;
       },
     });
-    this.unsubscribe.push(addNewSubscr);
+    this.unsubscribe.push(getGalleriesSubscr);
   }
 
-  initAddNewForm() {
+  applyValidationRules(formGroup: FormGroup, rules: ValidationRule[]) {
+    rules.forEach((rule) => {
+      if (!rule.value && formGroup.contains(rule.keyName)) {
+        formGroup.removeControl(rule.keyName);
+      }
+    });
+
+    rules.forEach((rule) => {
+      if (rule.value) {
+        const control = formGroup.get(rule.keyName);
+        const existingValidators =
+          control && control.validator
+            ? control.validator({} as AbstractControl)
+            : null;
+        const newValidators = [];
+
+        if (existingValidators) {
+          Object.keys(existingValidators).forEach((key) => {
+            if (key !== 'minlength' && key !== 'maxlength') {
+              newValidators.push(existingValidators[key]);
+            }
+          });
+        }
+
+        if (rule.valueMin !== 0) {
+          newValidators.push(Validators.minLength(rule.valueMin));
+        }
+        if (rule.valueMax !== 0) {
+          newValidators.push(Validators.maxLength(rule.valueMax));
+        }
+        if (rule.keyName === 'ByLine') {
+          newValidators.push(Validators.required);
+        }
+
+        if (control) {
+          control.setValidators(newValidators);
+          control.updateValueAndValidity();
+        } else {
+          formGroup.addControl(
+            rule.keyName,
+            this.fb.control('', newValidators)
+          );
+        }
+      }
+    });
+  }
+
+  initAddNewForm(contentTypeID: number, rules: ValidationRule[]) {
     this.addNewForm = this.fb.group({
-      NewsType: ['', [Validators.required]],
+      NewsType: [contentTypeID, [Validators.required]],
       CatId: ['', [Validators.required]],
       sectionId: ['', [Validators.required]],
-      ByLine: ['', [Validators.required]],
-      Title: ['', [Validators.required]],
+      ByLine: ['', []],
+      Title: ['', []],
       SubTitle: [''],
-      Brief: ['', [Validators.required]],
-      PictureCaption1: ['', [Validators.required]],
+      Brief: ['', []],
+      PictureCaption1: ['', []],
       Notes: [''],
       ChkNewsTicker: [false],
       ChkTopNews: [false],
@@ -128,6 +196,11 @@ export class AddNewComponent implements OnInit {
       ChkIsVideo: [false],
       ChkIsAkbhbarKhassa: [false],
     });
+
+    const relevantRules = rules.filter(
+      (rule) => rule.contentTypeID == contentTypeID
+    );
+    this.applyValidationRules(this.addNewForm, relevantRules);
   }
 
   get f() {
@@ -172,9 +245,9 @@ export class AddNewComponent implements OnInit {
         this.f.Brief.value,
         this.tags,
         this.selectedImage.id,
-        this.img2Id,
+        0,
         this.f.PictureCaption1.value,
-        this.picCaption2,
+        '',
         this.f.ByLine.value,
         this.f.Notes.value,
         this.selectedAlbums.map((sa) => sa.galleryID),
@@ -205,71 +278,78 @@ export class AddNewComponent implements OnInit {
     this.unsubscribe.push(addNewSubscr);
   }
 
-  recieveSelectedImage(
-    data: {
-      icon: string;
-      title: string;
-      description: string;
-      id: number;
-    } | null
-  ) {
-    this.selectedImage = data;
+  receiver(recevier: string, data: any) {
+    (this as any)[recevier] = data;
+    // console.log(data);
+    // if (recevier === 'restoredDraft') {
+    //   console.log(data.NewsType);
+
+    //   this.addNewForm.patchValue({
+    //     NewsType: data?.newsType,
+    //     CatId: data?.categoryId,
+    //     sectionId: data?.sectionId,
+    //     ByLine: data?.byLine,
+    //     Title: data?.title,
+    //     SubTitle: data?.subTitle,
+    //     Brief: data?.brief,
+    //     PictureCaption1: data?.pictureCaption1,
+    //     Notes: data?.notes,
+    //     ChkNewsTicker: data?.ChkNewsTicker,
+    //     ChkTopNews: data?.ChkTopNews,
+    //     ChkReadNow: data?.ChkReadNow,
+    //     ChkIsInstall: data?.ChkIsInstall,
+    //     ChkIsImage: data?.ChkIsImage,
+    //     ChkIsAkhbarKhassa: data?.ChkIsAkhbarKhassa,
+    //     ChkTopNewCategory: data?.ChkTopNewCategory,
+    //     ChkTopNewSection: data?.ChkTopNewSection,
+    //     ChkImportantNews: data?.ChkImportantNews,
+    //     ChkFilesNews: data?.ChkFilesNews,
+    //     ChkIsVideo: data?.ChkIsVideo,
+    //     ChkIsAkbhbarKhassa: data?.ChkIsAkbhbarKhassa,
+    //   });
+
+    //   this.Story = data?.story;
+    //   this.tags = data?.tags;
+    //   this.selectedImage = data?.selectedImage;
+    //   this.date = data?.date;
+    //   this.selectedAlbums = data?.selectedAlbums;
+    //   this.attachment = data?.attachment;
+    // }
   }
 
-  recieveStory(data: string) {
-    this.Story = data;
-  }
-
-  recieveTags(data: string[]) {
-    console.log(data);
-
-    this.tags = data;
-  }
-
-  recieveDate(data: string) {
-    this.date = data;
-  }
-
-  recieveAttachment(data: any) {
-    this.attachment = data;
-  }
-
-  getDrafts() {
+  getContentTypeSetting() {
     this.hasError = false;
-    const getDraftsSubscr = this.addNewService.getDrafts().subscribe({
-      next: (data: typeof this.drafts) => {
-        if (data) {
-          const items = data.map((item) => ({
-            title: item.title,
-            category: item.secTitle,
-            dateWithTime: item.createdDate,
-          }));
-          this.drafts = items;
-          this.cdr.detectChanges();
-        }
-      },
-      error: (error: any) => {
-        console.log('[DRAFTS]', error);
-        this.hasError = true;
-      },
-    });
-    this.unsubscribe.push(getDraftsSubscr);
+    const getContentTypeSettingSubscr = this.dashboardService
+      .getContentTypeSetting()
+      .subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.contentTypesSetting = data;
+            this.initAddNewForm(this.contentTypeID, data);
+          }
+        },
+        error: (error: any) => {
+          console.log('[CONTENT_TYPE_SETTING]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(getContentTypeSettingSubscr);
   }
 
-  deleteAllDrafts() {
+  getAllEditors() {
     this.hasError = false;
-    const getDraftsSubscr = this.addNewService.deleteAllDrafts().subscribe({
+    const getAllEditorsSubscr = this.editorsService.getAllEditors().subscribe({
       next: (data: any) => {
         if (data) {
-          this.toast.error(data.message);
+          this.editors = data;
           this.cdr.detectChanges();
         }
       },
       error: (error: any) => {
-        console.log('[DELETE_DRAFTS]', error);
+        console.log('[GET_ALL_EDITORS]', error);
         this.hasError = true;
       },
     });
-    this.unsubscribe.push(getDraftsSubscr);
+    this.unsubscribe.push(getAllEditorsSubscr);
   }
 }

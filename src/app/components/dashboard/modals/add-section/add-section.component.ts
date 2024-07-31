@@ -11,6 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
+import { Section } from 'src/app/models/components.model';
 import { ModalConfig } from 'src/app/models/modal.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { SectionsService } from 'src/app/services/dashboard/sections/sections.service';
@@ -32,36 +33,13 @@ export class AddSectionComponent implements OnInit {
 
   @Input() title: string = 'أضافة باب فرعي';
   @Input() btnStyle: string = '';
-  @Input() section: {
-    SecTitle: string;
-    Hide: boolean;
-    WeeklySection: boolean;
-    Keywords: string;
-    Description: string;
-    CategoryId: number | null;
-  } = {
+  @Input() section: Section = {
     SecTitle: '',
     Hide: false,
     WeeklySection: false,
     Keywords: '',
     Description: '',
-    CategoryId: null,
-  };
-
-  defaultSection: {
-    SecTitle: string;
-    Hide: boolean;
-    WeeklySection: boolean;
-    Keywords: string;
-    Description: string;
-    CategoryId: number | null;
-  } = {
-    SecTitle: this.section?.SecTitle ?? '',
-    Hide: this.section?.Hide ?? false,
-    WeeklySection: this.section?.WeeklySection ?? false,
-    Keywords: this.section?.Keywords ?? '',
-    Description: this.section?.Description ?? '',
-    CategoryId: this.section?.CategoryId ?? null,
+    SectionId: null,
   };
 
   hasError: boolean = false;
@@ -103,19 +81,16 @@ export class AddSectionComponent implements OnInit {
 
   initForm() {
     this.sectionForm = this.fb.group({
-      Description: [this.defaultSection.Description, Validators.required],
-      CategoryId: [this.defaultSection.CategoryId, Validators.required],
-      Keywords: [this.defaultSection.Keywords, Validators.required],
-      SecTitle: [this.defaultSection.SecTitle, Validators.required],
-      Hide: [this.defaultSection.Hide],
-      WeeklySection: [this.defaultSection.WeeklySection],
+      Description: ['', Validators.required],
+      CategoryId: ['', Validators.required],
+      Keywords: ['', Validators.required],
+      SecTitle: ['', Validators.required],
+      Hide: [false],
+      WeeklySection: [false],
     });
   }
 
   onOpen() {
-    this.defaultSection = this.section;
-    console.log(this.defaultSection);
-
     this.openModal();
   }
 

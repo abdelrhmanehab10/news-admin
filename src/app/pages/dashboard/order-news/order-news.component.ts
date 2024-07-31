@@ -21,8 +21,10 @@ export class OrderNewsComponent implements OnInit {
     secTitle: string;
   }[] = [];
   itemsIds = this.items?.map((item) => item.newId);
+
   filterOption: FilterOption = {
     isOrderCategories: true,
+    orderCategoryId: '1',
   };
 
   hasError: boolean = false;

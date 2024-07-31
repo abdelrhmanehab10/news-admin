@@ -139,4 +139,25 @@ export class DashboardService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+
+  getContentTypeSetting() {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.dashboardHTTPService
+      .getContentTypeSetting(auth.authToken)
+      .pipe(
+        map((data) => {
+          return data.data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
 }

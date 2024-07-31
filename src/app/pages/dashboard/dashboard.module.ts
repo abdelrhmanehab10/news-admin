@@ -20,6 +20,9 @@ import { CommentsComponent } from './comments/comments.component';
 import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditorsComponent } from './editors/editors.component';
+import { TinyMCEEditorComponent } from 'src/app/components/shared/tiny-mce-editor/tiny-mce-editor.component';
+import { EditorComponent } from '@tinymce/tinymce-angular';
+import { CategoryComponent } from './category/category.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,7 @@ import { EditorsComponent } from './editors/editors.component';
     CommentsComponent,
     DeletedNewsComponent,
     EditorsComponent,
+    CategoryComponent,
   ],
   imports: [
     CommonModule,
@@ -45,7 +49,7 @@ import { EditorsComponent } from './editors/editors.component';
     ComponentsModule,
     DragDropModule,
     ReactiveFormsModule,
-    // WidgetsModule, ModalsModule
+    EditorComponent,
   ],
 })
 export class DashboardModule {}

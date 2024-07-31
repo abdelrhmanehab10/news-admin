@@ -4,7 +4,6 @@
     <div
       class="card-header justify-content-between align-items-center border-0"
     >
-      <!-- <h3 class="card-title fw-bolder text-gray-900">Todo</h3> -->
       <label
         class="checkbox checkbox-xl checkbox-inline ms-2 d-flex align-items-center"
       >
@@ -18,29 +17,68 @@
         />
         <span class="me-2">الكل</span>
       </label>
-      <div class="card-toolbar">
-        <!-- begin::Menu -->
-        <button
-          type="button"
-          class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-          data-kt-menu-trigger="click"
-          data-kt-menu-placement="bottom-end"
-          data-kt-menu-flip="top-end"
-        >
-          <app-keenicon name="category" class="fs-2"></app-keenicon>
+      <form
+        [formGroup]="searchForm"
+        class="flex-grow-1 d-flex align-items-center justify-content-around"
+        autoComplete="off"
+      >
+        <div class="flex-grow-1 position-relative">
+          <input
+            type="text"
+            class="form-control form-control-solid pe-5"
+            name="search"
+            placeholder="ابحث عن الأخبار اليومية من هنا.."
+            formControlName="search"
+          />
+        </div>
+        <div>
+          <select
+            #albumSelect
+            class="form-select form-select-solid"
+            (change)="onCategoryChange($event)"
+            formControlName="categoryId"
+          >
+            <option value="">الباب</option>
+            @for(item of categories; track item;){
+            <option value="{{ item.categoryID }}">
+              {{ item.name }}
+            </option>
+            }
+          </select>
+        </div>
+        <div>
+          <select
+            #albumSelect
+            class="form-select form-select-solid"
+            formControlName="subCategoryId"
+          >
+            <option value="">الباب الفرعي</option>
+            @for(item of subCategories; track item;){
+            <option value="{{ item.sectionID }}">
+              {{ item.secTitle }}
+            </option>
+            }
+          </select>
+        </div>
+        <button class="btn btn-primary btn-sm mx-2" (click)="getDailyNews()">
+          بحث
         </button>
-        <app-dropdown-menu [filterOptions]="filterOptions"></app-dropdown-menu>
-        <!-- <app-add-section
-          (onNewSectionAddedEmitter)="recieveIsNewSectionAdded($event)"
-        ></app-add-section> -->
-        <button class="btn btn-danger btn-sm mx-2">حذف</button>
-        <!-- end::Menu -->
+      </form>
+      <div class="card-toolbar">
+        <button class="btn btn-primary btn-sm" (click)="addUrgentContent()">
+          اضافة
+        </button>
       </div>
     </div>
     <!-- end::Header -->
     <!-- begin::Body -->
     <div class="card-body pt-2">
-      <app-group-list [items]="items"></app-group-list>
+      <app-group-list
+        [items]="items"
+        [groupListOptions]="groupListOptions"
+        [isAllSectionSelected]="items.length === selectedItems.length"
+        (selectedItemsEmitter)="recieveSelectedItems($event)"
+      ></app-group-list>
     </div>
     <!-- end::Body -->
   </div>

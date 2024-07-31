@@ -6,7 +6,6 @@
         data-kt-select2="true"
         data-placeholder="Select option"
         data-allow-clear="true"
-        formControlName="GalleryTypeId"
         (change)="getGalleryByType($event)"
       >
         @for(item of galleryTypes; track item; let idx = $index;){

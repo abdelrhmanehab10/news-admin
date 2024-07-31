@@ -84,4 +84,19 @@ export class DashboardHTTPService {
       headers: httpHeaders,
     });
   }
+
+  getContentTypeSetting(token: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/News/ContentTypeSetting`, {
+      headers: httpHeaders,
+    });
+  }
 }

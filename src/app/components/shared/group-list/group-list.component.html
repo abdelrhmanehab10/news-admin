@@ -12,17 +12,14 @@
       class="spinner-border spinner-border-sm align-middle me-1"
     ></span> </span
   >} @else if(items && items.length){@for( item of items; track item ){
-  <div class="timeline-item align-items-center">
-    <div
-      class="timeline-label fw-bolder text-gray-800 my-7 fs-6"
-      style="writing-mode: vertical-lr"
-    >
-      {{ convertDateToArabicFormat(item.date) }}
+  <div class="">
+    <div class="d-flex align-items-center gap-2 me-1">
+      <i class="fa fa-genderless text-primary fs-1 position-relative z-2"></i>
+      <div class="fw-bolder text-gray-800 my-2 fs-6">
+        {{ convertDateToArabicFormat(item.date) }}
+      </div>
     </div>
-    <div class="timeline-badge align-self-start">
-      <i class="fa fa-genderless text-primary fs-1"></i>
-    </div>
-    <div class="w-100 my-7">
+    <div class="new-container me-auto my-7">
       @for(subItem of item.news; track subItem){
       <div
         class="bg-gray-100 bg-hover-gray-300 px-2 py-4 rounded w-100 d-flex justify-content-between align-items-center mb-2"
@@ -58,7 +55,7 @@
         }
         <div class="d-flex">
           @if(groupListOptions.isEnable && groupListOptions.enable){<button
-            (click)="groupListOptions.enable(item.id)"
+            (click)="groupListOptions.enable(subItem.id)"
             class="btn btn-sm btn-outline-dark border b d-flex align-items-center gap-3 me-2"
           >
             @if(isLoading){
@@ -68,7 +65,7 @@
                 class="spinner-border spinner-border-sm align-middle ms-2"
               ></span>
             </span>
-            }@else { @if(item.active) { ايقاف }@else{ تفعيل }}</button
+            }@else { @if(subItem.active) { ايقاف }@else{ تفعيل }}</button
           >} @if(groupListOptions.isEdit){<app-add-section
             [title]="'تعديل'"
             [btnStyle]="'btn-light'"

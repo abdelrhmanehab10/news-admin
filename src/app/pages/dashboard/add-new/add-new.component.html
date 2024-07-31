@@ -3,18 +3,10 @@
     <div class="card-title m-0" style="padding: 0 2.25rem">
       <h3 class="fw-bolder mt-4">أضافة مادة</h3>
     </div>
-    @if(drafts.length){
-    <div class="w-100 p-5">
-      <app-table
-        [customBtns]="customBtnsOptions"
-        [items]="drafts"
-        [tableOptions]="tableOptions"
-      >
-      </app-table>
-    </div>
-    }
   </div>
+  <app-drafts (draftEmitter)="receiver('restoredDraft', $event)"></app-drafts>
   <div class="card-body border-top p-9">
+    @if(addNewForm && addNewForm.controls){
     <form [formGroup]="addNewForm" class="form">
       <div class="row mb-6">
         <label class="col-lg-2 col-form-label fw-bold fs-6">
@@ -27,6 +19,7 @@
             data-placeholder="Select option"
             data-allow-clear="true"
             formControlName="NewsType"
+            (change)="onNewsTypeChange($event)"
           >
             @for(item of contentTypes; track item; let idx = $index){
             <option value="{{ item.typeId }}">{{ item.contentType1 }}</option>
@@ -50,7 +43,9 @@
       >
         <ng-container
           *ngIf="
-            control.hasError(validation) && (control.dirty || control.touched)
+            control &&
+            control.hasError(validation) &&
+            (control.dirty || control.touched)
           "
         >
           <div class="w-100 fv-plugins-message-container">
@@ -144,7 +139,7 @@
           </ng-container>
         </ng-template>
       </div>
-      <div class="row mb-6">
+      <div class="row mb-6" *ngIf="addNewForm.get('ByLine')">
         <label class="col-lg-2 col-form-label fw-bold fs-6">
           <span class="required">كتب</span>
         </label>
@@ -168,6 +163,26 @@
             <ng-container
               [ngTemplateOutlet]="formError"
               [ngTemplateOutletContext]="{
+                  validation: 'minlength',
+                  message: ' يجب ان لا يقل العنوان عن ' + this.addNewForm.controls.ByLine.errors?.minlength 
+                  ?.requiredLength + ' حرف ',
+                  control: addNewForm.controls['ByLine'],
+                }
+              "
+            ></ng-container>
+            <ng-container
+              [ngTemplateOutlet]="formError"
+              [ngTemplateOutletContext]="{
+                  validation: 'maxlength',
+                  message: ' يجب ان لا يقل العنوان عن ' + this.addNewForm.controls.ByLine.errors?.maxlength 
+                  ?.requiredLength + ' حرف ',
+                  control: addNewForm.controls['ByLine'],
+                }
+              "
+            ></ng-container>
+            <ng-container
+              [ngTemplateOutlet]="formError"
+              [ngTemplateOutletContext]="{
                 validation: 'required',
                 message: 'كاتب الخبر مطلوب',
                 control: addNewForm.controls['ByLine']
@@ -177,6 +192,7 @@
         </div>
       </div>
       <ng-template
+        *ngIf="addNewForm.get('ByLine')"
         #formError
         let-control="control"
         let-message="message"
@@ -194,7 +210,52 @@
           </div>
         </ng-container>
       </ng-template>
-      <div class="row mb-6">
+      <div class="row mb-6" *ngIf="addNewForm.get('EditorID')">
+        <label class="col-lg-2 col-form-label fw-bold fs-6">
+          <span class="required">الكاتب / المراسل</span>
+        </label>
+        <div class="col-lg-10 fv-row">
+          <select
+            class="form-select w-fit form-select-solid"
+            data-kt-select2="true"
+            data-placeholder="Select option"
+            data-allow-clear="true"
+            formControlName="EditorID"
+          >
+            @for(item of editors; track item; let idx = $index){
+            <option value="{{ item.editorId }}">{{ item.editorName }}</option>
+            }
+          </select>
+          <ng-container
+            [ngTemplateOutlet]="formError"
+            [ngTemplateOutletContext]="{
+              validation: 'required',
+              message: 'نوع الخبر مطلوب',
+              control: addNewForm.controls['NewsType']
+            }"
+          ></ng-container>
+        </div>
+      </div>
+      <ng-template
+        *ngIf="addNewForm.get('ByLine')"
+        #formError
+        let-control="control"
+        let-message="message"
+        let-validation="validation"
+      >
+        <ng-container
+          *ngIf="
+            control.hasError(validation) && (control.dirty || control.touched)
+          "
+        >
+          <div class="w-100 fv-plugins-message-container">
+            <span role="alert" class="text-danger">
+              {{ message }}
+            </span>
+          </div>
+        </ng-container>
+      </ng-template>
+      <div class="row mb-6" *ngIf="addNewForm.get('Title')">
         <label class="col-lg-2 col-form-label fw-bold fs-6">
           <span class="required">العنوان</span>
         </label>
@@ -218,15 +279,28 @@
             <ng-container
               [ngTemplateOutlet]="formError"
               [ngTemplateOutletContext]="{
-                validation: 'required',
-                message: 'العنوان مطلوب',
-                control: addNewForm.controls['Title']
-              }"
+                  validation: 'minlength',
+                  message: ' يجب ان لا يقل العنوان عن ' + this.addNewForm.controls.Title.errors?.minlength 
+                  ?.requiredLength + ' حرف ',
+                  control: addNewForm.controls['Title'],
+                }
+              "
+            ></ng-container>
+            <ng-container
+              [ngTemplateOutlet]="formError"
+              [ngTemplateOutletContext]="{
+                  validation: 'maxlength',
+                  message: ' يجب ان لا يقل العنوان عن ' + this.addNewForm.controls.Title.errors?.maxlength 
+                  ?.requiredLength + ' حرف ',
+                  control: addNewForm.controls['Title'],
+                }
+              "
             ></ng-container>
           </div>
         </div>
       </div>
       <ng-template
+        *ngIf="addNewForm.get('Title')"
         #formError
         let-control="control"
         let-message="message"
@@ -244,7 +318,7 @@
           </div>
         </ng-container>
       </ng-template>
-      <div class="row mb-6">
+      <div class="row mb-6" *ngIf="addNewForm.get('SubTitle')">
         <label class="col-lg-2 col-form-label fw-bold fs-6">
           عنوان تمهيدي
         </label>
@@ -268,7 +342,7 @@
           </div>
         </div>
       </div>
-      <div class="row mb-6">
+      <div class="row mb-6" *ngIf="addNewForm.get('Brief')">
         <label class="col-lg-2 col-form-label fw-bold fs-6">
           <span class="required">مقدمة</span>
         </label>
@@ -292,6 +366,26 @@
             <ng-container
               [ngTemplateOutlet]="formError"
               [ngTemplateOutletContext]="{
+                  validation: 'minlength',
+                  message: ' يجب ان لا يقل المقدمة عن ' + this.addNewForm.controls.Brief.errors?.minlength 
+                  ?.requiredLength + ' حرف ',
+                  control: addNewForm.controls['Brief'],
+                }
+              "
+            ></ng-container>
+            <ng-container
+              [ngTemplateOutlet]="formError"
+              [ngTemplateOutletContext]="{
+                  validation: 'maxlength',
+                  message: ' يجب ان لا يقل المقدمة عن ' + this.addNewForm.controls.Brief.errors?.maxlength 
+                  ?.requiredLength + ' حرف ',
+                  control: addNewForm.controls['Brief'],
+                }
+              "
+            ></ng-container>
+            <ng-container
+              [ngTemplateOutlet]="formError"
+              [ngTemplateOutletContext]="{
                 validation: 'required',
                 message: 'المقدمة مطلوبة',
                 control: addNewForm.controls['Brief']
@@ -301,6 +395,7 @@
         </div>
       </div>
       <ng-template
+        *ngIf="addNewForm.get('Brief')"
         #formError
         let-control="control"
         let-message="message"
@@ -323,9 +418,22 @@
           جسم الخبر
         </label>
         <div class="col-lg-10 fv-row">
-          <app-tiny-mce-editor
-            (storyEmitter)="recieveStory($event)"
-          ></app-tiny-mce-editor>
+          <editor
+            [init]="init"
+            [apiKey]="TINY_MCE_API_KEY"
+            formControlName="Story"
+            [maxlength]="
+              this.addNewForm.controls.Story.errors?.maxlength?.requiredLength
+            "
+            [minlength]="
+              this.addNewForm.controls.Story.errors?.minlength?.requiredLength
+            "
+          />
+        </div>
+      </div>
+      <div class="row mb-6" *ngIf="addNewForm.get('AssociatedID')">
+        <div class="col-lg-10 fv-row me-auto">
+          <app-add-article></app-add-article>
         </div>
       </div>
       <div class="separator my-3 opacity-75"></div>
@@ -334,7 +442,9 @@
           >تاجز</label
         >
         <div class="col-lg-10 fv-row">
-          <app-tags-input (tagsEmitter)="recieveTags($event)"></app-tags-input>
+          <app-tags-input
+            (tagsEmitter)="receiver('tags', $event)"
+          ></app-tags-input>
         </div>
       </div>
       <div class="separator my-3 opacity-75"></div>
@@ -347,11 +457,11 @@
           @if(selectedImage){
           <app-image
             [selectedImage]="selectedImage"
-            (selectedImageEmitter)="recieveSelectedImage($event)"
+            (selectedImageEmitter)="receiver('selectedImage', $event)"
           ></app-image
           >}
           <app-add-image
-            (selectedImageEmitter)="recieveSelectedImage($event)"
+            (selectedImageEmitter)="receiver('selectedImage', $event)"
           ></app-add-image>
           <app-upload-image></app-upload-image>
         </div>
@@ -412,7 +522,7 @@
         </label>
         <div class="col-lg-10 fv-row mb-6">
           <app-image
-            (selectedImageEmitter)="recieveAttachment($event)"
+            (selectedImageEmitter)="receiver('attachment', $event)"
           ></app-image>
         </div>
         <div class="row mb-6">
@@ -613,7 +723,7 @@
       <div class="row mb-6">
         <label class="col-lg-3 col-form-label fw-bold fs-6">نشر في</label>
         <app-date-time-picker
-          (dateEmitter)="recieveDate($event)"
+          (dateEmitter)="receiver('date', $event)"
         ></app-date-time-picker>
       </div>
       <div class="separator my-3 opacity-75"></div>
@@ -746,5 +856,6 @@
         }
       </div>
     </form>
+    }
   </div>
 </div>

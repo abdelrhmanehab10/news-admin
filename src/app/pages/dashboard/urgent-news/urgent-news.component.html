@@ -3,17 +3,6 @@
   <div class="card-header justify-content-between border-0">
     <h3 class="card-title fw-bolder text-gray-900">أخبار عاجلة</h3>
     <div class="card-toolbar">
-      <!-- begin::Menu -->
-      <button
-        type="button"
-        class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-        data-kt-menu-trigger="click"
-        data-kt-menu-placement="bottom-end"
-        data-kt-menu-flip="top-end"
-      >
-        <app-keenicon name="category" class="fs-2"></app-keenicon>
-      </button>
-      <app-dropdown-menu [filterOptions]="filterOptions"></app-dropdown-menu>
       <app-add-urgent-new
         (onNewUrgentContentAddedEmitter)="recieveIsUrgentContentAdded($event)"
       ></app-add-urgent-new>

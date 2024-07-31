@@ -17,8 +17,6 @@ import { EditorsService } from 'src/app/services/dashboard/editors/editors.servi
 export class EditorsComponent implements OnDestroy, OnInit {
   private unsubscribe: Subscription[] = [];
 
-  searchForm: FormGroup;
-
   items: any[] = [];
   search = '';
   pageNumber: number = 1;
@@ -48,34 +46,19 @@ export class EditorsComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllEditors(this.pageNumber, this.search);
-    this.initForm();
-    this.onSearch();
+    this.getAllEditors();
   }
 
-  onSearch() {
-    this.searchForm
-      .get('search')
-      ?.valueChanges.pipe(
-        debounceTime(300), // Adjust the debounce time as needed
-        distinctUntilChanged()
-      )
-      .subscribe((value: string) => {
-        this.search = value;
-        this.getAllEditors(this.pageNumber, value);
-      });
+  onSearch(e: any) {
+    this.search = e.target.value;
+    this.getAllEditors(300, this.pageNumber, this.search);
   }
 
-  initForm() {
-    this.searchForm = this.fb.group({
-      search: [''],
-    });
-  }
-
-  getAllEditors(pageNumber: number, search: string) {
+  getAllEditors(delay: number = 0, pageNumber?: number, search?: string) {
     this.hasError = false;
     const getAllEditorsSubscr = this.editorsService
       .getAllEditors(pageNumber, search)
+      .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
         next: (data: any[]) => {
           if (data) {

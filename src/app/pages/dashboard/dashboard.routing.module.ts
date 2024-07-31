@@ -14,6 +14,8 @@ import { MainNewsComponent } from './main-news/main-news.component';
 import { CommentsComponent } from './comments/comments.component';
 import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
 import { EditorsComponent } from './editors/editors.component';
+import { VersionsComponent } from './versions/versions/versions.component';
+import { CategoryComponent } from './category/category.component';
 
 export const routes: Routes = [
   {
@@ -61,6 +63,10 @@ export const routes: Routes = [
         component: SectionsComponent,
       },
       {
+        path: 'category',
+        component: CategoryComponent,
+      },
+      {
         path: 'categories',
         component: NewsCategoriesComponent,
       },
@@ -79,6 +85,10 @@ export const routes: Routes = [
       {
         path: 'editors',
         component: EditorsComponent,
+      },
+      {
+        path: 'versions/:id',
+        component: VersionsComponent,
       },
     ],
   },

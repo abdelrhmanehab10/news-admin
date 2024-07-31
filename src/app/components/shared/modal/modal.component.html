@@ -7,11 +7,7 @@
       <!--begin::Close-->
       <div
         class="btn btn-sm btn-icon btn-active-color-primary"
-        (click)="dismiss()"
-        *ngIf="
-          modalConfig.hideDismissButton === undefined ||
-          !modalConfig.hideDismissButton()
-        "
+        (click)="close()"
       >
         <app-keenicon name="cross" class="fs-1"></app-keenicon>
         <!--end::Svg Icon-->
@@ -28,10 +24,7 @@
         (click)="
           modalConfig.customDismiss ? modalConfig.customDismiss() : dismiss()
         "
-        *ngIf="
-          modalConfig.hideDismissButton === undefined ||
-          !modalConfig.hideDismissButton()
-        "
+        *ngIf="!modalConfig.hideDismissButton"
         [disabled]="
           modalConfig.disableDismissButton !== undefined &&
           modalConfig.disableDismissButton()

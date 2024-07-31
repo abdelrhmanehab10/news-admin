@@ -8,7 +8,7 @@ import { IconUserModel } from '../../../_metronic/partials';
 export class ProjectsComponent implements OnInit {
   users1: Array<IconUserModel> = [
     { name: 'Emma Smith', avatar: './assets/media/avatars/300-6.jpg' },
-    { name: 'Rudy Stone', avatar: './assets/media/avatars/300-1.jpg' },
+    // { name: 'Rudy Stone', avatar: './assets/media/avatars/300-1.jpg' },
     { name: 'Susan Redwood', initials: 'S', color: 'primary' },
   ];
 
@@ -19,7 +19,7 @@ export class ProjectsComponent implements OnInit {
 
   users3 = [
     { name: 'Mad Masy', avatar: './assets/media/avatars/300-6.jpg' },
-    { name: 'Cris Willson', avatar: './assets/media/avatars/300-1.jpg' },
+    // { name: 'Cris Willson', avatar: './assets/media/avatars/300-1.jpg' },
     { name: 'Mike Garcie', initials: 'M', color: 'info' },
   ];
 
@@ -36,7 +36,7 @@ export class ProjectsComponent implements OnInit {
 
   users6 = [
     { name: 'Emma Smith', avatar: './assets/media/avatars/300-6.jpg' },
-    { name: 'Rudy Stone', avatar: './assets/media/avatars/300-1.jpg' },
+    // { name: 'Rudy Stone', avatar: './assets/media/avatars/300-1.jpg' },
     { name: 'Susan Redwood', initials: 'S', color: 'primary' },
   ];
 
@@ -47,7 +47,7 @@ export class ProjectsComponent implements OnInit {
 
   users8 = [
     { name: 'Emma Smith', avatar: './assets/media/avatars/300-6.jpg' },
-    { name: 'Rudy Stone', avatar: './assets/media/avatars/300-1.jpg' },
+    { name: 'Rudy Stone', avatar: './assets/media/avatars/' },
     { name: 'Susan Redwood', initials: 'S', color: 'primary' },
   ];
 

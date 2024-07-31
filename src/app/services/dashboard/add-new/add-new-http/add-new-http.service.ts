@@ -240,6 +240,21 @@ export class AddNewHTTPService {
     });
   }
 
+  restoreDraft(token: string, id: number): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<{
+      status: number;
+      data: any[] | null;
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/Draft/RestoreDraft?draftId=${id}`, {
+      headers: httpHeaders,
+    });
+  }
+
   deleteAllDrafts(token: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,

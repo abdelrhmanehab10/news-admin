@@ -9,7 +9,5 @@ import { TableOption } from 'src/app/models/components.model';
 export class CommentsComponent {
   tableOptions: TableOption = {
     isCheckbox: true,
-    isSearch: false,
-    title: 'تعليقات القراء',
   };
 }

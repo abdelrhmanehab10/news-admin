@@ -251,6 +251,25 @@ export class AddNewService {
     );
   }
 
+  restoreDraft(id: number) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.AddNewHTTPService.restoreDraft(auth.authToken, id).pipe(
+      map((data) => {
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
   deleteAllDrafts() {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {

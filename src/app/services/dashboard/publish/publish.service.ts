@@ -107,7 +107,7 @@ export class PublishService {
     );
   }
 
-  returnNews(newsStatus: string, newsIds: string[]) {
+  returnNews(newsStatus: number, newsIds: string[]) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);

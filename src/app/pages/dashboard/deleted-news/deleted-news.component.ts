@@ -27,8 +27,6 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
     delete: this.onDelete,
   };
 
-  searchForm: FormGroup;
-
   pageNumber: number = 1;
   search = '';
   filterOption: FilterOption = {
@@ -48,44 +46,24 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.getDeletedNews();
+  }
+
+  onSearch(e: any) {
+    this.search = e.target.value;
     this.getDeletedNews(
-      this.pageNumber,
+      300,
+      1,
       this.search,
       this.filterOption.categoryId,
       this.filterOption.subCategoryId
     );
-
-    this.initForm();
-    this.onSearch();
-  }
-
-  onSearch() {
-    this.searchForm
-      .get('search')
-      ?.valueChanges.pipe(
-        debounceTime(300), // Adjust the debounce time as needed
-        distinctUntilChanged()
-      )
-      .subscribe((value: string) => {
-        this.search = value;
-        this.getDeletedNews(
-          this.pageNumber,
-          value,
-          this.filterOption.categoryId,
-          this.filterOption.subCategoryId
-        );
-      });
-  }
-
-  initForm() {
-    this.searchForm = this.fb.group({
-      search: [''],
-    });
   }
 
   getDeletedNews(
-    pageNumber: number,
-    search: string,
+    delay: number = 0,
+    pageNumber?: number,
+    search?: string,
     categoryId?: string,
     subCategoryId?: string
   ) {
@@ -93,7 +71,7 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
 
     const getDeletedNewsSubscr = this.deletedNewsService
       .getDeletedNews(pageNumber, search, categoryId, subCategoryId)
-      .pipe(distinctUntilChanged())
+      .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
         next: (data: { news: any[] }) => {
           if (data) {
@@ -114,12 +92,7 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
   recieveFilterOption(data: any) {
     this.filterOption = data;
     if (data.category && data.subCategory) {
-      this.getDeletedNews(
-        this.pageNumber,
-        this.search,
-        data.category,
-        data.subCategory
-      );
+      this.getDeletedNews();
     }
   }
 

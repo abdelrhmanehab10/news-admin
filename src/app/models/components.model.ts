@@ -5,7 +5,7 @@ export interface ListOptions {
   isCheckList?: boolean;
   edit?: () => void;
   enable?: (id: string) => void;
-  delete?: (id?: string) => void;
+  delete?: (id: string) => void;
 }
 
 export interface Pagination {
@@ -34,18 +34,9 @@ export interface FilterOption {
 
 export interface TableOption {
   isCheckbox?: boolean;
-  isCategories?: boolean;
-  isSubCategories?: boolean;
-  isRoles?: boolean;
-  isStatus?: boolean;
-  isSearch?: boolean;
-  isDelete?: boolean;
-  isDraft?: boolean;
 
-  title?: string;
-  searchPlaceholder?: string;
   headerCols?: { title: string; width: number }[];
-  actions?: { title: string; click: () => void; icon: string }[];
+  actions?: { title: string; click: (id: number) => void; icon: string }[];
 }
 
 export interface CustomButton {
@@ -63,3 +54,27 @@ export type Image =
     }
   | File
   | undefined;
+
+export interface Draft {
+  newAutoSaveId: number;
+  title: string;
+  secTitle: string;
+  createdDate: string;
+}
+
+export interface Section {
+  SecTitle: string;
+  Hide: boolean;
+  WeeklySection: boolean;
+  Keywords: string;
+  Description: string;
+  SectionId: number | null;
+}
+
+export interface Category {
+  Name: string;
+  Hide: boolean;
+  SeoTitle: string;
+  SeoKeyWords: string;
+  SeoDescription: string;
+}

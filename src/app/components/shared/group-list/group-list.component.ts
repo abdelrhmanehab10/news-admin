@@ -5,6 +5,7 @@ import { ListOptions } from 'src/app/models/components.model';
 @Component({
   selector: 'app-group-list',
   templateUrl: './group-list.component.html',
+  styleUrl: './group-list.component.scss',
 })
 export class GroupListComponent {
   @Output() selectedItemsEmitter = new EventEmitter<string[]>();

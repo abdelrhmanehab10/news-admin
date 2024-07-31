@@ -24,12 +24,20 @@ export class UrgentNewsComponent implements OnInit {
     isEnable: true,
     isDelete: true,
     edit: () => {},
-    enable: (id: string) => {},
-    delete: () => {},
+    enable: (id: string) => {
+      this.toggleEnableUrgentNew(id);
+    },
+    delete: (id: string) => {
+      this.deleteUrgentContent(id);
+    },
   };
 
   filterOptions: FilterOption = {
-    isOrderSubCategories: true,
+    isCategories: true,
+    isSubCategories: true,
+
+    categoryId: '',
+    subCategoryId: '',
   };
 
   constructor(
@@ -60,18 +68,38 @@ export class UrgentNewsComponent implements OnInit {
     this.unsubscribe.push(getUrgentNewsSubscr);
   }
 
-  onEnable(editorId: string) {
+  deleteUrgentContent(id: string) {
     this.hasError = false;
-    const toggleEnableUrgentNewSubscr = this.urgentNewsService
-      .toggleEnableUrgentNew(editorId)
+    const deleteUrgentContentSubscr = this.urgentNewsService
+      .deleteUrgentContent(id)
       .subscribe({
-        next: (data: any) => {
+        next: (data: string) => {
           if (data) {
-            this.toast.success(data.message);
+            this.toast.error(data);
+            this.getUrgentNews();
           }
         },
         error: (error: any) => {
-          console.log('[TOGGLE_ENABLE_EDITOR]', error);
+          console.log('[DELETE_URGENT_CONTENT]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(deleteUrgentContentSubscr);
+  }
+
+  toggleEnableUrgentNew(id: string) {
+    this.hasError = false;
+    const toggleEnableUrgentNewSubscr = this.urgentNewsService
+      .toggleEnableUrgentNew(id)
+      .subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.toast.success(data);
+            this.getUrgentNews();
+          }
+        },
+        error: (error: any) => {
+          console.log('[TOGGLE_ENABLE_URGENT_NEW]', error);
           this.hasError = true;
         },
       });

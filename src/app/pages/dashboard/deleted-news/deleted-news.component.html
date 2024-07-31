@@ -2,11 +2,7 @@
   <div class="card-header justify-content-between border-0 mt-2">
     <h3 class="card-title fw-bolder text-gray-900">المحتوي المحذوف</h3>
     <div class="w-100 d-flex gap-2 my-5">
-      <form
-        [formGroup]="searchForm"
-        class="flex-grow-1 position-relative"
-        autoComplete="off"
-      >
+      <div class="flex-grow-1 position-relative">
         <app-keenicon
           name="magnifier"
           class="fs-2 position-absolute top-50 start-0 ms-5 translate-middle-y"
@@ -16,9 +12,9 @@
           class="form-control form-control-solid pe-5"
           name="search"
           placeholder="ابحث عن الأخبار المحذوفة من هنا.."
-          formControlName="search"
+          (change)="onSearch($event)"
         />
-      </form>
+      </div>
       <div class="card-toolbar">
         <!-- begin::Menu -->
         <button

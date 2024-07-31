@@ -4,11 +4,7 @@
   >
     <h3 class="card-title fw-bolder text-gray-900">كل الكتاب</h3>
     <div class="w-100 d-flex align-items-center gap-2 my-3">
-      <form
-        [formGroup]="searchForm"
-        class="flex-grow-1 position-relative"
-        autoComplete="off"
-      >
+      <div class="flex-grow-1 position-relative">
         <app-keenicon
           name="magnifier"
           class="fs-2 position-absolute top-50 start-0 ms-5 translate-middle-y"
@@ -18,9 +14,9 @@
           class="form-control form-control-solid pe-5"
           name="search"
           placeholder="ابحث عن الكتاب من هنا.."
-          formControlName="search"
+          (change)="onSearch($event)"
         />
-      </form>
+      </div>
       <div class="card-toolbar">
         <app-add-editor></app-add-editor>
       </div>

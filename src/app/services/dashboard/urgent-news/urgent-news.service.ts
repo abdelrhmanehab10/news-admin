@@ -25,7 +25,7 @@ export class UrgentNewsService {
     this.isLoading$ = this.isLoadingSubject.asObservable();
   }
 
-  getUrgentNews(pageNumber: string) {
+  getUrgentNews(pageNumber?: string) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
@@ -46,7 +46,7 @@ export class UrgentNewsService {
       );
   }
 
-  addUrgentContent(urgentContent: { Title: string; isUrgentNew: boolean }) {
+  addUrgentContent(ids: string[]) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
@@ -54,10 +54,10 @@ export class UrgentNewsService {
 
     this.isLoadingSubject.next(true);
     return this.urgentNewsHTTPService
-      .addUrgentContent(auth.authToken, urgentContent)
+      .addUrgentContent(auth.authToken, ids)
       .pipe(
         map((data) => {
-          return data;
+          return data.message;
         }),
         catchError((err) => {
           console.error('err', err);
@@ -78,7 +78,53 @@ export class UrgentNewsService {
       .toggleEnableUrgentNew(auth.authToken, newId)
       .pipe(
         map((data) => {
-          return data;
+          return data.message;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  deleteUrgentContent(newId: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.urgentNewsHTTPService
+      .deleteUrgentContent(auth.authToken, newId)
+      .pipe(
+        map((data) => {
+          return data.message;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  getDailyNewsContent(
+    search?: string,
+    categoryId?: string,
+    subCategoryId?: string
+  ) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.urgentNewsHTTPService
+      .getDailyNewsContent(auth.authToken, search, categoryId, subCategoryId)
+      .pipe(
+        map((data) => {
+          return data.data;
         }),
         catchError((err) => {
           console.error('err', err);

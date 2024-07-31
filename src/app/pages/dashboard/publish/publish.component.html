@@ -15,11 +15,7 @@
         />
         <span class="me-2">الكل</span>
       </div>
-      <form
-        [formGroup]="searchForm"
-        class="flex-grow-1 position-relative"
-        autoComplete="off"
-      >
+      <form class="flex-grow-1 position-relative">
         <app-keenicon
           name="magnifier"
           class="fs-2 position-absolute top-50 start-0 ms-5 translate-middle-y"
@@ -29,7 +25,7 @@
           class="form-control form-control-solid pe-5"
           name="search"
           placeholder="ابحث عن الأخبار من هنا.."
-          formControlName="search"
+          (change)="onSearch($event)"
         />
       </form>
       <div class="card-toolbar">
@@ -53,11 +49,11 @@
               data-kt-select2="true"
               data-placeholder="Select option"
               data-allow-clear="true"
-              formControlName="role"
+              [value]="selectedRole"
               (change)="onSelectedRoleChange($event)"
             >
               @for(item of rolePassList; track item; let idx = $index){
-              <option value="{{ idx }}">{{ item.name }}</option>
+              <option value="{{ idx + 1 }}">{{ item.name }}</option>
               }
             </select>
           </div>

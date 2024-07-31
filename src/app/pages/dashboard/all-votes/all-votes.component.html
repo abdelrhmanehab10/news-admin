@@ -16,11 +16,7 @@
         />
         <span class="me-2">الكل</span>
       </div>
-      <form
-        [formGroup]="searchForm"
-        class="flex-grow-1 position-relative"
-        autoComplete="off"
-      >
+      <div class="flex-grow-1 position-relative">
         <app-keenicon
           name="magnifier"
           class="fs-2 position-absolute top-50 start-0 ms-5 translate-middle-y"
@@ -30,9 +26,9 @@
           class="form-control form-control-solid pe-5"
           name="search"
           placeholder="ابحث عن استطلاع الرأي من هنا.."
-          formControlName="search"
+          (change)="onSearch($event)"
         />
-      </form>
+      </div>
       <div class="card-toolbar">
         <button
           type="button"
@@ -48,7 +44,9 @@
           (filterOptionsEmitter)="recieveFilterOptions($event)"
         ></app-dropdown-menu>
         <app-add-vote [title]="'أضافة أستطلاع'"></app-add-vote>
-        <button (click)="deleteVotes()" class="btn btn-danger btn-sm mx-2">حذف</button>
+        <button (click)="deleteVotes()" class="btn btn-danger btn-sm mx-2">
+          حذف
+        </button>
       </div>
     </div>
   </div>

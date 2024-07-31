@@ -10,8 +10,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { FilterOption } from 'src/app/models/components.model';
+import { FilterOption, ListOptions } from 'src/app/models/components.model';
 import { ModalConfig } from 'src/app/models/modal.model';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent-news.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -27,11 +28,15 @@ export class ChooseFromDailyNewsComponent implements OnInit {
 
   @Output() onUrgentNewsChoosedFromDailyNewsEmitter =
     new EventEmitter<boolean>();
+
   items: any[] = [];
   selectedItems: string[] = [];
 
-  filterOptions: FilterOption = {
-    isCategories: true,
+  categories: any[] = [];
+  subCategories: any[] = [];
+
+  groupListOptions: ListOptions = {
+    isCheckList: true,
   };
 
   hasError: boolean = false;
@@ -41,77 +46,121 @@ export class ChooseFromDailyNewsComponent implements OnInit {
     modalTitle: 'أضافة خبر عاجل من المحتويات اليومية',
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'اغلاق',
-    // customDismiss: () => {
-    //   this.addUrgentNewsFromDailyNews();
-    //   this.modalComponent.close();
-    // },
+    hideDismissButton: true,
   };
+
+  searchForm: FormGroup;
 
   constructor(
     private urgentNewsService: UrgentNewsService,
+    private dashboardService: DashboardService,
     private toast: ToastrService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private cdr: ChangeDetectorRef,
+    private fb: FormBuilder
   ) {
     this.isLoading$ = this.urgentNewsService.isLoading$;
+    this.dashboardService.categories$.subscribe((categories) => {
+      this.categories = categories;
+    });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initForm();
+    this.getDailyNews();
+  }
+
+  initForm() {
+    this.searchForm = this.fb.group({
+      search: [''],
+      categoryId: [''],
+      subCategoryId: [''],
+    });
+  }
 
   async openModal() {
     return await this.modalComponent.open();
   }
 
   toggleSelectAll(e: any) {
-    this.selectedItems = this.utilsService.toggleSelectAll(e, this.items);
+    this.selectedItems = this.utilsService.toggleSelectAll(
+      e,
+      this.items.map((items) => items.news)
+    );
+  }
+
+  onCategoryChange(e: any) {
+    this.hasError = false;
+    const getNewsSubCategoriesSubscr = this.dashboardService
+      .getNewsSubCategories(e.target.value)
+      .pipe(distinctUntilChanged())
+      .subscribe({
+        next: (data: { sectionID: string; secTitle: string }[]) => {
+          this.subCategories = data;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.log('NEWS_SUB_CATEGORIES', err);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(getNewsSubCategoriesSubscr);
+  }
+
+  get f() {
+    return this.searchForm.controls;
   }
 
   getDailyNews() {
     this.hasError = false;
-    this.onUrgentNewsChoosedFromDailyNewsEmitter.emit(false);
-    const addUrgentContentSubscr = this.urgentNewsService
-      .addUrgentContent()
+    const getDailyNewsSubscr = this.urgentNewsService
+      .getDailyNewsContent(
+        this.f.search.value,
+        this.f.categoryId.value,
+        this.f.subCategoryId.value
+      )
       .subscribe({
         next: (data: any) => {
           if (data) {
-            this.toast.success(data.message);
-            this.onUrgentNewsChoosedFromDailyNewsEmitter.emit(true);
+            this.items = data.map(
+              (item: { date: string; dailyNewsContent: {} }) => ({
+                date: item.date,
+                news: item.dailyNewsContent,
+              })
+            );
+            this.cdr.detectChanges();
           }
         },
         error: (error: any) => {
-          console.log('[ADD_URGENT_NEWS_FROM_DAILY]', error);
+          console.log('[GET_DAILY_NEWS]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(getDailyNewsSubscr);
+  }
+
+  addUrgentContent() {
+    this.hasError = false;
+    const addUrgentContentSubscr = this.urgentNewsService
+      .addUrgentContent(this.selectedItems)
+      .subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.toast.success(data);
+            this.getDailyNews();
+          }
+        },
+        error: (error: any) => {
+          console.log('[GET_DAILY_NEWS]', error);
           this.hasError = true;
         },
       });
     this.unsubscribe.push(addUrgentContentSubscr);
   }
 
-  // addUrgentNewsFromDailyNews() {
-  //   this.hasError = false;
-  //   this.onUrgentNewsChoosedFromDailyNewsEmitter.emit(false);
-  //   const addUrgentContentSubscr = this.urgentNewsService
-  //     .addUrgentContent()
-  //     .subscribe({
-  //       next: (data: any) => {
-  //         if (data) {
-  //           this.toast.success(data.message);
-  //           this.onUrgentNewsChoosedFromDailyNewsEmitter.emit(true);
-  //         }
-  //       },
-  //       error: (error: any) => {
-  //         console.log('[ADD_URGENT_NEWS_FROM_DAILY]', error);
-  //         this.hasError = true;
-  //       },
-  //     });
-  //   this.unsubscribe.push(addUrgentContentSubscr);
-  // }
-
-  // toggleSelectAll(e: any) {
-  //   if (e.target.checked) {
-  //     this.selectedItems = this.items.map((item) => String(item.sectionId));
-  //   } else {
-  //     this.selectedItems = [];
-  //   }
-  // }
+  recieveSelectedItems(data: any[]) {
+    this.selectedItems = data;
+  }
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());

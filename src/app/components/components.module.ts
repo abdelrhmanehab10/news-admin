@@ -37,6 +37,9 @@ import {
   OwlDateTimeModule,
   OwlNativeDateTimeModule,
 } from '@danielmoncada/angular-datetime-picker';
+import { AddArticleComponent } from './dashboard/modals/add-article/add-article.component';
+import { DraftsComponent } from './dashboard/drafts/drafts.component';
+import { AddCategoryComponent } from './dashboard/modals/add-category/add-category.component';
 
 @NgModule({
   declarations: [
@@ -59,9 +62,11 @@ import {
     AddVoteComponent,
     PaginationComponent,
     AddEditorComponent,
-    TinyMCEEditorComponent,
     TagsInputComponent,
     DateTimePickerComponent,
+    AddArticleComponent,
+    DraftsComponent,
+    AddCategoryComponent,
   ],
   imports: [
     ImageCropperComponent,
@@ -69,7 +74,6 @@ import {
     ReactiveFormsModule,
     CommonModule,
     DragDropModule,
-    EditorComponent,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     NgbDatepickerModule,
@@ -93,9 +97,11 @@ import {
     AddVoteComponent,
     PaginationComponent,
     AddEditorComponent,
-    TinyMCEEditorComponent,
     TagsInputComponent,
     DateTimePickerComponent,
+    AddArticleComponent,
+    DraftsComponent,
+    AddCategoryComponent,
   ],
   providers: [
     DatePipe,

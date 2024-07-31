@@ -21,9 +21,6 @@ export class EditorNewsStateComponent implements OnDestroy {
     statusId: '',
     roleId: '',
   };
-  tableOptions: TableOption = {
-    isStatus: true,
-  };
   hasError: boolean = false;
   status: string;
 

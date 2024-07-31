@@ -1,6 +1,11 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { FilterOption, TableOption } from 'src/app/models/components.model';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
+import {
+  FilterOption,
+  ListOptions,
+  TableOption,
+} from 'src/app/models/components.model';
 import { NEW } from 'src/app/models/new.model';
 import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-status.service';
 
@@ -9,42 +14,60 @@ import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-s
   templateUrl: './news-status.component.html',
   styleUrl: './news-status.component.scss',
 })
-export class NewsStatusComponent implements OnDestroy {
+export class NewsStatusComponent implements OnDestroy, OnInit {
   private unsubscribe: Subscription[] = [];
 
   news: NEW[] = [];
   searchQuery: string = '';
   selectedNews: string[] = [];
   pageNumber: number = 1;
-  filterOption: FilterOption = {
+
+  groupListOptions: ListOptions = {};
+
+  filterOptions: FilterOption = {
+    isCategories: true,
+    isSubCategories: true,
+    isStatus: true,
+    isRoles: true,
+
     categoryId: '',
     subCategoryId: '',
     statusId: '',
     roleId: '',
   };
-  tableOptions: TableOption = {
-    isCategories: true,
-    isSubCategories: true,
-    isStatus: true,
-  };
+
   hasError: boolean = false;
 
-  constructor(private newsStatusService: NewsStatusService) {}
+  constructor(
+    private newsStatusService: NewsStatusService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  getNews() {
+  ngOnInit(): void {
+    this.getNews();
+  }
+
+  onSearch(e: any) {
+    this.searchQuery = e.target.value;
+    this.getNews(300);
+  }
+
+  getNews(delay = 0) {
     this.hasError = false;
     const getNewsSubscr = this.newsStatusService
       .getNews(
         this.pageNumber,
         this.searchQuery,
-        this.filterOption.statusId,
-        this.filterOption.categoryId,
-        this.filterOption.subCategoryId
+        this.filterOptions.statusId,
+        this.filterOptions.categoryId,
+        this.filterOptions.subCategoryId
       )
+      .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
-        next: (data: { news: NEW[] }[]) => {
+        next: (data: any) => {
           if (data) {
-            this.news = data[0]?.news;
+            this.news = data.news;
+            this.cdr.detectChanges();
           }
         },
         error: (error: any) => {
@@ -56,7 +79,7 @@ export class NewsStatusComponent implements OnDestroy {
   }
 
   recieveFilterOption(data: FilterOption) {
-    this.filterOption = data;
+    this.filterOptions = data;
   }
 
   ngOnDestroy(): void {

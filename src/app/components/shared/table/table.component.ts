@@ -1,13 +1,9 @@
-import { Component, EventEmitter, input, Input, Output } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
-import { Subscription } from 'rxjs';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {
   CustomButton,
   FilterOption,
   TableOption,
 } from 'src/app/models/components.model';
-import { NEW } from 'src/app/models/new.model';
-import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 
 @Component({
   selector: 'app-table',
@@ -27,12 +23,7 @@ export class TableComponent {
 
   @Input() tableOptions: TableOption = {
     isCheckbox: false,
-    isSearch: false,
-    isDelete: false,
-    isDraft: false,
 
-    title: '',
-    searchPlaceholder: '',
     headerCols: [
       { title: 'العنوان', width: 150 },
       { title: 'الوقت', width: 120 },

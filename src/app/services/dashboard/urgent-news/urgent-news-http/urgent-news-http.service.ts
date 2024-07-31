@@ -11,7 +11,7 @@ const API_URL = `${environment.apiUrl}/UrgentNews/`;
 export class UrgentNewsHTTPService {
   constructor(private http: HttpClient) {}
 
-  getUrgentNews(token: string, pageNumber: string): Observable<any> {
+  getUrgentNews(token: string, pageNumber?: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -24,15 +24,12 @@ export class UrgentNewsHTTPService {
     );
   }
 
-  addUrgentContent(
-    token: string,
-    urgentContent: { Title: string; isUrgentNew: boolean }
-  ): Observable<any> {
+  addUrgentContent(token: string, ids: string[]): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
-    return this.http.post<any>(`${API_URL}AddUrgentContent`, urgentContent, {
+    return this.http.post<any>(`${API_URL}AddUrgentContent`, ids, {
       headers: httpHeaders,
     });
   }
@@ -42,16 +39,52 @@ export class UrgentNewsHTTPService {
       Authorization: `Bearer ${token}`,
     });
 
-    const formData = new FormData();
-    formData.append('EditorId', urgentNewId);
-
     return this.http.put<{
       status: number;
       data: any[];
       message: string | null;
       errors: string[] | null;
-    }>(`${API_URL}DisbleOrEnableUrgentNew`, formData, {
+    }>(
+      `${API_URL}EnableOrDisableNew?Id=${urgentNewId}`,
+      {},
+      {
+        headers: httpHeaders,
+      }
+    );
+  }
+
+  deleteUrgentContent(token: string, urgentNewId: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.delete<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}DeleteUrgentContent?Id=${urgentNewId}`, {
       headers: httpHeaders,
     });
+  }
+
+  getDailyNewsContent(
+    token: string,
+    search?: string,
+    categoryId?: string,
+    subCategoryId?: string
+  ): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<any>(
+      `${API_URL}GetDailyNewsContent?Search=${search ?? ''}${
+        categoryId ? '&CategoryId' + categoryId : ''
+      }${subCategoryId ? '&SectionId' + subCategoryId : ''}`,
+      {
+        headers: httpHeaders,
+      }
+    );
   }
 }

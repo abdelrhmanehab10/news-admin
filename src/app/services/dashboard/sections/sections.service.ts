@@ -65,22 +65,24 @@ export class SectionsService {
       );
   }
 
-  // deleteSections() {
-  //   const auth = this.authService.getAuthFromLocalStorage();
-  //   if (!auth || !auth.authToken) {
-  //     return of(undefined);
-  //   }
+  deleteSections(sectionsIds: string[]) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
 
-  //   this.isLoadingSubject.next(true);
-  //   return this.sectionsHTTPService.deleteSections(auth.authToken).pipe(
-  //     map((data) => {
-  //       return data.data;
-  //     }),
-  //     catchError((err) => {
-  //       console.error('err', err);
-  //       return of(undefined);
-  //     }),
-  //     finalize(() => this.isLoadingSubject.next(false))
-  //   );
-  // }
+    this.isLoadingSubject.next(true);
+    return this.sectionsHTTPService
+      .deleteSections(auth.authToken, sectionsIds)
+      .pipe(
+        map((data) => {
+          return data.message;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
 }

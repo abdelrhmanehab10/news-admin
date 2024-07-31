@@ -22,9 +22,7 @@ export class AllVotesComponent {
 
   items: any[] = [];
   search = '';
-
-  searchForm: FormGroup;
-
+  
   selectedVotes: string[] = [];
 
   customBtnsOptions: {
@@ -91,25 +89,12 @@ export class AllVotesComponent {
 
   ngOnInit(): void {
     this.getAllVotes();
-
-    this.initForm();
-    this.onSearch();
   }
 
-  onSearch() {
-    this.searchForm
-      .get('search')
-      ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((value: string) => {
-        this.search = value;
-        this.getAllVotes(this.search, this.filterOptions.categoryId);
-      });
-  }
+  onSearch(e: any) {
+    this.search = e.target.value;
 
-  initForm() {
-    this.searchForm = this.fb.group({
-      search: [''],
-    });
+    this.getAllVotes(300, this.search, this.filterOptions.categoryId);
   }
 
   deleteVotes() {
@@ -132,11 +117,12 @@ export class AllVotesComponent {
     this.unsubscribe.push(deleteVotesSubscr);
   }
 
-  getAllVotes(search?: string, categoryId?: string) {
+  getAllVotes(delay: number = 0, search?: string, categoryId?: string) {
     this.hasError = false;
 
     const getAllVotesSubscr = this.voteService
       .getAllVotes(search, categoryId)
+      .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
         next: (data: any[]) => {
           const items = data.map((item) => ({
@@ -156,10 +142,7 @@ export class AllVotesComponent {
   }
 
   toggleSelectAll(e: any) {
-    this.selectedVotes = this.utilsService.toggleSelectAll(
-      e,
-      this.items
-    );
+    this.selectedVotes = this.utilsService.toggleSelectAll(e, this.items);
   }
 
   activeVote(id: string) {
@@ -192,7 +175,7 @@ export class AllVotesComponent {
 
   recieveFilterOptions(data: FilterOption) {
     this.filterOptions = data;
-    this.getAllVotes(this.search, data.categoryId);
+    this.getAllVotes(0, this.search, data.categoryId);
   }
 
   ngOnDestroy() {

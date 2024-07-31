@@ -51,17 +51,18 @@ export class SectionsHTTPService {
     );
   }
 
-  deleteSections(token: string, sections: string[]): Observable<any> {
+  deleteSections(token: string, sectionsIds: string[]): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
     const formData = new FormData();
 
-    // formData.append()
+    sectionsIds.forEach((id) => formData.append('sectionIds', id));
 
     return this.http.delete<any>(`${API_URL}DeleteSection`, {
       headers: httpHeaders,
+      body: formData,
     });
   }
 }

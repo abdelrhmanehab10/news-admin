@@ -98,7 +98,7 @@ export class PublishHTTPService {
 
   returnNews(
     token: string,
-    newsStatus: string,
+    newsStatus: number,
     newsIds: string[]
   ): Observable<any> {
     const httpHeaders = new HttpHeaders({
@@ -106,7 +106,7 @@ export class PublishHTTPService {
     });
 
     const formData = new FormData();
-    formData.append('NewStatus', newsStatus);
+    formData.append('NewStatus', String(newsStatus));
     newsIds.forEach((id) => {
       formData.append(`NewsIDs`, id);
     });

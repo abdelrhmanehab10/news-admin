@@ -19,7 +19,7 @@ $index){
     <input
       class="form-check-input"
       type="checkbox"
-      value="{{ item.sectionId }}"
+      value="{{ item.id }}"
       (change)="toggleSelect($event)"
       [checked]="isAllSectionSelected"
       data-kt-check="true"
@@ -34,7 +34,7 @@ $index){
     <span class="fw-bold d-block">{{ item.secTitle }}</span>
   </div>
   @if(listOptions.isEnable && listOptions.enable){<button
-    (click)="listOptions.enable(item.sectionId)"
+    (click)="listOptions.enable(item.id)"
     class="btn btn-sm btn-outline-dark border b d-flex align-items-center gap-3 me-2"
   >
     {{ item.active ? "ايقاف" : "تفعيل" }}</button
@@ -43,7 +43,7 @@ $index){
     [btnStyle]="'btn-light'"
   ></app-add-section
   >} @if(listOptions.isDelete && listOptions.delete){<button
-    (click)="listOptions.delete()"
+    (click)="listOptions.delete(item.id)"
     class="btn btn-sm btn-icon btn-outline-light border b d-flex align-items-center gap-3 me-2"
   >
     @if(isLoading){

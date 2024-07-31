@@ -47,7 +47,7 @@ export class AddUrgentContentComponent implements OnInit {
     closeButtonLabel: 'اغلاق',
     customDismiss: () => {
       if (!this.urgentContentForm.invalid) {
-        this.addUrgentContent();
+        // this.addUrgentContent();
         this.modalComponent.close();
       }
     },
@@ -80,28 +80,28 @@ export class AddUrgentContentComponent implements OnInit {
     return await this.modalComponent.open();
   }
 
-  addUrgentContent() {
-    this.hasError = false;
-    this.onNewUrgentContentAddedEmitter.emit(false);
-    const addUrgentContentSubscr = this.urgentNewsService
-      .addUrgentContent({
-        Title: this.f.Title.value,
-        isUrgentNew: this.f.isUrgentNew.value,
-      })
-      .subscribe({
-        next: (data: any) => {
-          if (data) {
-            this.toast.success(data.message);
-            this.onNewUrgentContentAddedEmitter.emit(true);
-          }
-        },
-        error: (error: any) => {
-          console.log('[ADD_URGENT_CONTENT]', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(addUrgentContentSubscr);
-  }
+  // addUrgentContent() {
+  //   this.hasError = false;
+  //   this.onNewUrgentContentAddedEmitter.emit(false);
+  //   const addUrgentContentSubscr = this.urgentNewsService
+  //     .addUrgentContent({
+  //       Title: this.f.Title.value,
+  //       isUrgentNew: this.f.isUrgentNew.value,
+  //     })
+  //     .subscribe({
+  //       next: (data: any) => {
+  //         if (data) {
+  //           this.toast.success(data.message);
+  //           this.onNewUrgentContentAddedEmitter.emit(true);
+  //         }
+  //       },
+  //       error: (error: any) => {
+  //         console.log('[ADD_URGENT_CONTENT]', error);
+  //         this.hasError = true;
+  //       },
+  //     });
+  //   this.unsubscribe.push(addUrgentContentSubscr);
+  // }
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());

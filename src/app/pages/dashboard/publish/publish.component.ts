@@ -37,8 +37,7 @@ export class PublishComponent implements OnInit, OnDestroy {
   };
 
   search: string = '';
-  selectedRole: string;
-  searchForm: FormGroup;
+  selectedRole: number = 1;
 
   groupLisOptions: ListOptions = {
     isDelete: true,
@@ -53,7 +52,7 @@ export class PublishComponent implements OnInit, OnDestroy {
   constructor(
     private publishService: PublishService,
     private utilsService: UtilsService,
-    private toastr: ToastrService,
+    private toast: ToastrService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder
   ) {
@@ -63,29 +62,11 @@ export class PublishComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getNewsToPublish();
     this.getRolesPassList();
-
-    this.initForm();
-    this.onSearch();
   }
 
-  onSearch() {
-    this.searchForm
-      .get('search')
-      ?.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((value: string) => {
-        this.search = value;
-        this.getNewsToPublish(
-          value,
-          this.filterOptions.categoryId,
-          this.filterOptions.subCategoryId
-        );
-      });
-  }
-
-  initForm() {
-    this.searchForm = this.fb.group({
-      search: [''],
-    });
+  onSearch(e: any) {
+    this.search = e.target.value;
+    this.getNewsToPublish(300);
   }
 
   getRolesPassList(): void {
@@ -105,15 +86,16 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(getRolesPassListSubscr);
   }
 
-  getNewsToPublish(
-    search?: string,
-    categoryId?: string,
-    subCategoryId?: string
-  ): void {
+  getNewsToPublish(delay: number = 0): void {
     this.hasError = false;
 
     const getNewsToPublishSubscr = this.publishService
-      .getNewsToPublish(search, categoryId, subCategoryId)
+      .getNewsToPublish(
+        this.search,
+        this.filterOptions.categoryId,
+        this.filterOptions.subCategoryId
+      )
+      .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
         next: (data: any[]) => {
           if (data) {
@@ -131,19 +113,16 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(getNewsToPublishSubscr);
   }
 
-  publish() {
-    //publish new logic
-  }
-
   returnNews(): void {
     this.hasError = false;
+    if (!this.selectedNews.length) return;
     const returnNewsSubscr = this.publishService
       .returnNews(this.selectedRole, this.selectedNews)
       .subscribe({
-        next: (data: any[]) => {
+        next: (data: string) => {
           if (data) {
-            this.newsToPublish = data;
-            this.cdr.detectChanges();
+            this.toast.success(data);
+            this.getNewsToPublish();
           }
         },
         error: (error: any) => {
@@ -167,7 +146,7 @@ export class PublishComponent implements OnInit, OnDestroy {
       .deleteNew(this.selectedNews)
       .subscribe({
         next: (data: string) => {
-          this.toastr.error(data);
+          this.toast.error(data);
         },
         error: (error: any) => {
           console.log('[DELETE]', error);
@@ -188,7 +167,7 @@ export class PublishComponent implements OnInit, OnDestroy {
       .publishNews(this.selectedNews)
       .subscribe({
         next: (data: string) => {
-          this.toastr.success(data);
+          this.toast.success(data);
         },
         error: (error: any) => {
           console.log('[PUBLISH]', error);
@@ -204,7 +183,7 @@ export class PublishComponent implements OnInit, OnDestroy {
 
   recieveFilterOptions(data: any) {
     this.filterOptions = data;
-    this.getNewsToPublish(this.search, data.categoryId, data.subCategoryId);
+    this.getNewsToPublish();
   }
 
   recieveSelectedNews(data: any) {

@@ -94,7 +94,7 @@ const defaultUserInfos: Array<UserInfoModel> = [
   },
   {
     name: 'Max Smith',
-    avatar: 'avatars/300-1.jpg',
+    // avatar: 'avatars/300-1.jpg',
     email: 'max@kt.com',
     position: 'Software Enginer',
     online: false,
