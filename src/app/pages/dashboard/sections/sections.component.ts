@@ -8,9 +8,8 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 @Component({
   selector: 'app-sections',
   templateUrl: './sections.component.html',
-  styleUrl: './sections.component.scss',
 })
-export class SectionsComponent implements OnInit {
+export class SectionsComponent {
   private unsubscribe: Subscription[] = [];
 
   items: {
@@ -23,7 +22,10 @@ export class SectionsComponent implements OnInit {
     categoryId: number;
   }[] = [];
 
-  filterOptions: FilterOption = { isCategories: true };
+  filterOptions: FilterOption = {
+    isCategories: true,
+    categoryId: '',
+  };
   listOptions: ListOptions = {
     isCheckList: true,
     isEdit: true,
@@ -48,7 +50,8 @@ export class SectionsComponent implements OnInit {
     this.selectedSections = this.utilsService.toggleSelectAll(e, this.items);
   }
 
-  ngOnInit(): void {
+  getDefaultCategory(data: string) {
+    this.filterOptions.categoryId = data;
     this.getAllSections();
   }
 
@@ -56,7 +59,7 @@ export class SectionsComponent implements OnInit {
     this.hasError = false;
 
     const getAllSectionSubscr = this.sectionsService
-      .getAllSections(this.pageNumber, 2)
+      .getAllSections(this.pageNumber, this.filterOptions.categoryId as string)
       .subscribe({
         next: (data: any[]) => {
           this.items = data;
