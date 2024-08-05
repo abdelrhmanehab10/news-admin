@@ -11,18 +11,15 @@ import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.compone
 import { OrderNewsComponent } from './order-news/order-news.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AllVotesComponent } from './all-votes/all-votes.component';
-import { NewsCategoriesComponent } from '../newsCategory/news-categories/news-categories.component';
-import { NewsCategoryAddOrupdateComponent } from '../newsCategory/news-category-add-orupdate/news-category-add-orupdate.component';
 import { SectionsComponent } from './sections/sections.component';
 import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
 import { MainNewsComponent } from './main-news/main-news.component';
-import { CommentsComponent } from './comments/comments.component';
 import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditorsComponent } from './editors/editors.component';
-import { TinyMCEEditorComponent } from 'src/app/components/shared/tiny-mce-editor/tiny-mce-editor.component';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { CategoryComponent } from './category/category.component';
+import { LayoutModule } from 'src/app/components/layout/layout.module';
 
 @NgModule({
   declarations: [
@@ -34,22 +31,21 @@ import { CategoryComponent } from './category/category.component';
     OrderNewsComponent,
     SectionsComponent,
     AllVotesComponent,
-    NewsCategoriesComponent,
-    NewsCategoryAddOrupdateComponent,
     UrgentNewsComponent,
     MainNewsComponent,
-    CommentsComponent,
     DeletedNewsComponent,
     EditorsComponent,
     CategoryComponent,
   ],
   imports: [
     CommonModule,
+    LayoutModule,
     DashboardRoutingModule,
     ComponentsModule,
     DragDropModule,
     ReactiveFormsModule,
     EditorComponent,
+    FormsModule,
   ],
 })
 export class DashboardModule {}

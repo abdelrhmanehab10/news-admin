@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ListOptions } from 'src/app/models/components.model';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styleUrl: './list.style.scss',
+  styleUrl: './list.component.scss',
 })
 export class ListComponent {
   @Output() selectedItemsEmitter = new EventEmitter<string[]>();
@@ -51,6 +51,7 @@ export class ListComponent {
         (id) => id === e.target.value
       );
     }
+    console.log(e.target.value);
 
     this.selectedItemsEmitter.emit(this.selectedItems);
   }

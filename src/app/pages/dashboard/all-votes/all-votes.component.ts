@@ -15,14 +15,13 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 @Component({
   selector: 'app-all-votes',
   templateUrl: './all-votes.component.html',
-  styleUrl: './all-votes.component.scss',
 })
 export class AllVotesComponent {
   private unsubscribe: Subscription[] = [];
 
   items: any[] = [];
   search = '';
-  
+
   selectedVotes: string[] = [];
 
   customBtnsOptions: {
@@ -80,7 +79,6 @@ export class AllVotesComponent {
   constructor(
     private utilsService: UtilsService,
     private voteService: VoteService,
-    private fb: FormBuilder,
     private cdr: ChangeDetectorRef,
     private toast: ToastrService
   ) {
@@ -89,12 +87,6 @@ export class AllVotesComponent {
 
   ngOnInit(): void {
     this.getAllVotes();
-  }
-
-  onSearch(e: any) {
-    this.search = e.target.value;
-
-    this.getAllVotes(300, this.search, this.filterOptions.categoryId);
   }
 
   deleteVotes() {
@@ -117,21 +109,25 @@ export class AllVotesComponent {
     this.unsubscribe.push(deleteVotesSubscr);
   }
 
-  getAllVotes(delay: number = 0, search?: string, categoryId?: string) {
+  getAllVotes(delay: number = 0) {
     this.hasError = false;
 
     const getAllVotesSubscr = this.voteService
-      .getAllVotes(search, categoryId)
+      .getAllVotes(this.search, this.filterOptions.categoryId)
       .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
         next: (data: any[]) => {
-          const items = data.map((item) => ({
-            name: item.pollBody,
-            sectionId: item.pollId,
-            active: item.activated,
-          }));
-          this.items = items;
-          this.cdr.detectChanges();
+          if (data) {
+            const items = data.map((item) => ({
+              name: item.pollBody,
+              id: item.pollId,
+              active: item.activated,
+            }));
+            this.items = items;
+            this.cdr.detectChanges();
+          } else {
+            this.items = [];
+          }
         },
         error: (error: any) => {
           console.log('[GET_ALL_VOTES]', error);
@@ -175,7 +171,7 @@ export class AllVotesComponent {
 
   recieveFilterOptions(data: FilterOption) {
     this.filterOptions = data;
-    this.getAllVotes(0, this.search, data.categoryId);
+    this.getAllVotes(0);
   }
 
   ngOnDestroy() {
