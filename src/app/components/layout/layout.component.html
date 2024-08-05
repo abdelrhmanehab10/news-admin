@@ -40,14 +40,7 @@
           </app-content>
         </div>
         <!--end::Content wrapper-->
-        <ng-container *ngIf="appFooterDisplay">
-          <app-footer
-            class="app-footer"
-            [ngClass]="appFooterCSSClass"
-            id="kt_app_footer"
-            [appFooterContainerCSSClass]="appFooterContainerCSSClass"
-          ></app-footer>
-        </ng-container>
+        <ng-container *ngIf="appFooterDisplay"> </ng-container>
       </div>
     </div>
   </div>
@@ -61,11 +54,3 @@
     data-kt-scrolltop="true"
   ></app-scroll-top>
 </ng-container>
-<app-activity-drawer></app-activity-drawer>
-<app-messenger-drawer></app-messenger-drawer>
-
-<app-engages></app-engages>
-
-<app-main-modal></app-main-modal>
-<app-invite-users-modal></app-invite-users-modal>
-<app-upgrade-plan-modal></app-upgrade-plan-modal>
