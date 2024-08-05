@@ -30,7 +30,12 @@
           [filterOptions]="filterOption"
           (filterOptionsEmitter)="recieveFilterOption($event)"
         ></app-dropdown-menu>
-        <!-- end::Menu -->
+        <button
+          (click)="deleteDeletedNews()"
+          class="btn btn-danger btn-sm mx-2"
+        >
+          حذف
+        </button>
       </div>
     </div>
   </div>

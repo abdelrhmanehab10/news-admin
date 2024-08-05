@@ -12,7 +12,8 @@
           type="text"
           class="form-control form-control-solid pe-5"
           name="search"
-          placeholder=""
+          [(ngModel)]="search"
+          (ngModelChange)="getPublishedNews(300)"
         />
       </form>
       <div class="card-toolbar">

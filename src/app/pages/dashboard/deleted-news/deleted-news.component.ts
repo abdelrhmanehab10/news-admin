@@ -89,6 +89,8 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(getDeletedNewsSubscr);
   }
 
+  deleteDeletedNews() {}
+
   recieveFilterOption(data: any) {
     this.filterOption = data;
     if (data.category && data.subCategory) {
