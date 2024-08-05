@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import {
   debounceTime,
@@ -7,20 +7,13 @@ import {
   Observable,
   Subscription,
 } from 'rxjs';
-import {
-  FilterOption,
-  ListOptions,
-  TableOption,
-} from 'src/app/models/components.model';
-import { NEW } from 'src/app/models/new.model';
-import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
+import { FilterOption, ListOptions } from 'src/app/models/components.model';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-publish',
   templateUrl: './publish.component.html',
-  styleUrl: './publish.component.scss',
 })
 export class PublishComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
@@ -64,10 +57,6 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.getRolesPassList();
   }
 
-  onSearch(e: any) {
-    this.search = e.target.value;
-    this.getNewsToPublish(300);
-  }
 
   getRolesPassList(): void {
     this.hasError = false;

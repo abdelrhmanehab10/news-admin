@@ -25,7 +25,8 @@
           class="form-control form-control-solid pe-5"
           name="search"
           placeholder="ابحث عن الأخبار من هنا.."
-          (change)="onSearch($event)"
+          [(ngModel)]="search"
+          (ngModelChange)="getNewsToPublish(300)"
         />
       </form>
       <div class="card-toolbar">

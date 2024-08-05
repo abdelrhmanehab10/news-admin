@@ -1,6 +1,11 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, Subscription } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  Observable,
+  Subscription,
+} from 'rxjs';
 import {
   FilterOption,
   ListOptions,
@@ -11,7 +16,6 @@ import { MainNewsService } from 'src/app/services/dashboard/main-news/main-news.
 @Component({
   selector: 'app-main-news',
   templateUrl: './main-news.component.html',
-  styleUrl: './main-news.component.scss',
 })
 export class MainNewsComponent implements OnDestroy, OnInit {
   private unsubscribe: Subscription[] = [];
@@ -61,7 +65,7 @@ export class MainNewsComponent implements OnDestroy, OnInit {
     this.getPublishedNews();
   }
 
-  getPublishedNews() {
+  getPublishedNews(delay: number = 0) {
     this.hasError = false;
 
     const getPublishedNewsSubscr = this.mainNewsService
@@ -71,6 +75,7 @@ export class MainNewsComponent implements OnDestroy, OnInit {
         this.filterOption.categoryId,
         this.filterOption.subCategoryId
       )
+      .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
         next: (data: { news: any[]; count: number; pageNumbers: number }) => {
           this.items = data.news;
