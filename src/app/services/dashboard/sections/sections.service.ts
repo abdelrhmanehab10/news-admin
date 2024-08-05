@@ -44,7 +44,7 @@ export class SectionsService {
     );
   }
 
-  getAllSections(pageNumber: number, category: number, searchQuery?: string) {
+  getAllSections(pageNumber: number, categoryId: string, searchQuery?: string) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
@@ -52,7 +52,7 @@ export class SectionsService {
 
     this.isLoadingSubject.next(true);
     return this.sectionsHTTPService
-      .getAllSections(auth.authToken, pageNumber, category)
+      .getAllSections(auth.authToken, pageNumber, categoryId)
       .pipe(
         map((data) => {
           return data.data;

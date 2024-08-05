@@ -34,7 +34,7 @@ export class SectionsHTTPService {
   getAllSections(
     token: string,
     pageNumber: number,
-    category: number,
+    categoryId?: string,
     searchQuery?: string
   ): Observable<any> {
     const httpHeaders = new HttpHeaders({
@@ -42,7 +42,7 @@ export class SectionsHTTPService {
     });
 
     return this.http.get<any>(
-      `${API_URL}GetAllSection?PageNumber=${pageNumber}&CatId=${category}${
+      `${API_URL}GetAllSection?PageNumber=${pageNumber}&CatId=${categoryId}${
         searchQuery ? '&Search=' + searchQuery : ''
       }`,
       {
