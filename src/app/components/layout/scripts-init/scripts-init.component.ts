@@ -9,7 +9,7 @@ import {
   StickyComponent,
   MenuComponent,
   ScrollComponent,
-} from '../../../_metronic/kt/components';
+} from '../../../components/kt';
 import { PageInfoService } from '../../../services/layout/page-info.service';
 import { Title } from '@angular/platform-browser';
 import { LayoutService } from 'src/app/services/layout/layout.service';
