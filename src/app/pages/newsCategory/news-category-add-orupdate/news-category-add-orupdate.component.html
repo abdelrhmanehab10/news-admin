@@ -1,0 +1,41 @@
+<div class="d-flex align-items-center justify-content-between">
+    <h2>اقسام الأخبار</h2>
+    <a (click)="openModal()" data-bs-toggle="modal" data-bs-target="#addcategory" class="btn btn-primary">إضافة قسم
+        جديد</a>
+</div>
+<app-modal #addcategory [modalConfig]="modalConfig">
+    <div class="d-block" tabindex="-1" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="modal-body">
+                    <div class="mb-4">
+                        <label for="title" class="mb-3">العنوان</label>
+                        <input id="title" type="text" class="form-control" placeholder="" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="metatitle" class="mb-3">عنوان ميتا</label>
+                        <input id="metatitle" type="text" class="form-control" placeholder="" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="metadescription" class="mb-3">وصف ميتا</label>
+                        <input id="metadescription" type="text" class="form-control" placeholder="" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="metakeywords" class="mb-3">كلمات مفتاحية</label>
+                        <input id="metakeywords" type="text" class="form-control" placeholder="" required />
+                    </div>
+                    <div class="form-check mb-4">
+                        <label for="flexCheckDefault">
+                            اخفاء
+                        </label>
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
+                    </div>
+                    <!-- <div class="modal-footer text-start">
+                        <button type="submit" class="btn btn-primary ms-4">حفظ</button>
+                        <button (click)="closeModal()" type="button" class="btn btn-danger">{{ modalConfig.closeButtonLabel }}</button>
+                    </div> -->
+                </form>
+            </div>
+        </div>
+    </div>
+</app-modal>

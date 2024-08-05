@@ -1,0 +1,121 @@
+<div class="px-7 py-5">
+  <div class="fs-5 text-gray-900 fw-bolder">اظهار حسب</div>
+</div>
+
+<div class="separator border-gray-200"></div>
+
+<form [formGroup]="filterForm" (ngSubmit)="onFilter()" class="px-7 py-5">
+  @if(filterOptions.isStatus){
+  <div class="mb-10">
+    <label class="form-label fw-bold">المرحلة:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        formControlName="status"
+      >
+        @for(item of newsStatus; track item; let idx = $index){
+        <option value="{{ item.roleId }}">{{ item.roleName }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  } @if(filterOptions.isRoles){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الدور:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        formControlName="role"
+      >
+        @for(item of rolesPassList; track item; let idx = $index){
+        <option value="{{ idx }}">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  } @if(filterOptions.isCategories){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الباب:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        (change)="
+          filterOptions.isSubCategories &&
+            onSelectedNewsCategoriesChange($event)
+        "
+        formControlName="category"
+      >
+        <option></option>
+        @for(item of categories; track item; let idx = $index){
+        <option value="{{ item.categoryID }}">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  } @if(filterOptions.isSubCategories){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الباب الفرعي:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        formControlName="subCategory"
+      >
+        <option value=""></option>
+        @for(item of newsSubCategories; track item; let idx = $index){
+        <option value="{{ item.sectionID }}">{{ item.secTitle }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  }@if(filterOptions.isOrderCategories){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الباب:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        (change)="
+          filterOptions.isSubCategories &&
+            onSelectedNewsOrderCategoriesChange($event)
+        "
+        formControlName="orderCategory"
+      >
+        <option></option>
+        @for(item of newsOrderCategories; track item; let idx = $index){
+        <option value="{{ item.id }}">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  }
+  <div class="d-flex justify-content-end">
+    <button
+      type="submit"
+      class="btn btn-sm btn-primary"
+      data-kt-menu-dismiss="true"
+    >
+      اظهار
+    </button>
+    <button
+      type="reset"
+      class="btn btn-sm btn-light btn-active-light-primary me-2"
+      data-kt-menu-dismiss="true"
+    >
+      مسح
+    </button>
+  </div>
+</form>
