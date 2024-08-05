@@ -30,6 +30,7 @@ export class AddSectionComponent implements OnInit {
   @ViewChild('modal') private modalComponent: ModalComponent;
 
   @Output() onNewSectionAddedEmitter = new EventEmitter<boolean>();
+  @Output() categoryIdEmitter = new EventEmitter<string>();
 
   @Input() title: string = 'أضافة باب فرعي';
   @Input() btnStyle: string = '';
@@ -68,6 +69,11 @@ export class AddSectionComponent implements OnInit {
     this.isLoading$ = this.sectionsService.isLoading$;
     this.dashboardService.categories$.subscribe((categories) => {
       this.newsCategories = categories;
+      this.categoryIdEmitter.emit(categories[0]?.categoryID);
+      this.filterForm.patchValue(
+        { CategoryId: categories[0]?.categoryID },
+        { onlySelf: true, emitEvent: true }
+      );
     });
   }
 

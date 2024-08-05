@@ -24,8 +24,11 @@
       <app-dropdown-menu [filterOptions]="filterOptions"></app-dropdown-menu>
       <app-add-section
         (onNewSectionAddedEmitter)="recieveIsNewSectionAdded($event)"
+        (categoryIdEmitter)="getDefaultCategory($event)"
       ></app-add-section>
-      <button (click)="deleteSections()" class="btn btn-danger btn-sm mx-2">حذف</button>
+      <button (click)="deleteSections()" class="btn btn-danger btn-sm mx-2">
+        حذف
+      </button>
     </div>
   </div>
   <div class="card-body pt-2">
