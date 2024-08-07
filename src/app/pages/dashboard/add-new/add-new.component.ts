@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -8,7 +8,6 @@ import {
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { ToastrService } from 'ngx-toastr';
 import { distinctUntilChanged, Observable, Subscription } from 'rxjs';
-import { CustomButton, TableOption } from 'src/app/models/components.model';
 import {
   Album,
   Category,
@@ -27,7 +26,7 @@ import { environment } from 'src/environments/environment';
   templateUrl: './add-new.component.html',
   styleUrl: './add-new.component.scss',
 })
-export class AddNewComponent implements OnInit {
+export class AddNewComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
   addNewForm: FormGroup;
@@ -47,12 +46,13 @@ export class AddNewComponent implements OnInit {
 
   selectedAlbums: Album[] = [];
   selectedImage: any = null;
+  addDraft: (draft: any) => void;
   restoredDraft: any;
   attachment: any = null;
-  Story: string = '';
+  story: any;
   tags: string[] = [];
   date: string = '';
-
+  interval: any;
   constructor(
     private dashboardService: DashboardService,
     private addNewService: AddNewService,
@@ -75,6 +75,39 @@ export class AddNewComponent implements OnInit {
     this.dashboardService.categories$.subscribe((categories) => {
       this.categories = categories;
     });
+
+    this.interval = setInterval(() => {
+      if (this.addDraft) {
+        this.addDraft({
+          newsAction: 1,
+          sectionId: this.f.sectionId.value,
+          CatId: this.f.CatId.value,
+          NewsType: this.f.NewsType.value,
+          Title: this.f.Title.value,
+          SubTitle: this.f.SubTitle.value,
+          Brief: this.f.Brief.value,
+          Story: this.f.Story.value,
+          tags: this.tags,
+          selectedImage: this.selectedImage ? this.selectedImage.id : '',
+          PictureCaption1: this.f.PictureCaption1.value,
+          ByLine: this.f.ByLine.value,
+          Notes: this.f.Notes.value,
+          selectedAlbums: this.selectedAlbums.map((sa) => sa.galleryID),
+          ChkNewsTicker: this.f.ChkNewsTicker.value,
+          ChkTopNews: this.f.ChkTopNews.value,
+          ChkTopNewCategory: this.f.ChkTopNewCategory.value,
+          ChkReadNow: this.f.ChkReadNow.value,
+          ChkImportantNews: this.f.ChkImportantNews.value,
+          ChkFilesNews: this.f.ChkFilesNews.value,
+          ChkTopNewSection: this.f.ChkTopNewSection.value,
+          ChkIsVideo: this.f.ChkIsVideo.value,
+          ChkIsInstall: this.f.ChkIsInstall.value,
+          ChkIsAkbhbarKhassa: this.f.ChkIsAkbhbarKhassa.value,
+          ChkIsImage: this.f.ChkIsImage.value,
+          date: this.date,
+        });
+      }
+    }, 3000);
   }
 
   //TinyMCE
@@ -92,6 +125,7 @@ export class AddNewComponent implements OnInit {
 
   onCategoryChange(e: any) {
     this.hasError = false;
+    this.subCategories = [];
     const getNewsSubCategoriesSubscr = this.dashboardService
       .getNewsSubCategories(e.target.value)
       .pipe(distinctUntilChanged())
@@ -176,10 +210,14 @@ export class AddNewComponent implements OnInit {
     this.addNewForm = this.fb.group({
       NewsType: [contentTypeID, [Validators.required]],
       CatId: ['', [Validators.required]],
-      sectionId: ['', [Validators.required]],
+      sectionId: [
+        { value: '', disabled: !!this.subCategories.length },
+        [Validators.required],
+      ],
       ByLine: ['', []],
       Title: ['', []],
       SubTitle: [''],
+      Story: [''],
       Brief: ['', []],
       PictureCaption1: ['', []],
       Notes: [''],
@@ -231,18 +269,19 @@ export class AddNewComponent implements OnInit {
     );
   }
 
-  addNew() {
+  addNew(newAction: number) {
     this.hasError = false;
+
     const addNewSubscr = this.addNewService
       .addNew(
-        1,
+        newAction,
         this.f.sectionId.value,
         this.f.CatId.value,
         this.f.NewsType.value,
         this.f.Title.value,
         this.f.SubTitle.value,
-        this.Story,
         this.f.Brief.value,
+        this.f.Story.value,
         this.tags,
         this.selectedImage.id,
         0,
@@ -268,6 +307,7 @@ export class AddNewComponent implements OnInit {
         next: (data: any) => {
           if (data) {
             this.toast.success(data);
+            this.addNewForm.reset();
           }
         },
         error: (error: any) => {
@@ -280,41 +320,6 @@ export class AddNewComponent implements OnInit {
 
   receiver(recevier: string, data: any) {
     (this as any)[recevier] = data;
-    // console.log(data);
-    // if (recevier === 'restoredDraft') {
-    //   console.log(data.NewsType);
-
-    //   this.addNewForm.patchValue({
-    //     NewsType: data?.newsType,
-    //     CatId: data?.categoryId,
-    //     sectionId: data?.sectionId,
-    //     ByLine: data?.byLine,
-    //     Title: data?.title,
-    //     SubTitle: data?.subTitle,
-    //     Brief: data?.brief,
-    //     PictureCaption1: data?.pictureCaption1,
-    //     Notes: data?.notes,
-    //     ChkNewsTicker: data?.ChkNewsTicker,
-    //     ChkTopNews: data?.ChkTopNews,
-    //     ChkReadNow: data?.ChkReadNow,
-    //     ChkIsInstall: data?.ChkIsInstall,
-    //     ChkIsImage: data?.ChkIsImage,
-    //     ChkIsAkhbarKhassa: data?.ChkIsAkhbarKhassa,
-    //     ChkTopNewCategory: data?.ChkTopNewCategory,
-    //     ChkTopNewSection: data?.ChkTopNewSection,
-    //     ChkImportantNews: data?.ChkImportantNews,
-    //     ChkFilesNews: data?.ChkFilesNews,
-    //     ChkIsVideo: data?.ChkIsVideo,
-    //     ChkIsAkbhbarKhassa: data?.ChkIsAkbhbarKhassa,
-    //   });
-
-    //   this.Story = data?.story;
-    //   this.tags = data?.tags;
-    //   this.selectedImage = data?.selectedImage;
-    //   this.date = data?.date;
-    //   this.selectedAlbums = data?.selectedAlbums;
-    //   this.attachment = data?.attachment;
-    // }
   }
 
   getContentTypeSetting() {
@@ -351,5 +356,12 @@ export class AddNewComponent implements OnInit {
       },
     });
     this.unsubscribe.push(getAllEditorsSubscr);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.forEach((sb) => sb.unsubscribe());
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
   }
 }

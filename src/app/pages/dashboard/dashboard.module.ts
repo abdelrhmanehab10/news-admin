@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { ModalsModule, WidgetsModule } from '../../_metronic/partials';
 import { PublishComponent } from './publish/publish.component';
 import { DashboardRoutingModule } from './dashboard.routing.module';
 import { ComponentsModule } from '../../components/components.module';
@@ -16,7 +15,7 @@ import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
 import { MainNewsComponent } from './main-news/main-news.component';
 import { CommentsComponent } from './comments/comments.component';
 import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditorsComponent } from './editors/editors.component';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { CategoryComponent } from './category/category.component';
@@ -42,6 +41,7 @@ import { VersionsComponent } from './versions/versions.component';
   ],
   imports: [
     CommonModule,
+    FormsModule,
     DashboardRoutingModule,
     ComponentsModule,
     DragDropModule,

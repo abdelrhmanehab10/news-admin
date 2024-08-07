@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  TINY_MCE_API_KEY: 'ahxsnaz651emu6ebjchn1szpv76eega3bqmgh9womdkplffn',
   production: true,
   appVersion: 'v8.2.4',
   USERDATA_KEY: 'authf649fc9a5f55',

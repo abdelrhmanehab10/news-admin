@@ -9,7 +9,7 @@
           class="form-check-input"
           type="checkbox"
           (change)="toggleSelectAll($event)"
-          [checked]="newsToPublish.length === selectedNews.length"
+          [checked]="newsToPublish[0].news.length === selectedNews.length"
           data-kt-check="true"
           data-kt-check-target=".widget-9-check"
         />
@@ -60,42 +60,24 @@
           <button
             (click)="returnNews()"
             class="btn btn-sm btn-primary d-flex align-items-center gap-3 me-2"
+            [disabled]="isLoading$ | async"
           >
-            @if(isLoading$ | async){
-            <span class="indicator-progress" [style.display]="'block'">
-              جاري التحميل...
-              <span
-                class="spinner-border spinner-border-sm align-middle ms-2"
-              ></span>
-            </span>
-            }@else { اعادة }
+            اعادة
           </button>
         </div>
         <button
           (click)="publishNews()"
           class="btn btn-sm btn-primary d-flex align-items-center gap-3 me-2"
+          [disabled]="isLoading$ | async"
         >
-          @if(isLoading$ | async){
-          <span class="indicator-progress" [style.display]="'block'">
-            جاري التحميل...
-            <span
-              class="spinner-border spinner-border-sm align-middle ms-2"
-            ></span>
-          </span>
-          }@else { نشر }
+          نشر
         </button>
         <button
           (click)="deleteNews()"
           class="btn btn-sm btn-danger d-flex align-items-center gap-3 me-2"
+          [disabled]="isLoading$ | async"
         >
-          @if(isLoading$ | async){
-          <span class="indicator-progress" [style.display]="'block'">
-            جاري التحميل...
-            <span
-              class="spinner-border spinner-border-sm align-middle ms-2"
-            ></span>
-          </span>
-          }@else { حذف }
+          حذف
         </button>
       </div>
     </div>
@@ -104,8 +86,8 @@
     <app-group-list
       [items]="newsToPublish"
       [groupListOptions]="groupLisOptions"
-      (selectedItemsEmitter)="receiveSelectedNews($event)"
-      [isAllSectionSelected]="newsToPublish.length === selectedNews.length"
+      [selectedItems]="selectedNews"
+      (selectedItemsChange)="receiveSelectedNews($event)"
     ></app-group-list>
   </div>
 </div>

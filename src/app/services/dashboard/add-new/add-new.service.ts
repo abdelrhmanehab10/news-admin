@@ -232,6 +232,54 @@ export class AddNewService {
     );
   }
 
+  addDraft(draft: {
+    newsAction?: number;
+    sectionId?: number;
+    catId?: number;
+    NewsType?: number;
+    Title?: string;
+    SubTitle?: string;
+    Story?: string;
+    Brief?: string;
+    Tags?: string[];
+    image1Id?: number;
+    image2Id?: number;
+    PictureCaption1?: string;
+    PicCaption2?: string;
+    ByLine?: string;
+    Notes?: string;
+    ContentAlbumIds?: string[];
+    ChkNewsTicker?: boolean;
+    ChkTopNews?: boolean;
+    ChkTopNewCategory?: boolean;
+    ChkReadNow?: boolean;
+    ChkImportantNews?: boolean;
+    ChkFilesNews?: boolean;
+    ChkTopNewSection?: boolean;
+    ChkIsVideo?: boolean;
+    ChkIsInstall?: boolean;
+    ChkIsAkbhbarKhassa?: boolean;
+    ChkIsImage?: boolean;
+    PublishDate?: string;
+  }) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.AddNewHTTPService.addDraft(auth.authToken, draft).pipe(
+      map((data) => {
+        return data.message;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
   getDrafts() {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {

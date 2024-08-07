@@ -76,8 +76,7 @@
       <app-group-list
         [items]="items"
         [groupListOptions]="groupListOptions"
-        [isAllSectionSelected]="items.length === selectedItems.length"
-        (selectedItemsEmitter)="recieveSelectedItems($event)"
+        [selectedItems]="selectedItems"
       ></app-group-list>
     </div>
     <!-- end::Body -->

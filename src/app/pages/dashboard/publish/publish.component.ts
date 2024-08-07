@@ -7,11 +7,7 @@ import {
   Observable,
   Subscription,
 } from 'rxjs';
-import {
-  FilterOption,
-  ListOptions,
-  TableOption,
-} from 'src/app/models/components.model';
+import { FilterOption, ListOptions } from 'src/app/models/components.model';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -145,7 +141,10 @@ export class PublishComponent implements OnInit, OnDestroy {
       .deleteNew(this.selectedNews)
       .subscribe({
         next: (data: string) => {
-          this.toast.error(data);
+          if (data) {
+            this.toast.error(data);
+            this.getNewsToPublish();
+          }
         },
         error: (error: any) => {
           console.log('[DELETE]', error);
@@ -167,6 +166,7 @@ export class PublishComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data: string) => {
           this.toast.success(data);
+          this.getNewsToPublish();
         },
         error: (error: any) => {
           console.log('[PUBLISH]', error);
@@ -185,15 +185,14 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.getNewsToPublish();
   }
 
-  recieveSelectedNews(data: any) {
-    this.selectedNews = data;
-  }
-
   toggleSelectAll(e: any) {
-    this.selectedNews = this.utilsService.toggleSelectAll(
-      e,
-      this.newsToPublish.map((items) => items.news)
-    );
+    if (e.target.checked) {
+      this.selectedNews = this.newsToPublish[0].news.map(
+        (item: { id: string }) => item.id
+      );
+    } else {
+      this.selectedNews = [];
+    }
   }
 
   ngOnDestroy() {
