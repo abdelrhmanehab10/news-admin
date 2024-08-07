@@ -66,6 +66,9 @@
               ></span>
             </span>
             }@else { @if(subItem.active) { ايقاف }@else{ تفعيل }}</button
+          >} @if(groupListOptions.isVersion && groupListOptions.version){<a
+            [routerLink]="['/dashboard/versions', subItem.id]"
+            >الأصدارات</a
           >} @if(groupListOptions.isEdit){<app-add-section
             [title]="'تعديل'"
             [btnStyle]="'btn-light'"

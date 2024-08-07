@@ -2,10 +2,12 @@ export interface ListOptions {
   isEdit?: boolean;
   isEnable?: boolean;
   isDelete?: boolean;
+  isVersion?: boolean;
   isCheckList?: boolean;
   edit?: () => void;
   enable?: (id: string) => void;
   delete?: (id: string) => void;
+  version?: (id: string) => void;
 }
 
 export interface Pagination {

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import {
   debounceTime,
@@ -12,15 +12,12 @@ import {
   ListOptions,
   TableOption,
 } from 'src/app/models/components.model';
-import { NEW } from 'src/app/models/new.model';
-import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-publish',
   templateUrl: './publish.component.html',
-  styleUrl: './publish.component.scss',
 })
 export class PublishComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
@@ -42,9 +39,11 @@ export class PublishComponent implements OnInit, OnDestroy {
   groupLisOptions: ListOptions = {
     isDelete: true,
     isEdit: true,
+    isVersion: true,
     isCheckList: true,
     delete: () => {},
     edit: () => {},
+    version: () => {},
   };
 
   hasError: boolean;

@@ -40,6 +40,7 @@ import {
 import { AddArticleComponent } from './dashboard/modals/add-article/add-article.component';
 import { DraftsComponent } from './dashboard/drafts/drafts.component';
 import { AddCategoryComponent } from './dashboard/modals/add-category/add-category.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -77,6 +78,7 @@ import { AddCategoryComponent } from './dashboard/modals/add-category/add-catego
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     NgbDatepickerModule,
+    RouterModule,
   ],
   exports: [
     TableComponent,

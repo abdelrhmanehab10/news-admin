@@ -61,6 +61,7 @@ export class PageInfoService {
     const asideTitle = this.calculateTitleInMenu('kt_app_sidebar');
     const headerTitle = this.calculateTitleInMenu('kt_app_header_wrapper');
     const title = asideTitle || headerTitle || '';
+
     this.setTitle(title);
   }
 

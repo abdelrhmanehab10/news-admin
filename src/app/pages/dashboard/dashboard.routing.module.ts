@@ -8,13 +8,12 @@ import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.compone
 import { OrderNewsComponent } from './order-news/order-news.component';
 import { AllVotesComponent } from './all-votes/all-votes.component';
 import { SectionsComponent } from './sections/sections.component';
-import { NewsCategoriesComponent } from '../newsCategory/news-categories/news-categories.component';
 import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
 import { MainNewsComponent } from './main-news/main-news.component';
 import { CommentsComponent } from './comments/comments.component';
 import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
 import { EditorsComponent } from './editors/editors.component';
-import { VersionsComponent } from './versions/versions/versions.component';
+import { VersionsComponent } from './versions/versions.component';
 import { CategoryComponent } from './category/category.component';
 
 export const routes: Routes = [
@@ -65,10 +64,6 @@ export const routes: Routes = [
       {
         path: 'category',
         component: CategoryComponent,
-      },
-      {
-        path: 'categories',
-        component: NewsCategoriesComponent,
       },
       {
         path: 'urgent-news',
