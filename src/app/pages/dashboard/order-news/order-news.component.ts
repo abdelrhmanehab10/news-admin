@@ -24,7 +24,7 @@ export class OrderNewsComponent implements OnInit {
 
   filterOption: FilterOption = {
     isOrderCategories: true,
-    orderCategoryId: '1',
+    orderCategoryId: '',
   };
 
   hasError: boolean = false;

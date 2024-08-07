@@ -23,6 +23,7 @@ export class DraftsComponent implements OnDestroy, OnInit {
   hasError: boolean = false;
 
   @Output() draftEmitter = new EventEmitter<any>();
+  @Output() addDraftEmitter = new EventEmitter<any>();
 
   tableOptions: TableOption = {
     actions: [
@@ -46,6 +47,7 @@ export class DraftsComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.getDrafts();
+    this.addDraftEmitter.emit(this.addDraft);
   }
 
   getDrafts() {
@@ -105,6 +107,17 @@ export class DraftsComponent implements OnDestroy, OnInit {
       },
     });
     this.unsubscribe.push(restoreDraftSubscr);
+  }
+
+  addDraft(draft: any) {
+    this.hasError = false;
+    const addDraftSubscr = this.addNewService.addDraft(draft).subscribe({
+      error: (error: any) => {
+        console.log('[ADD_DRAFTS]', error);
+        this.hasError = true;
+      },
+    });
+    this.unsubscribe.push(addDraftSubscr);
   }
 
   ngOnDestroy(): void {

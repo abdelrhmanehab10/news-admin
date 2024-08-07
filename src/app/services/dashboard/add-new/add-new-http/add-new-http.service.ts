@@ -225,6 +225,34 @@ export class AddNewHTTPService {
     });
   }
 
+  addDraft(token: string, draft: { [key: string]: any }) {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    for (const key in draft) {
+      if (draft.hasOwnProperty(key)) {
+        const value = draft[key];
+        if (Array.isArray(value)) {
+          value.forEach((item: any) => formData.append(key, item));
+        } else {
+          formData.append(key, value.toString());
+        }
+      }
+    }
+
+    return this.http.post<{
+      status: number;
+      data: NEW[] | null;
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/Draft/AddDrafts`, formData, {
+      headers: httpHeaders,
+    });
+  }
+
   getDrafts(token: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,

@@ -158,10 +158,6 @@ export class ChooseFromDailyNewsComponent implements OnInit {
     this.unsubscribe.push(addUrgentContentSubscr);
   }
 
-  recieveSelectedItems(data: any[]) {
-    this.selectedItems = data;
-  }
-
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
