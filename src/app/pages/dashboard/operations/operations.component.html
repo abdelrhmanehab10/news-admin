@@ -9,7 +9,7 @@
           class="form-check-input"
           type="checkbox"
           (change)="toggleSelectAll($event)"
-          [checked]="newsToPublish[0]?.news.length === selectedNews.length"
+          [checked]="items[0]?.news.length === selectedNews.length"
           data-kt-check="true"
           data-kt-check-target=".widget-9-check"
         />
@@ -66,13 +66,6 @@
           </button>
         </div>
         <button
-          (click)="publishNews()"
-          class="btn btn-sm btn-primary d-flex align-items-center gap-3 me-2"
-          [disabled]="isLoading$ | async"
-        >
-          نشر
-        </button>
-        <button
           (click)="deleteNews()"
           class="btn btn-sm btn-danger d-flex align-items-center gap-3 me-2"
           [disabled]="isLoading$ | async"
@@ -84,7 +77,7 @@
   </div>
   <div class="card-body pt-2">
     <app-group-list
-      [items]="newsToPublish"
+      [items]="items"
       [groupListOptions]="groupLisOptions"
       [selectedItems]="selectedNews"
       (selectedItemsChange)="receiveSelectedNews($event)"

@@ -1,25 +1,29 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { get } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  Observable,
-  Subscription,
-} from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { FilterOption, ListOptions } from 'src/app/models/components.model';
+import { OperationsService } from 'src/app/services/dashboard/operations/operations.service';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
+import { VersionsService } from 'src/app/services/dashboard/versions/versions.service';
+import { PageInfoService } from 'src/app/services/layout/page-info.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
-  selector: 'app-publish',
-  templateUrl: './publish.component.html',
+  selector: 'app-operations',
+  templateUrl: './operations.component.html',
 })
-export class PublishComponent implements OnInit, OnDestroy {
+export class OperationsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
-  newsToPublish: any[] = [];
+  items: any[] = [];
   selectedNews: string[] = [];
   rolePassList: { id: string; name: string }[] = [];
+
+  selectedRole: number = 1;
+
+  search: string = '';
   filterOptions: FilterOption = {
     isCategories: true,
     isSubCategories: true,
@@ -27,10 +31,6 @@ export class PublishComponent implements OnInit, OnDestroy {
     categoryId: '',
     subCategoryId: '',
   };
-
-  search: string = '';
-  selectedRole: number = 1;
-
   groupLisOptions: ListOptions = {
     isDelete: true,
     isEdit: true,
@@ -42,22 +42,33 @@ export class PublishComponent implements OnInit, OnDestroy {
 
   hasError: boolean;
   isLoading$: Observable<boolean>;
+
+  groupListOptions: ListOptions = {
+    isEdit: true,
+    isCheckList: true,
+
+    edit() {},
+  };
+
   constructor(
     private publishService: PublishService,
-    private toast: ToastrService,
-    private cdr: ChangeDetectorRef
-  ) {
-    this.isLoading$ = this.publishService.isLoading$;
-  }
+    private pageInfoServices: PageInfoService,
+    private utilsService: UtilsService,
+    private cdr: ChangeDetectorRef,
+    private operationService: OperationsService,
+    private toast: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    this.getNewsToPublish();
+    this.pageInfoServices.updateTitle('العمليات' + ' - El Wakeel');
+
+    this.getOperations();
     this.getRolesPassList();
   }
 
   onSearch(e: any) {
     this.search = e.target.value;
-    this.getNewsToPublish(300);
+    this.getOperations(300);
   }
 
   getRolesPassList(): void {
@@ -77,33 +88,6 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(getRolesPassListSubscr);
   }
 
-  getNewsToPublish(delay: number = 0): void {
-    this.hasError = false;
-
-    const getNewsToPublishSubscr = this.publishService
-      .getNewsToPublish(
-        this.search,
-        this.filterOptions.categoryId,
-        this.filterOptions.subCategoryId
-      )
-      .pipe(debounceTime(delay), distinctUntilChanged())
-      .subscribe({
-        next: (data: any[]) => {
-          if (data) {
-            this.newsToPublish = data;
-            this.cdr.detectChanges();
-          } else {
-            this.newsToPublish = [];
-          }
-        },
-        error: (error: any) => {
-          console.log('[NEWS_TO_PUBLISH]', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getNewsToPublishSubscr);
-  }
-
   returnNews(): void {
     this.hasError = false;
     if (!this.selectedNews.length) return;
@@ -113,7 +97,7 @@ export class PublishComponent implements OnInit, OnDestroy {
         next: (data: string) => {
           if (data) {
             this.toast.success(data);
-            this.getNewsToPublish();
+            this.getOperations();
           }
         },
         error: (error: any) => {
@@ -122,10 +106,6 @@ export class PublishComponent implements OnInit, OnDestroy {
         },
       });
     this.unsubscribe.push(returnNewsSubscr);
-  }
-
-  receiveSelectedNews(data: string[]) {
-    this.selectedNews = data;
   }
 
   deleteNews(id?: string) {
@@ -139,7 +119,7 @@ export class PublishComponent implements OnInit, OnDestroy {
         next: (data: string) => {
           if (data) {
             this.toast.error(data);
-            this.getNewsToPublish();
+            this.getOperations();
           }
         },
         error: (error: any) => {
@@ -150,45 +130,45 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(deleteNewSubscr);
   }
 
-  publishNews(id?: string) {
+  getOperations(delay: number = 0): void {
     this.hasError = false;
-
-    if (id) {
-      this.selectedNews.push(id);
-    }
-
-    const publishNewSubscr = this.publishService
-      .publishNews(this.selectedNews)
+    const getOperationsSubscr = this.operationService
+      .getOperations()
       .subscribe({
-        next: (data: string) => {
-          this.toast.success(data);
-          this.getNewsToPublish();
+        next: (data: any[]) => {
+          if (data) {
+            this.items = data;
+            this.cdr.detectChanges();
+          } else {
+            this.items = [];
+          }
         },
         error: (error: any) => {
-          console.log('[PUBLISH]', error);
+          console.log('OPERATIONS', error);
           this.hasError = true;
         },
       });
-    this.unsubscribe.push(publishNewSubscr);
+    this.unsubscribe.push(getOperationsSubscr);
+  }
+
+  toggleSelectAll(e: any) {
+    this.selectedNews = this.utilsService.toggleSelectAll(
+      e,
+      this.items.map((items) => items.news)
+    );
   }
 
   onSelectedRoleChange(e: any) {
     this.selectedRole = e.target.value;
   }
 
-  recieveFilterOptions(data: any) {
-    this.filterOptions = data;
-    this.getNewsToPublish();
+  receiveSelectedNews(data: any) {
+    this.selectedNews = data;
   }
 
-  toggleSelectAll(e: any) {
-    if (e.target.checked) {
-      this.selectedNews = this.newsToPublish[0]?.news.map(
-        (item: { id: string }) => item.id
-      );
-    } else {
-      this.selectedNews = [];
-    }
+  recieveFilterOptions(data: any) {
+    this.filterOptions = data;
+    this.getOperations();
   }
 
   ngOnDestroy() {

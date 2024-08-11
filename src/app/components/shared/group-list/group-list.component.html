@@ -66,7 +66,8 @@
               ></span>
             </span>
             }@else { @if(subItem.active) { ايقاف }@else{ تفعيل }}</button
-          >} @if(groupListOptions.isVersion && groupListOptions.version){<a
+          >} @if(groupListOptions.isVersion){<a
+            class="btn btn-sm btn-outline-dark border b d-flex align-items-center gap-3 me-2"
             [routerLink]="['/dashboard/versions', subItem.id]"
             >الأصدارات</a
           >} @if(groupListOptions.isEdit){<app-add-section
@@ -89,7 +90,6 @@
     </div>
   </div>
   } }@else{
-
   <p class="text-center text-gray-900 fw-bolder fs-6">لا يوجد بيانات</p>
   }
 </div>

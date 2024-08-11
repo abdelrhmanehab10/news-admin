@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NEW } from 'src/app/models/new.model';
 import { environment } from 'src/environments/environment';
 
 const API_URL = `${environment.apiUrl}`;
@@ -17,7 +16,7 @@ export class DashboardHTTPService {
 
     return this.http.get<{
       status: number;
-      data: NEW[];
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/ContentTypes/GetContentTypes`, {

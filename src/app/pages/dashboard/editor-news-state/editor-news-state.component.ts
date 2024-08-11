@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { FilterOption, TableOption } from 'src/app/models/components.model';
-import { NEW } from 'src/app/models/new.model';
 import { EditorNewsStatusService } from 'src/app/services/dashboard/editor-news-status/editor-news-status.service';
 
 @Component({
@@ -12,7 +11,7 @@ import { EditorNewsStatusService } from 'src/app/services/dashboard/editor-news-
 export class EditorNewsStateComponent implements OnDestroy {
   private unsubscribe: Subscription[] = [];
 
-  news: NEW[] = [];
+  news: any[] = [];
   selectedNews: string[] = [];
   pageNumber: number = 1;
   filterOption: FilterOption = {
@@ -31,7 +30,7 @@ export class EditorNewsStateComponent implements OnDestroy {
     const getMyNewsSubscr = this.editorNewsStatusService
       .getMyNews(this.pageNumber, this.filterOption.statusId)
       .subscribe({
-        next: (data: { news: NEW[] }[]) => {
+        next: (data: { news: any[] }[]) => {
           if (data) {
             this.news = data[0]?.news;
           }

@@ -7,12 +7,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Toast, ToastrService } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { ModalConfig } from 'src/app/models/modal.model';
-import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
-import { SectionsService } from 'src/app/services/dashboard/sections/sections.service';
+import { ModalConfig } from 'src/app/models/components.model';
 import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent-news.service';
 
 @Component({

@@ -144,7 +144,7 @@ const defaultUserInfos: Array<UserInfoModel> = [
   },
   {
     name: 'Dan Wilson',
-    avatar: 'avatars/300-23.jpg',
+    // avatar: 'avatars/300-23.jpg',
     email: 'dam@consilting.com',
     position: 'Web Desinger',
     online: false,

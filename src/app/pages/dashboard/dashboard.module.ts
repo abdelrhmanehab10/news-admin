@@ -20,6 +20,7 @@ import { EditorsComponent } from './editors/editors.component';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { CategoryComponent } from './category/category.component';
 import { VersionsComponent } from './versions/versions.component';
+import { OperationsComponent } from './operations/operations.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { VersionsComponent } from './versions/versions.component';
     EditorsComponent,
     CategoryComponent,
     VersionsComponent,
+    OperationsComponent,
   ],
   imports: [
     CommonModule,

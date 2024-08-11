@@ -12,9 +12,8 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { ModalConfig } from 'src/app/models/modal.model';
+import { ModalConfig } from 'src/app/models/components.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
-import { SectionsService } from 'src/app/services/dashboard/sections/sections.service';
 import { VoteService } from 'src/app/services/dashboard/vote/vote.service';
 
 @Component({

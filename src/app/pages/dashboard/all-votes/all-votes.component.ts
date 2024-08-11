@@ -7,8 +7,11 @@ import {
   Observable,
   Subscription,
 } from 'rxjs';
-import { FilterOption, ListOptions } from 'src/app/models/components.model';
-import { ModalConfig } from 'src/app/models/modal.model';
+import {
+  FilterOption,
+  ListOptions,
+  ModalConfig,
+} from 'src/app/models/components.model';
 import { VoteService } from 'src/app/services/dashboard/vote/vote.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -22,7 +25,7 @@ export class AllVotesComponent {
 
   items: any[] = [];
   search = '';
-  
+
   selectedVotes: string[] = [];
 
   customBtnsOptions: {

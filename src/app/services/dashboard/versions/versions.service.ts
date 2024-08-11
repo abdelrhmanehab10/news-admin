@@ -45,4 +45,23 @@ export class VersionsService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+
+  compareNews(newsIds: string[]) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.versionsHTTPService.compareNews(auth.authToken, newsIds).pipe(
+      map((data: any) => {
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
 }

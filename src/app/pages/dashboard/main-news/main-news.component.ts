@@ -20,8 +20,7 @@ export class MainNewsComponent implements OnDestroy, OnInit {
 
   groupListOptions: ListOptions = {
     isDelete: true,
-    isEdit: false,
-    isEnable: false,
+    isVersion: true,
     delete: (id?: string) => {
       if (id) {
         this.deleteNew(id);

@@ -9,7 +9,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { ModalConfig } from 'src/app/models/modal.model';
+import { ModalConfig } from 'src/app/models/components.model';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 
 @Component({

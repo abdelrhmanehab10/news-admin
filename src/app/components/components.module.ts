@@ -41,6 +41,7 @@ import { AddArticleComponent } from './dashboard/modals/add-article/add-article.
 import { DraftsComponent } from './dashboard/drafts/drafts.component';
 import { AddCategoryComponent } from './dashboard/modals/add-category/add-category.component';
 import { RouterModule } from '@angular/router';
+import { CompareVersionsComponent } from './dashboard/modals/compare-versions/compare-versions.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { RouterModule } from '@angular/router';
     AddArticleComponent,
     DraftsComponent,
     AddCategoryComponent,
+    CompareVersionsComponent,
   ],
   imports: [
     ImageCropperComponent,
@@ -104,6 +106,7 @@ import { RouterModule } from '@angular/router';
     AddArticleComponent,
     DraftsComponent,
     AddCategoryComponent,
+    CompareVersionsComponent,
   ],
   providers: [
     DatePipe,

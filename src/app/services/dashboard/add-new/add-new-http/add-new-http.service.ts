@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { NEW } from 'src/app/models/new.model';
 import { environment } from 'src/environments/environment';
 
 const API_URL = `${environment.apiUrl}`;
@@ -19,7 +18,7 @@ export class AddNewHTTPService {
 
     return this.http.get<{
       status: number;
-      data: NEW[];
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/Image/GetGalleries`, {
@@ -34,7 +33,7 @@ export class AddNewHTTPService {
 
     return this.http.get<{
       status: number;
-      data: NEW[];
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/Image/GetGalleryTypes`, {
@@ -49,7 +48,7 @@ export class AddNewHTTPService {
 
     return this.http.get<{
       status: number;
-      data: NEW[];
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/Image/GetGalleryByType?categoryId=${galleryId}`, {
@@ -72,7 +71,7 @@ export class AddNewHTTPService {
 
     return this.http.get<{
       status: number;
-      data: NEW[];
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(
@@ -128,7 +127,7 @@ export class AddNewHTTPService {
 
     return this.http.post<{
       status: number;
-      data: NEW[] | null;
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/Image/AddImage`, formData, {
@@ -217,7 +216,7 @@ export class AddNewHTTPService {
 
     return this.http.post<{
       status: number;
-      data: NEW[] | null;
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/News/AddNews`, formData, {
@@ -245,7 +244,7 @@ export class AddNewHTTPService {
 
     return this.http.post<{
       status: number;
-      data: NEW[] | null;
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/Draft/AddDrafts`, formData, {
@@ -260,7 +259,7 @@ export class AddNewHTTPService {
 
     return this.http.get<{
       status: number;
-      data: NEW[] | null;
+      data: any;
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/Draft/GetDrafts`, {
@@ -290,7 +289,7 @@ export class AddNewHTTPService {
 
     return this.http.delete<{
       status: number;
-      data: NEW[] | null;
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/Draft/DeleteAllDrafts`, {
@@ -305,7 +304,7 @@ export class AddNewHTTPService {
 
     return this.http.get<{
       status: number;
-      data: NEW[] | null;
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/Draft/GetDrafts?draftId=${id}`, {

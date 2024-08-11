@@ -7,7 +7,6 @@ export interface ListOptions {
   edit?: () => void;
   enable?: (id: string) => void;
   delete?: (id: string) => void;
-  version?: (id: string) => void;
 }
 
 export interface Pagination {
@@ -79,4 +78,19 @@ export interface Category {
   SeoTitle: string;
   SeoKeyWords: string;
   SeoDescription: string;
+}
+
+export interface ModalConfig {
+  modalTitle: string;
+  dismissButtonLabel?: string;
+  closeButtonLabel?: string;
+  shouldClose?(): Promise<boolean> | boolean;
+  shouldDismiss?(): Promise<boolean> | boolean;
+  onClose?(): Promise<boolean> | boolean;
+  onDismiss?(): Promise<boolean> | boolean;
+  disableCloseButton?(): boolean;
+  disableDismissButton?(): boolean;
+  hideCloseButton?(): boolean;
+  hideDismissButton?: boolean;
+  customDismiss?(): void;
 }

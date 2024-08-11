@@ -6,7 +6,6 @@ import {
   ListOptions,
   TableOption,
 } from 'src/app/models/components.model';
-import { NEW } from 'src/app/models/new.model';
 import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-status.service';
 
 @Component({
@@ -17,7 +16,7 @@ import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-s
 export class NewsStatusComponent implements OnDestroy, OnInit {
   private unsubscribe: Subscription[] = [];
 
-  news: NEW[] = [];
+  news: any[] = [];
   searchQuery: string = '';
   selectedNews: string[] = [];
   pageNumber: number = 1;

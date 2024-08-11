@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Subscription, first } from 'rxjs';
-import { NewStatusCount } from 'src/app/models/layout.model';
 import { LayoutService } from 'src/app/services/layout/layout.service';
 
 @Component({
@@ -12,7 +11,7 @@ export class NewsStatusCountComponent implements OnInit {
   private unsubscribe: Subscription[] = [];
   cardBGColors: string[] = ['primary', 'success', 'danger', 'warning', 'info'];
 
-  appNewsStatusCount: NewStatusCount[];
+  newsStatusCount: any[];
   total: number = 0;
   hasError: boolean = false;
 
@@ -31,12 +30,9 @@ export class NewsStatusCountComponent implements OnInit {
     const getNewsStatusCountSubscr = this.layout
       .getNewsStatusCount()
       .subscribe({
-        next: (data: NewStatusCount[]) => {
-          this.total = data.reduce(
-            (a: number, c: NewStatusCount) => a + c.count,
-            0
-          );
-          this.appNewsStatusCount = data;
+        next: (data: any[]) => {
+          this.total = data.reduce((a: number, c: any) => a + c.count, 0);
+          this.newsStatusCount = data;
           this.cdr.detectChanges();
         },
         error: (error: any) => {

@@ -11,8 +11,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { Section } from 'src/app/models/components.model';
-import { ModalConfig } from 'src/app/models/modal.model';
+import { ModalConfig, Section } from 'src/app/models/components.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { SectionsService } from 'src/app/services/dashboard/sections/sections.service';
 

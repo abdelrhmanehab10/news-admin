@@ -2,8 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { NewStatusCount } from 'src/app/models/layout.model';
-import { NEW } from 'src/app/models/new.model';
 
 const API_URL = `${environment.apiUrl}`;
 
@@ -25,7 +23,7 @@ export class PublishHTTPService {
 
     return this.http.get<{
       status: number;
-      data: NEW[];
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(
@@ -66,7 +64,7 @@ export class PublishHTTPService {
 
     return this.http.delete<{
       status: number;
-      data: NEW[];
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/PublishNews/DeleteNews`, {
@@ -88,7 +86,7 @@ export class PublishHTTPService {
 
     return this.http.post<{
       status: number;
-      data: NEW[];
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/PublishNews/PublishNews`, formData, {
@@ -113,7 +111,7 @@ export class PublishHTTPService {
 
     return this.http.put<{
       status: number;
-      data: NEW[];
+      data: any[];
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/PublishNews/ReturnNews`, formData, {

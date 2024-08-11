@@ -8,11 +8,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Toast, ToastrService } from 'ngx-toastr';
-import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, Subscription } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
 import { Category } from 'src/app/models/components.model';
-import { ModalConfig } from 'src/app/models/modal.model';
+import { ModalConfig } from 'src/app/models/components.model';
 import { CategoryService } from 'src/app/services/dashboard/category/category.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 

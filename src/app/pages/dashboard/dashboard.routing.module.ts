@@ -15,6 +15,7 @@ import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
 import { EditorsComponent } from './editors/editors.component';
 import { VersionsComponent } from './versions/versions.component';
 import { CategoryComponent } from './category/category.component';
+import { OperationsComponent } from './operations/operations.component';
 
 export const routes: Routes = [
   {
@@ -84,6 +85,10 @@ export const routes: Routes = [
       {
         path: 'versions/:id',
         component: VersionsComponent,
+      },
+      {
+        path: 'operations/:id',
+        component: OperationsComponent,
       },
     ],
   },

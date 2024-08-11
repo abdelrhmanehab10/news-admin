@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
 import { ListOptions } from 'src/app/models/components.model';
 import { VersionsService } from 'src/app/services/dashboard/versions/versions.service';
@@ -33,12 +34,14 @@ export class VersionsComponent implements OnInit, OnDestroy {
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    private versionService: VersionsService
+    private versionService: VersionsService,
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {
     this.pageInfoServices.updateTitle('الأصدارات' + ' - El Wakeel');
     this.versionId = this.route.snapshot.params.id;
+
     this.getNewsVersions();
   }
 
@@ -48,13 +51,22 @@ export class VersionsComponent implements OnInit, OnDestroy {
       .getNewsVersions(this.versionId)
       .subscribe({
         next: (data: any[]) => {
-          const items = data.map((item) => ({
-            date: item.date,
-            news: item.newsVersions,
-          }));
+          if (data) {
+            console.log(data);
 
-          this.items = items;
-          this.cdr.detectChanges();
+            const items = data.map((item) => ({
+              date: item.date,
+              news: item.newsVersions.map((nv: any) => ({
+                ...nv,
+                id: nv.versionId,
+              })),
+            }));
+
+            this.items = items;
+            this.cdr.detectChanges();
+          } else {
+            this.items = [];
+          }
         },
         error: (error: any) => {
           console.log('NEWS_VERSIONS', error);
@@ -73,6 +85,10 @@ export class VersionsComponent implements OnInit, OnDestroy {
 
   receiveSelectedNews(data: any) {
     this.selectedNews = data;
+  }
+
+  recieveError(data: string) {
+    this.toast.error(data);
   }
 
   ngOnDestroy() {

@@ -20,4 +20,17 @@ export class VersionsHTTPService {
       headers: httpHeaders,
     });
   }
+
+  compareNews(token: string, newsIds: string[]): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<any>(
+      `${API_URL}CompareNews?oldVersion=${newsIds[0]}&newVersion=${newsIds[1]}`,
+      {
+        headers: httpHeaders,
+      }
+    );
+  }
 }

@@ -15,13 +15,18 @@
         />
         <span class="me-2">الكل</span>
       </div>
+      <div class="card-toolbar">
+        <app-compare-versions
+          [selectedItems]="selectedNews"
+          (errorEmit)="recieveError($event)"
+        ></app-compare-versions>
+      </div>
     </div>
     <div class="card-body pt-2">
       <app-group-list
         [items]="items"
         [groupListOptions]="groupListOptions"
-        (selectedItemsEmitter)="receiveSelectedNews($event)"
-        [isAllSectionSelected]="items.length === selectedNews.length"
+        (selectedItemsChange)="receiveSelectedNews($event)"
       ></app-group-list>
     </div>
   </div>
