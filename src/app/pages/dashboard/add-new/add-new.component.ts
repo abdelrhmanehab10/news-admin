@@ -19,6 +19,7 @@ import {
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { EditorsService } from 'src/app/services/dashboard/editors/editors.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -33,6 +34,7 @@ export class AddNewComponent implements OnInit, OnDestroy {
 
   isLoading$: Observable<boolean>;
   hasError: boolean = false;
+  submitted: boolean = false;
 
   contentTypesSetting: ContentTypeSetting[] = [];
 
@@ -57,6 +59,7 @@ export class AddNewComponent implements OnInit, OnDestroy {
     private dashboardService: DashboardService,
     private addNewService: AddNewService,
     private editorsService: EditorsService,
+    private utilsService: UtilsService,
     private cdr: ChangeDetectorRef,
     private toast: ToastrService,
     private fb: FormBuilder
@@ -77,37 +80,35 @@ export class AddNewComponent implements OnInit, OnDestroy {
     });
 
     this.interval = setInterval(() => {
-      if (this.addDraft) {
+      if (this.addDraft && this.f.CatId.value && this.f.sectionId.value) {
         this.addDraft({
-          newsAction: 1,
-          sectionId: this.f.sectionId.value,
-          CatId: this.f.CatId.value,
-          NewsType: this.f.NewsType.value,
+          NewAutoSaveID: -1,
+          SectionId: this.f.sectionId.value,
+          CategoryId: this.f.CatId.value,
+          ContentId: this.f.NewsType.value,
           Title: this.f.Title.value,
           SubTitle: this.f.SubTitle.value,
           Brief: this.f.Brief.value,
           Story: this.f.Story.value,
-          tags: this.tags,
-          selectedImage: this.selectedImage ? this.selectedImage.id : '',
+          Tags: this.tags,
+          Image1Id: this.selectedImage ? this.selectedImage.id : '',
           PictureCaption1: this.f.PictureCaption1.value,
           ByLine: this.f.ByLine.value,
           Notes: this.f.Notes.value,
-          selectedAlbums: this.selectedAlbums.map((sa) => sa.galleryID),
           ChkNewsTicker: this.f.ChkNewsTicker.value,
           ChkTopNews: this.f.ChkTopNews.value,
           ChkTopNewCategory: this.f.ChkTopNewCategory.value,
           ChkReadNow: this.f.ChkReadNow.value,
           ChkImportantNews: this.f.ChkImportantNews.value,
           ChkFilesNews: this.f.ChkFilesNews.value,
-          ChkTopNewSection: this.f.ChkTopNewSection.value,
           ChkIsVideo: this.f.ChkIsVideo.value,
-          ChkIsInstall: this.f.ChkIsInstall.value,
-          ChkIsAkbhbarKhassa: this.f.ChkIsAkbhbarKhassa.value,
-          ChkIsImage: this.f.ChkIsImage.value,
-          date: this.date,
+          ChkNewInstall: this.f.ChkIsInstall.value,
+          ChkAkhbarKhassa: this.f.ChkIsAkbhbarKhassa.value,
+          ChkImage: this.f.ChkIsImage.value,
+          AutoPublishDate: this.date,
         });
       }
-    }, 3000);
+    }, 30000);
   }
 
   //TinyMCE
@@ -214,12 +215,12 @@ export class AddNewComponent implements OnInit, OnDestroy {
         { value: '', disabled: !!this.subCategories.length },
         [Validators.required],
       ],
-      ByLine: ['', []],
-      Title: ['', []],
+      ByLine: ['', [Validators.required]],
+      Title: ['', [Validators.required]],
       SubTitle: [''],
-      Story: [''],
-      Brief: ['', []],
-      PictureCaption1: ['', []],
+      Story: ['', [Validators.required]],
+      Brief: ['', [Validators.required]],
+      PictureCaption1: ['', [Validators.required]],
       Notes: [''],
       ChkNewsTicker: [false],
       ChkTopNews: [false],
@@ -271,6 +272,24 @@ export class AddNewComponent implements OnInit, OnDestroy {
 
   addNew(newAction: number) {
     this.hasError = false;
+    this.submitted = true;
+
+    if (!this.selectedImage) {
+      this.utilsService.scrollToFirstInvalidControl('addNew');
+      this.toast.error('اختر صورة من فضلك');
+      return;
+    }
+
+    if (newAction === 4 && !this.date) {
+      this.utilsService.scrollToFirstInvalidControl('addNew');
+      this.toast.error('اختر تاريخ ووقت من فضلك');
+      return;
+    }
+
+    if (this.addNewForm.status === 'INVALID') {
+      this.utilsService.scrollToFirstInvalidControl('addNew');
+      return;
+    }
 
     const addNewSubscr = this.addNewService
       .addNew(
@@ -283,7 +302,7 @@ export class AddNewComponent implements OnInit, OnDestroy {
         this.f.Brief.value,
         this.f.Story.value,
         this.tags,
-        this.selectedImage.id,
+        this.selectedImage?.id,
         0,
         this.f.PictureCaption1.value,
         '',
@@ -308,11 +327,13 @@ export class AddNewComponent implements OnInit, OnDestroy {
           if (data) {
             this.toast.success(data);
             this.addNewForm.reset();
+            this.submitted = false;
           }
         },
         error: (error: any) => {
           console.log('[ADD_NEW]', error);
           this.hasError = true;
+          this.submitted = false;
         },
       });
     this.unsubscribe.push(addNewSubscr);

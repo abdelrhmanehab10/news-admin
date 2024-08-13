@@ -7,6 +7,14 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 export class UtilsService {
   constructor() {}
 
+  scrollToFirstInvalidControl(selector: string) {
+    const form = document.getElementById(selector);
+    const firstInvalidControl = form?.getElementsByClassName('ng-invalid')[0];
+
+    firstInvalidControl?.scrollIntoView({ behavior: 'smooth' });
+    (firstInvalidControl as HTMLElement).focus();
+  }
+
   toggleSelectAll(e: any, items: any[]) {
     if (e.target.checked) {
       return items.map((item) => String(item.id));

@@ -10,7 +10,7 @@
   ></app-drafts>
   <div class="card-body border-top p-9">
     @if(addNewForm && addNewForm.controls){
-    <form [formGroup]="addNewForm" class="form">
+    <form [formGroup]="addNewForm" id="addNew" class="form">
       <div class="row mb-6">
         <label class="col-lg-2 col-form-label fw-bold fs-6">
           <span class="required">نوع المادة</span>
@@ -48,7 +48,7 @@
           *ngIf="
             control &&
             control.hasError(validation) &&
-            (control.dirty || control.touched)
+            (control.dirty || control.touched || (!control.valid && submitted))
           "
         >
           <div class="w-100 fv-plugins-message-container">
@@ -93,7 +93,10 @@
         >
           <ng-container
             *ngIf="
-              control.hasError(validation) && (control.dirty || control.touched)
+              control.hasError(validation) &&
+              (control.dirty ||
+                control.touched ||
+                (!control.valid && submitted))
             "
           >
             <div class="w-100 fv-plugins-message-container">
@@ -131,7 +134,10 @@
         >
           <ng-container
             *ngIf="
-              control.hasError(validation) && (control.dirty || control.touched)
+              control.hasError(validation) &&
+              (control.dirty ||
+                control.touched ||
+                (!control.valid && submitted))
             "
           >
             <div class="w-100 fv-plugins-message-container">
@@ -203,7 +209,8 @@
       >
         <ng-container
           *ngIf="
-            control.hasError(validation) && (control.dirty || control.touched)
+            control.hasError(validation) &&
+            (control.dirty || control.touched || (!control.valid && submitted))
           "
         >
           <div class="w-100 fv-plugins-message-container">
@@ -248,7 +255,8 @@
       >
         <ng-container
           *ngIf="
-            control.hasError(validation) && (control.dirty || control.touched)
+            control.hasError(validation) &&
+            (control.dirty || control.touched || (!control.valid && submitted))
           "
         >
           <div class="w-100 fv-plugins-message-container">
@@ -311,7 +319,8 @@
       >
         <ng-container
           *ngIf="
-            control.hasError(validation) && (control.dirty || control.touched)
+            control.hasError(validation) &&
+            (control.dirty || control.touched || (!control.valid && submitted))
           "
         >
           <div class="w-100 fv-plugins-message-container">
@@ -406,7 +415,8 @@
       >
         <ng-container
           *ngIf="
-            control.hasError(validation) && (control.dirty || control.touched)
+            control.hasError(validation) &&
+            (control.dirty || control.touched || (!control.valid && submitted))
           "
         >
           <div class="w-100 fv-plugins-message-container">
@@ -503,7 +513,8 @@
       >
         <ng-container
           *ngIf="
-            control.hasError(validation) && (control.dirty || control.touched)
+            control.hasError(validation) &&
+            (control.dirty || control.touched || (!control.valid && submitted))
           "
         >
           <div class="w-100 fv-plugins-message-container">
@@ -613,7 +624,8 @@
       >
         <ng-container
           *ngIf="
-            control.hasError(validation) && (control.dirty || control.touched)
+            control.hasError(validation) &&
+            (control.dirty || control.touched || (!control.valid && submitted))
           "
         >
           <div class="w-100 fv-plugins-message-container">
