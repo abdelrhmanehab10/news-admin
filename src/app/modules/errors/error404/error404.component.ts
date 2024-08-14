@@ -8,8 +8,8 @@ import {
   ScrollTopComponent,
   StickyComponent,
   ToggleComponent,
-} from '../../../_metronic/kt/components';
-import { ThemeModeService } from '../../../_metronic/partials/layout/theme-mode-switcher/theme-mode.service';
+} from '../../../core/kt/components';
+import { ThemeModeService } from '../../../components/extras/theme-mode-switcher/theme-mode.service';
 
 @Component({
   selector: 'app-error404',

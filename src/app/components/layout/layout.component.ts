@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 import { ILayout, LayoutType } from 'src/app/core/configs/config';
 import { ContentType } from 'src/app/models/data.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
+import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 import { LayoutInitService } from 'src/app/services/layout/layout-init.service';
 import { LayoutService } from 'src/app/services/layout/layout.service';
 
@@ -79,6 +80,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
   constructor(
     private initService: LayoutInitService,
     private dashboardService: DashboardService,
+    private publishService: PublishService,
     private layout: LayoutService,
     private router: Router,
     private activatedRoute: ActivatedRoute
@@ -109,6 +111,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(subscr);
     this.getCategories();
     this.getContentTypes();
+    this.getRolesPassList();
   }
 
   updateProps(config: ILayout) {
@@ -447,6 +450,19 @@ export class LayoutComponent implements OnInit, OnDestroy {
         },
       });
     this.unsubscribe.push(getNewsCategoriesSubscr);
+  }
+
+  getRolesPassList(): void {
+    this.hasError = false;
+    const getRolesPassListSubscr = this.publishService
+      .getRolesPassList()
+      .subscribe({
+        error: (error: any) => {
+          console.log('ROLES_PASSLIST', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(getRolesPassListSubscr);
   }
 
   ngOnDestroy() {

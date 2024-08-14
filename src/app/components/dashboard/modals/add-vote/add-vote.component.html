@@ -1,5 +1,5 @@
 <app-modal #modal [modalConfig]="modalConfig">
-  <form [formGroup]="voteForm" novalidate="novalidate">
+  <form [formGroup]="voteForm" novalidate="novalidate" id="addVote">
     <div class="row mb-6">
       <label class="col-lg-2 col-form-label fw-bold fs-6">الباب</label>
       <div class="col-lg-8">
@@ -44,7 +44,8 @@
     >
       <ng-container
         *ngIf="
-          control.hasError(validation) && (control.dirty || control.touched)
+          control.hasError(validation) &&
+          (control.dirty || control.touched || (!control.valid && submitted))
         "
       >
         <div class="fv-plugins-message-container">
@@ -102,7 +103,8 @@
       >
         <ng-container
           *ngIf="
-            control.hasError(validation) && (control.dirty || control.touched)
+            control.hasError(validation) &&
+            (control.dirty || control.touched || (!control.valid && submitted))
           "
         >
           <div class="fv-plugins-message-container col-lg-10 me-auto">

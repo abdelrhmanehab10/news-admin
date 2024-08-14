@@ -8,7 +8,6 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 @Component({
   selector: 'app-sections',
   templateUrl: './sections.component.html',
-  styleUrl: './sections.component.scss',
 })
 export class SectionsComponent implements OnInit {
   private unsubscribe: Subscription[] = [];
@@ -59,8 +58,12 @@ export class SectionsComponent implements OnInit {
       .getAllSections(this.pageNumber, 2)
       .subscribe({
         next: (data: any[]) => {
-          this.items = data;
-          this.cdr.detectChanges();
+          if (data) {
+            this.items = data;
+            this.cdr.detectChanges();
+          } else {
+            this.items = [];
+          }
         },
         error: (error: any) => {
           console.log('[GET_ALL_SECTIONS]', error);

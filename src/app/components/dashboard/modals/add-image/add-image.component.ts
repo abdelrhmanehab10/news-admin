@@ -9,7 +9,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { ModalConfig } from 'src/app/models/components.model';
+import { GalleryImage, ModalConfig } from 'src/app/models/components.model';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 
 @Component({
@@ -18,18 +18,6 @@ import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.servic
   styleUrl: './add-image.component.scss',
 })
 export class AddImageComponent implements OnInit {
-  defaultFilterOption: {
-    pageNumber: string;
-    GalleryTypeId: string;
-    GalleryId: string;
-    searchText: string;
-  } = {
-    pageNumber: '1',
-    GalleryId: '',
-    GalleryTypeId: '',
-    searchText: '',
-  };
-
   selectedImage: {} = {};
   filterForm: FormGroup;
 
@@ -38,13 +26,7 @@ export class AddImageComponent implements OnInit {
 
   galleryTypes: { galleryTypeID: string; galleryTypeTitle: string }[] = [];
   gallery: { galleryID: string; galleryTitle: string }[] = [];
-  images: {
-    id: number;
-    title: string;
-    icon: string;
-    description: string;
-    addedDate: string;
-  }[] = [];
+  images: GalleryImage[] = [];
   hasError: boolean = false;
 
   isLoading$: Observable<boolean>;
@@ -83,10 +65,9 @@ export class AddImageComponent implements OnInit {
 
   initForm() {
     this.filterForm = this.fb.group({
-      pageNumber: [this.defaultFilterOption.pageNumber, Validators.required],
-      GalleryTypeId: [this.defaultFilterOption.GalleryTypeId],
-      GalleryId: [this.defaultFilterOption.GalleryId],
-      searchText: [this.defaultFilterOption.searchText],
+      GalleryTypeId: [''],
+      GalleryId: [''],
+      searchText: [''],
     });
   }
 
@@ -139,12 +120,12 @@ export class AddImageComponent implements OnInit {
   getGalleryImages() {
     this.hasError = false;
     const getGalleryImagesSubscr = this.addNewService
-      .getGalleryImages({
-        pageNumber: this.f.pageNumber.value,
-        GalleryId: this.f.GalleryId.value,
-        GalleryTypeId: this.f.GalleryTypeId.value,
-        searchText: this.f.searchText.value,
-      })
+      .getGalleryImages(
+        this.f.pageNumber.value,
+        this.f.GalleryId.value,
+        this.f.GalleryTypeId.value,
+        this.f.searchText.value
+      )
       .pipe(distinctUntilChanged())
       .subscribe({
         next: (data: {
@@ -164,7 +145,7 @@ export class AddImageComponent implements OnInit {
               icon: img.picPath,
               title: img.picName,
               description: img.picCaption,
-              addedDate: img.addedDate,
+              date: img.addedDate,
             }));
             this.images = items;
             this.cdr.detectChanges();

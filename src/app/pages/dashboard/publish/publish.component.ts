@@ -160,9 +160,13 @@ export class PublishComponent implements OnInit, OnDestroy {
     const publishNewSubscr = this.publishService
       .publishNews(this.selectedNews)
       .subscribe({
-        next: (data: string) => {
-          this.toast.success(data);
-          this.getNewsToPublish();
+        next: (data: { message: string; status: number }) => {
+          if (data) {
+            this.toast.success(data.message);
+            this.getNewsToPublish();
+          } else {
+            this.toast.error('حدث خطأ ما');
+          }
         },
         error: (error: any) => {
           console.log('[PUBLISH]', error);

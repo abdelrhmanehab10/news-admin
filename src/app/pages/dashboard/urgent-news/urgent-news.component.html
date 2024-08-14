@@ -6,7 +6,9 @@
       <app-add-urgent-new
         (onNewUrgentContentAddedEmitter)="recieveIsUrgentContentAdded($event)"
       ></app-add-urgent-new>
-      <app-choose-from-daily-news></app-choose-from-daily-news>
+      <app-choose-from-daily-news
+        (onNewUrgentContentAddedEmitter)="recieveIsUrgentContentAdded($event)"
+      ></app-choose-from-daily-news>
     </div>
   </div>
   <div class="card-body pt-2">

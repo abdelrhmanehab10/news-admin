@@ -65,4 +65,32 @@ export class SectionsHTTPService {
       body: formData,
     });
   }
+
+  getOrderedSections(token: string, categoryId: string) {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<any>(
+      `${API_URL}GetOrderSectionList?CategoryId=${categoryId}`,
+      {
+        headers: httpHeaders,
+      }
+    );
+  }
+
+  orderedSections(token: string, categoryId: string, ids: string[]) {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    ids.forEach((id) => formData.append('SectionIds', id));
+    formData.append('CategoryId', categoryId);
+
+    return this.http.put<any>(`${API_URL}OrderSectionList`, formData, {
+      headers: httpHeaders,
+    });
+  }
 }

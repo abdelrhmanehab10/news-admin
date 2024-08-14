@@ -56,7 +56,7 @@ export class VoteHTTPService {
 
     const formData = new FormData();
 
-    ids.forEach((id) => formData.append('id', id));
+    ids.forEach((id) => formData.append('pollIds', id));
 
     return this.http.delete<any>(`${API_URL}DeleteVote`, {
       headers: httpHeaders,

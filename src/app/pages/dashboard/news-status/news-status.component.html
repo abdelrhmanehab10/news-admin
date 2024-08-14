@@ -30,6 +30,7 @@
     <app-group-list
       [items]="news"
       [groupListOptions]="groupListOptions"
+      [isLoading]="isLoading$ | async"
     ></app-group-list>
   </div>
 </div>

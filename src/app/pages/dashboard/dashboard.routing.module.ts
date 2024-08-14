@@ -6,7 +6,7 @@ import { EditorNewsStateComponent } from './editor-news-state/editor-news-state.
 import { AddNewComponent } from './add-new/add-new.component';
 import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.component';
 import { OrderNewsComponent } from './order-news/order-news.component';
-import { AllVotesComponent } from './all-votes/all-votes.component';
+import { VotesComponent } from './votes/votes.component';
 import { SectionsComponent } from './sections/sections.component';
 import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
 import { MainNewsComponent } from './main-news/main-news.component';
@@ -16,6 +16,15 @@ import { EditorsComponent } from './editors/editors.component';
 import { VersionsComponent } from './versions/versions.component';
 import { CategoryComponent } from './category/category.component';
 import { OperationsComponent } from './operations/operations.component';
+import { GeneralHeadersComponent } from './ads/general-headers/general-headers.component';
+import { HomePageHeadersComponent } from './ads/home-page-headers/home-page-headers.component';
+import { InnerPagesHeadersComponent } from './ads/inner-pages-headers/inner-pages-headers.component';
+import { AdsTextFileCodeComponent } from './ads/ads-text-file-code/ads-text-file-code.component';
+import { PhotosComponent } from './photos/photos.component';
+import { OrderEditorsComponent } from './order-editors/order-editors.component';
+import { OrderCategoriesComponent } from './order-category/order-category.component';
+import { OrderSectionsComponent } from './order-sections/order-sections.component';
+import { GalleriesComponent } from './galleries/galleries.component';
 
 export const routes: Routes = [
   {
@@ -23,7 +32,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'publish',
+        redirectTo: 'main-news',
         pathMatch: 'full',
       },
       {
@@ -56,7 +65,7 @@ export const routes: Routes = [
       },
       {
         path: 'all-votes',
-        component: AllVotesComponent,
+        component: VotesComponent,
       },
       {
         path: 'sections',
@@ -89,6 +98,42 @@ export const routes: Routes = [
       {
         path: 'operations/:id',
         component: OperationsComponent,
+      },
+      {
+        path: 'ads/general-headers',
+        component: GeneralHeadersComponent,
+      },
+      {
+        path: 'ads/home-page-headers',
+        component: HomePageHeadersComponent,
+      },
+      {
+        path: 'ads/inner-page-headers',
+        component: InnerPagesHeadersComponent,
+      },
+      {
+        path: 'ads/ads-text-file-code',
+        component: AdsTextFileCodeComponent,
+      },
+      {
+        path: 'photos',
+        component: PhotosComponent,
+      },
+      {
+        path: 'order-editors',
+        component: OrderEditorsComponent,
+      },
+      {
+        path: 'order-sections',
+        component: OrderSectionsComponent,
+      },
+      {
+        path: 'order-categories',
+        component: OrderCategoriesComponent,
+      },
+      {
+        path: 'galleries',
+        component: GalleriesComponent,
       },
     ],
   },

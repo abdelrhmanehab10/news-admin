@@ -1,6 +1,11 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  Observable,
+  Subscription,
+} from 'rxjs';
 import {
   FilterOption,
   ListOptions,
@@ -11,7 +16,6 @@ import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-s
 @Component({
   selector: 'app-news-status',
   templateUrl: './news-status.component.html',
-  styleUrl: './news-status.component.scss',
 })
 export class NewsStatusComponent implements OnDestroy, OnInit {
   private unsubscribe: Subscription[] = [];
@@ -36,11 +40,14 @@ export class NewsStatusComponent implements OnDestroy, OnInit {
   };
 
   hasError: boolean = false;
+  isLoading$: Observable<boolean>;
 
   constructor(
     private newsStatusService: NewsStatusService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) {
+    this.newsStatusService.isLoading$ = this.isLoading$;
+  }
 
   ngOnInit(): void {
     this.getNews();
@@ -67,6 +74,8 @@ export class NewsStatusComponent implements OnDestroy, OnInit {
           if (data) {
             this.news = data.news;
             this.cdr.detectChanges();
+          } else {
+            this.news = [];
           }
         },
         error: (error: any) => {

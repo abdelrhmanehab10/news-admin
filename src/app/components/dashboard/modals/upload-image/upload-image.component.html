@@ -1,5 +1,9 @@
 <app-modal #modal [modalConfig]="modalConfig">
-  <form [formGroup]="uploadImageForm" novalidate="novalidate">
+  <form
+    *ngIf="uploadImageForm"
+    [formGroup]="uploadImageForm"
+    novalidate="novalidate"
+  >
     <div class="row mb-6">
       <label class="col-lg-2 col-form-label fw-bold fs-6">اسم الألبوم</label>
       <div class="col-lg-4">
@@ -8,6 +12,7 @@
           data-kt-select2="true"
           data-placeholder="Select option"
           data-allow-clear="true"
+          formControlName="GalleryTypeId"
           (change)="getGalleryByType($event)"
         >
           @for(item of galleryTypes; track item; let idx = $index;){
@@ -85,8 +90,10 @@
 </app-modal>
 <button
   class="btn btn-primary d-flex align-items-center gap-3"
+  [ngClass]="type === 'link' ? 'btn-sm' : ''"
   (click)="openModal()"
 >
-  رفع صورة
+  @if(type==='upload'){ رفع صورة
   <app-keenicon name="file-up" class="fs-1 text-white"></app-keenicon>
+  }@else{ أضافة صورة }
 </button>

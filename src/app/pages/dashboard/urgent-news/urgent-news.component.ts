@@ -7,7 +7,6 @@ import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent
 @Component({
   selector: 'app-urgent-news',
   templateUrl: './urgent-news.component.html',
-  styleUrl: './urgent-news.component.scss',
 })
 export class UrgentNewsComponent implements OnInit {
   private unsubscribe: Subscription[] = [];

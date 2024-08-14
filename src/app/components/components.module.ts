@@ -14,7 +14,6 @@ import { TableComponent } from './shared/table/table.component';
 import { KeeniconComponent } from './shared/keenicon/keenicon.component';
 import { DropdownMenuComponent } from './shared/dropdown/dropdown-menu.component';
 import { ModalComponent } from './shared/modal/modal.component';
-import { Card4Component } from '../_metronic/partials/content/cards/card4/card4.component';
 import { DragableListComponent } from './shared/dragable-list/dragable-list.component';
 import { ListComponent } from './shared/list/list.component';
 import { AddImageComponent } from './dashboard/modals/add-image/add-image.component';
@@ -42,6 +41,8 @@ import { DraftsComponent } from './dashboard/drafts/drafts.component';
 import { AddCategoryComponent } from './dashboard/modals/add-category/add-category.component';
 import { RouterModule } from '@angular/router';
 import { CompareVersionsComponent } from './dashboard/modals/compare-versions/compare-versions.component';
+import { StatsComponent } from './shared/stats/stats.component';
+import { InlineSVGModule } from 'ng-inline-svg-2';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,6 @@ import { CompareVersionsComponent } from './dashboard/modals/compare-versions/co
     KeeniconComponent,
     DropdownMenuComponent,
     ModalComponent,
-    Card4Component,
     DragableListComponent,
     ListComponent,
     AddImageComponent,
@@ -70,6 +70,7 @@ import { CompareVersionsComponent } from './dashboard/modals/compare-versions/co
     DraftsComponent,
     AddCategoryComponent,
     CompareVersionsComponent,
+    StatsComponent,
   ],
   imports: [
     ImageCropperComponent,
@@ -81,13 +82,13 @@ import { CompareVersionsComponent } from './dashboard/modals/compare-versions/co
     OwlNativeDateTimeModule,
     NgbDatepickerModule,
     RouterModule,
+    InlineSVGModule,
   ],
   exports: [
     TableComponent,
     KeeniconComponent,
     DropdownMenuComponent,
     ModalComponent,
-    Card4Component,
     DragableListComponent,
     ListComponent,
     AddImageComponent,
@@ -107,6 +108,7 @@ import { CompareVersionsComponent } from './dashboard/modals/compare-versions/co
     DraftsComponent,
     AddCategoryComponent,
     CompareVersionsComponent,
+    StatsComponent,
   ],
   providers: [
     DatePipe,

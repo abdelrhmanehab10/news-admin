@@ -14,9 +14,9 @@
         data-kt-select2="true"
         data-placeholder="Select option"
         data-allow-clear="true"
-        formControlName="status"
+        formControlName="statusId"
       >
-        @for(item of newsStatus; track item; let idx = $index){
+        @for(item of status; track item; let idx = $index){
         <option value="{{ item.roleId }}">{{ item.roleName }}</option>
         }
       </select>
@@ -31,7 +31,7 @@
         data-kt-select2="true"
         data-placeholder="Select option"
         data-allow-clear="true"
-        formControlName="role"
+        formControlName="roleId"
       >
         @for(item of rolesPassList; track item; let idx = $index){
         <option value="{{ idx }}">{{ item.name }}</option>
@@ -52,7 +52,7 @@
           filterOptions.isSubCategories &&
             onSelectedNewsCategoriesChange($event)
         "
-        formControlName="category"
+        formControlName="categoryId"
       >
         <option></option>
         @for(item of categories; track item; let idx = $index){
@@ -70,10 +70,10 @@
         data-kt-select2="true"
         data-placeholder="Select option"
         data-allow-clear="true"
-        formControlName="subCategory"
+        formControlName="subCategoryId"
       >
         <option value=""></option>
-        @for(item of newsSubCategories; track item; let idx = $index){
+        @for(item of subCategories; track item; let idx = $index){
         <option value="{{ item.sectionID }}">{{ item.secTitle }}</option>
         }
       </select>
@@ -89,14 +89,73 @@
         data-placeholder="Select option"
         data-allow-clear="true"
         (change)="
-          filterOptions.isSubCategories &&
+          filterOptions.isOrderSubCategories &&
             onSelectedNewsOrderCategoriesChange($event)
         "
-        formControlName="orderCategory"
+        formControlName="orderCategoryId"
       >
         <option></option>
-        @for(item of newsOrderCategories; track item; let idx = $index){
+        @for(item of orderCategories; track item; let idx = $index){
         <option value="{{ item.id }}">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  }@if(filterOptions.isOrderSubCategories){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الباب الفرعي:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        formControlName="orderSubCategoryId"
+      >
+        <option></option>
+        @for(item of orderSubCategories; track item; let idx = $index){
+        <option value="{{ item.sectionID }}">{{ item.secTitle }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  }@if(filterOptions.isGalleryType){
+  <div class="mb-10">
+    <label class="form-label fw-bold">نوع الألبوم:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        formControlName="galleryTypeId"
+        (click)="filterOptions.isGallery && onGalleryTypeChange($event)"
+      >
+        <option></option>
+        @for(item of galleryTypes; track item; let idx = $index){
+        <option value="{{ item.galleryTypeID }}">
+          {{ item.galleryTypeTitle }}
+        </option>
+        }
+      </select>
+    </div>
+  </div>
+  }@if(filterOptions.isGallery){
+  <div class="mb-10">
+    <label class="form-label fw-bold">الألبوم:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        formControlName="galleryId"
+      >
+        <option></option>
+        @for(item of galleries; track item; let idx = $index){
+        <option value="{{ item.galleryID }}">
+          {{ item.galleryTitle }}
+        </option>
         }
       </select>
     </div>

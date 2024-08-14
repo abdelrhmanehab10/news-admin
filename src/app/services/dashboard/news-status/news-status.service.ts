@@ -27,7 +27,7 @@ export class NewsStatusService {
 
   getNews(
     pageNumber: number,
-    search: string,
+    search?: string,
     statusId?: string,
     categoryId?: string,
     subCategoryId?: string

@@ -86,12 +86,10 @@ export class AddNewService {
   }
 
   getGalleryImages(
-    filterOptions: {
-      pageNumber: string;
-      GalleryTypeId?: string;
-      GalleryId?: string;
-      searchText?: string;
-    } = { pageNumber: '1' }
+    pageNumber?: number,
+    galleryTypeId?: string,
+    galleryId?: string,
+    searchText?: string
   ) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
@@ -101,7 +99,10 @@ export class AddNewService {
     this.isLoadingSubject.next(true);
     return this.AddNewHTTPService.getGalleryImages(
       auth.authToken,
-      filterOptions
+      pageNumber,
+      galleryTypeId,
+      galleryId,
+      searchText
     ).pipe(
       map((data) => {
         return data.data;

@@ -9,6 +9,6 @@ export class DateTimePickerComponent {
   public selectedMoment = new Date();
   @Output() dateEmitter = new EventEmitter<string>();
   dateChange(e: any) {
-    this.dateEmitter.emit(moment(e.value).format('YYYY-MM-DD HH:mm:ss'));
+    this.dateEmitter.emit(moment(e.value).format('YYYY-MM-DDTHH:mm:ss'));
   }
 }

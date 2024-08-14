@@ -14,7 +14,7 @@ export class NewsStatusHTTPService {
   getNews(
     token: string,
     pageNumber: number,
-    searchQuery: string,
+    searchQuery?: string,
     statusId?: string,
     categoryId?: string,
     subCategoryId?: string
@@ -30,7 +30,7 @@ export class NewsStatusHTTPService {
       errors: string[] | null;
     }>(
       `${API_URL}/News/GetNews?pageNumber=${pageNumber ?? 1}${
-        searchQuery ? '&Serach=' + searchQuery : ''
+        searchQuery ? '&Search=' + searchQuery : ''
       }${statusId ? '&Status=' + statusId : ''}${
         categoryId ? '&MainType=' + categoryId : ''
       }${subCategoryId ? '&subType=' + subCategoryId : ''}`,

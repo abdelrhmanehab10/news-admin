@@ -29,9 +29,7 @@ export class CategoryHTTPService {
     });
   }
 
-  getAllCategories(
-    token: string,
-  ): Observable<any> {
+  getAllCategories(token: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -41,18 +39,42 @@ export class CategoryHTTPService {
     });
   }
 
-  deleteSections(token: string, sectionsIds: string[]): Observable<any> {
+  deleteCategories(token: string, categoriesIds: string[]): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
     const formData = new FormData();
 
-    sectionsIds.forEach((id) => formData.append('sectionIds', id));
+    categoriesIds.forEach((id) => formData.append('CatId', id));
 
-    return this.http.delete<any>(`${API_URL}DeleteSection`, {
+    return this.http.delete<any>(`${API_URL}DeleteNewsCategory`, {
       headers: httpHeaders,
       body: formData,
+    });
+  }
+
+  getOrderedCategories(token: string) {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<any>(`${API_URL}GetOrderNewsCategoryList`, {
+      headers: httpHeaders,
+    });
+  }
+
+  orderedCategories(token: string, ids: string[]) {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    ids.forEach((id) => formData.append('NewsCategoryIds', id));
+
+    return this.http.put<any>(`${API_URL}SortingNewscategoryList`, formData, {
+      headers: httpHeaders,
     });
   }
 }

@@ -40,3 +40,33 @@ export interface ValidationRule {
   keyName: string;
   contentType: string;
 }
+
+export interface RolePassList {
+  id: string;
+  name: string;
+}
+
+export interface Category {
+  categoryID: string;
+  name: string;
+}
+
+export interface OrderCategory {
+  id: string;
+  name: string;
+}
+
+export interface orderSubCategory {
+  sectionID: string;
+  secTitle: string;
+}
+
+export interface SubCategory {
+  sectionID: string;
+  secTitle: string;
+}
+
+export interface Status {
+  roleId: string;
+  roleName: string;
+}

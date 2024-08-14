@@ -5,19 +5,16 @@ import {
   Input,
   Output,
 } from '@angular/core';
+import { GalleryImage } from 'src/app/models/components.model';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-image-card',
   templateUrl: './image-card.component.html',
 })
 export class ImageCardComponent {
-  @Input() image: {
-    icon: string;
-    title: string;
-    description: string;
-    id: number;
-    addedDate: string;
-  };
+  @Input() type: 'upload' | 'link' = 'upload';
+  @Input() image: GalleryImage;
   @HostBinding('class') class = 'card h-100';
 
   @Output() selectedImageEmitter = new EventEmitter<{
@@ -27,7 +24,11 @@ export class ImageCardComponent {
     id: number;
   }>();
 
-  constructor() {}
+  constructor(private utilsService: UtilsService) {}
+
+  timeSince(date: string) {
+    return this.utilsService.timeSinceInArabic(date);
+  }
 
   onSelect() {
     this.selectedImageEmitter.emit(this.image);

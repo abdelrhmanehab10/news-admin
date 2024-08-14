@@ -13,7 +13,9 @@ export class PaginationComponent {
   constructor() {}
 
   setCurrent(page: number) {
-    this.pagination.current = page;
-    this.pageChange.emit(page);
+    if (this.pagination) {
+      this.pagination.current = page;
+      this.pageChange.emit(page);
+    }
   }
 }

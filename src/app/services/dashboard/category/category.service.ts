@@ -63,7 +63,7 @@ export class CategoryService {
     );
   }
 
-  deleteCategories(sectionsIds: string[]) {
+  deleteCategories(categoriesIds: string[]) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
@@ -71,7 +71,7 @@ export class CategoryService {
 
     this.isLoadingSubject.next(true);
     return this.categoryHTTPService
-      .deleteSections(auth.authToken, sectionsIds)
+      .deleteCategories(auth.authToken, categoriesIds)
       .pipe(
         map((data) => {
           return data.message;
@@ -82,5 +82,43 @@ export class CategoryService {
         }),
         finalize(() => this.isLoadingSubject.next(false))
       );
+  }
+
+  getOrderedCategories() {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.categoryHTTPService.getOrderedCategories(auth.authToken).pipe(
+      map((data) => {
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  orderCategories(ids: string[]) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.categoryHTTPService.orderedCategories(auth.authToken, ids).pipe(
+      map((data) => {
+        return data.message;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
   }
 }

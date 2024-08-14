@@ -57,7 +57,28 @@ export class UrgentNewsService {
       .addUrgentContent(auth.authToken, ids)
       .pipe(
         map((data) => {
-          return data.message;
+          return data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  addUrgentContentWithTitle(title: string, isUrgentNew: boolean) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.urgentNewsHTTPService
+      .addUrgentContentWithTitle(auth.authToken, title, isUrgentNew)
+      .pipe(
+        map((data) => {
+          return data;
         }),
         catchError((err) => {
           console.error('err', err);
@@ -110,6 +131,7 @@ export class UrgentNewsService {
   }
 
   getDailyNewsContent(
+    pageNumber: number,
     search?: string,
     categoryId?: string,
     subCategoryId?: string
@@ -121,7 +143,13 @@ export class UrgentNewsService {
 
     this.isLoadingSubject.next(true);
     return this.urgentNewsHTTPService
-      .getDailyNewsContent(auth.authToken, search, categoryId, subCategoryId)
+      .getDailyNewsContent(
+        auth.authToken,
+        pageNumber,
+        search,
+        categoryId,
+        subCategoryId
+      )
       .pipe(
         map((data) => {
           return data.data;

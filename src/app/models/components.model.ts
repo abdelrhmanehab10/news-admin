@@ -23,6 +23,8 @@ export interface FilterOption {
   isOrderSubCategories?: boolean;
   isStatus?: boolean;
   isType?: boolean;
+  isGallery?: boolean;
+  isGalleryType?: boolean;
 
   categoryId?: string;
   statusId?: string;
@@ -31,6 +33,8 @@ export interface FilterOption {
   orderCategoryId?: string;
   orderSubCategoryId?: string;
   typeId?: string;
+  galleryId?: string;
+  galleryTypeId?: string;
 }
 
 export interface TableOption {
@@ -93,4 +97,12 @@ export interface ModalConfig {
   hideCloseButton?(): boolean;
   hideDismissButton?: boolean;
   customDismiss?(): void;
+}
+
+export interface GalleryImage {
+  date: string;
+  icon: string;
+  title: string;
+  description: string;
+  id: number;
 }

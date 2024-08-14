@@ -1,4 +1,4 @@
-<div class="d-flex flex-stack flex-wrap">
+<div *ngIf="pagination" class="d-flex flex-stack flex-wrap">
   <div class="fs-6 fw-bold text-gray-700">
     معروض 1 - {{ pagination.count < 25 ? pagination.count : 25 }} من
     {{ pagination.count }}

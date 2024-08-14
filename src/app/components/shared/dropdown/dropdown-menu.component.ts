@@ -11,6 +11,15 @@ import {
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription, distinctUntilChanged } from 'rxjs';
 import { FilterOption } from 'src/app/models/components.model';
+import {
+  Category,
+  OrderCategory,
+  orderSubCategory,
+  RolePassList,
+  Status,
+  SubCategory,
+} from 'src/app/models/data.model';
+import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 import { LayoutService } from 'src/app/services/layout/layout.service';
@@ -30,21 +39,23 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
 
   @Output() filterOptionsEmitter = new EventEmitter<FilterOption>();
 
-  //Filtration Methods
   @Input() filterOptions: FilterOption;
 
-  rolesPassList: { id: string; name: string }[];
-  categories: { categoryID: string; name: string }[] = [];
-  newsOrderCategories: { id: string; name: string }[] = [];
-  newsSubCategories: { sectionID: string; secTitle: string }[] = [];
-  newsOrderSubCategories: { sectionID: string; secTitle: string }[] = [];
-  newsStatus: { roleId: string; roleName: string }[] = [];
+  rolesPassList: RolePassList[] = [];
+  categories: Category[] = [];
+  subCategories: SubCategory[] = [];
+  orderCategories: OrderCategory[] = [];
+  orderSubCategories: orderSubCategory[] = [];
+  status: Status[] = [];
+  galleries: any[] = [];
+  galleryTypes: any[] = [];
 
   isError: boolean = false;
 
   constructor(
     private publishService: PublishService,
     private dashboardService: DashboardService,
+    private addNewService: AddNewService,
     private layoutService: LayoutService,
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder
@@ -52,7 +63,9 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.filterOptions.isRoles) {
-      this.getRolesPassList();
+      this.publishService.rolePassList$.subscribe((rolesPassList) => {
+        this.rolesPassList = rolesPassList;
+      });
     }
 
     if (this.filterOptions.isCategories) {
@@ -67,8 +80,12 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
 
     if (this.filterOptions.isStatus) {
       this.layoutService.newsStatusCount$.subscribe((newsStatus) => {
-        this.newsStatus = newsStatus;
+        this.status = newsStatus;
       });
+    }
+
+    if (this.filterOptions.isGalleryType) {
+      this.getGalleryTypes();
     }
 
     this.initForm();
@@ -80,30 +97,15 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.filterForm = this.fb.group({
-      role: [''],
-      category: [''],
-      orderCategory: [''],
-      subCategory: [''],
-      orderSubCategory: [''],
-      status: [''],
+      roleId: [''],
+      categoryId: [''],
+      orderCategoryId: [''],
+      subCategoryId: [''],
+      orderSubCategoryId: [''],
+      statusId: [''],
+      galleryId: [''],
+      galleryTypeId: [''],
     });
-  }
-
-  getRolesPassList(): void {
-    this.isError = false;
-    const getRolesPassListSubscr = this.publishService
-      .getRolesPassList()
-      .subscribe({
-        next: (data: { id: string; name: string }[]) => {
-          this.rolesPassList = data;
-          this.cdr.detectChanges();
-        },
-        error: (error: any) => {
-          console.log('ROLES_PASSLIST', error);
-          this.isError = true;
-        },
-      });
-    this.unsubscribe.push(getRolesPassListSubscr);
   }
 
   getNewsOrderCategories(): void {
@@ -111,16 +113,35 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
     const getNewsOrderCategoriesSubscr = this.dashboardService
       .getNewsOrderCategories()
       .subscribe({
-        next: (data: typeof this.newsOrderCategories) => {
-          this.newsOrderCategories = data;
+        next: (data: OrderCategory[]) => {
+          this.orderCategories = data;
           this.cdr.detectChanges();
         },
         error: (error: any) => {
-          console.log('NEWS_ORDER_CATEGORIES', error);
+          console.log('ORDER_CATEGORIES', error);
           this.isError = true;
         },
       });
     this.unsubscribe.push(getNewsOrderCategoriesSubscr);
+  }
+
+  getGalleryTypes() {
+    this.isError = false;
+    const getGalleryTypesSubscr = this.addNewService
+      .getGalleryTypes()
+      .subscribe({
+        next: (data: typeof this.galleryTypes) => {
+          if (data) {
+            this.galleryTypes = data;
+            this.cdr.detectChanges();
+          }
+        },
+        error: (error: any) => {
+          console.log('[GalleryTypes]', error);
+          this.isError = true;
+        },
+      });
+    this.unsubscribe.push(getGalleryTypesSubscr);
   }
 
   onSelectedNewsOrderCategoriesChange(e: any) {
@@ -130,8 +151,8 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
       .getNewsOrderSubCategories(e.target.value)
       .pipe(distinctUntilChanged())
       .subscribe({
-        next: (data: { sectionID: string; secTitle: string }[]) => {
-          this.newsSubCategories = data;
+        next: (data: orderSubCategory[]) => {
+          this.orderSubCategories = data;
           this.cdr.detectChanges();
         },
         error: (err: any) => {
@@ -149,10 +170,8 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
       .getNewsSubCategories(e.target.value)
       .pipe(distinctUntilChanged())
       .subscribe({
-        next: (data: { sectionID: string; secTitle: string }[]) => {
-          console.log(data);
-
-          this.newsSubCategories = data;
+        next: (data: SubCategory[]) => {
+          this.subCategories = data;
           this.cdr.detectChanges();
         },
         error: (err: any) => {
@@ -163,21 +182,55 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(getNewsSubCategoriesSubscr);
   }
 
+  onGalleryTypeChange(e: any) {
+    this.isError = false;
+
+    const getGalleriesSubscr = this.addNewService
+      .getGalleryByType(e.target.value)
+      .pipe(distinctUntilChanged())
+      .subscribe({
+        next: (data: any[]) => {
+          this.galleries = data;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.log('GET_GALLERIES', err);
+          this.isError = true;
+        },
+      });
+    this.unsubscribe.push(getGalleriesSubscr);
+  }
+
+  getGalleries() {
+    this.isError = false;
+
+    const getGalleriesSubscr = this.addNewService
+      .getGalleries()
+      .pipe()
+      .subscribe({
+        next: (data: any[]) => {
+          this.galleries = data;
+          this.cdr.detectChanges();
+        },
+        error: (err: any) => {
+          console.log('GET_GALLERIES', err);
+          this.isError = true;
+        },
+      });
+    this.unsubscribe.push(getGalleriesSubscr);
+  }
+
   onFilter() {
     this.filterOptionsEmitter.emit({
-      isCategories: this.filterOptions.isCategories,
-      isSubCategories: this.filterOptions.isSubCategories,
-      isOrderCategories: this.filterOptions.isOrderCategories,
-      isOrderSubCategories: this.filterOptions.isOrderSubCategories,
-      isRoles: this.filterOptions.isRoles,
-      isStatus: this.filterOptions.isStatus,
-      isType: this.filterOptions.isType,
-      categoryId: this.f.category.value,
-      statusId: this.f.status.value,
-      roleId: this.f.role.value,
-      subCategoryId: this.f.subCategory.value,
-      orderCategoryId: this.f.orderCategory.value,
-      orderSubCategoryId: this.f.orderSubCategory.value,
+      ...this.filterOptions,
+      categoryId: this.f.categoryId.value,
+      statusId: this.f.statusId.value,
+      roleId: this.f.roleId.value,
+      subCategoryId: this.f.subCategoryId.value,
+      orderCategoryId: this.f.orderCategoryId.value,
+      orderSubCategoryId: this.f.orderSubCategoryId.value,
+      galleryId: this.f.galleryId.value,
+      galleryTypeId: this.f.galleryTypeId.value,
     });
   }
 

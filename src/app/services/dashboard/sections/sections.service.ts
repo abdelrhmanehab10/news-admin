@@ -85,4 +85,46 @@ export class SectionsService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+
+  getOrderedSections(categoryId: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.sectionsHTTPService
+      .getOrderedSections(auth.authToken, categoryId)
+      .pipe(
+        map((data) => {
+          return data.data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  orderSections(categoryId: string, ids: string[]) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.sectionsHTTPService
+      .orderedSections(auth.authToken, categoryId, ids)
+      .pipe(
+        map((data) => {
+          return data.message;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
 }

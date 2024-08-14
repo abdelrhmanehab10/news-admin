@@ -9,7 +9,7 @@ import { AddNewComponent } from './add-new/add-new.component';
 import { AddNewWithIdComponent } from './add-new-with-id/add-new-with-id.component';
 import { OrderNewsComponent } from './order-news/order-news.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { AllVotesComponent } from './all-votes/all-votes.component';
+import { VotesComponent } from './votes/votes.component';
 import { SectionsComponent } from './sections/sections.component';
 import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
 import { MainNewsComponent } from './main-news/main-news.component';
@@ -21,6 +21,15 @@ import { EditorComponent } from '@tinymce/tinymce-angular';
 import { CategoryComponent } from './category/category.component';
 import { VersionsComponent } from './versions/versions.component';
 import { OperationsComponent } from './operations/operations.component';
+import { GeneralHeadersComponent } from './ads/general-headers/general-headers.component';
+import { HomePageHeadersComponent } from './ads/home-page-headers/home-page-headers.component';
+import { InnerPagesHeadersComponent } from './ads/inner-pages-headers/inner-pages-headers.component';
+import { AdsTextFileCodeComponent } from './ads/ads-text-file-code/ads-text-file-code.component';
+import { PhotosComponent } from './photos/photos.component';
+import { OrderEditorsComponent } from './order-editors/order-editors.component';
+import { OrderCategoriesComponent } from './order-category/order-category.component';
+import { OrderSectionsComponent } from './order-sections/order-sections.component';
+import { GalleriesComponent } from './galleries/galleries.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +40,7 @@ import { OperationsComponent } from './operations/operations.component';
     AddNewWithIdComponent,
     OrderNewsComponent,
     SectionsComponent,
-    AllVotesComponent,
+    VotesComponent,
     UrgentNewsComponent,
     MainNewsComponent,
     CommentsComponent,
@@ -40,6 +49,15 @@ import { OperationsComponent } from './operations/operations.component';
     CategoryComponent,
     VersionsComponent,
     OperationsComponent,
+    GeneralHeadersComponent,
+    HomePageHeadersComponent,
+    InnerPagesHeadersComponent,
+    AdsTextFileCodeComponent,
+    PhotosComponent,
+    OrderEditorsComponent,
+    OrderCategoriesComponent,
+    OrderSectionsComponent,
+    GalleriesComponent,
   ],
   imports: [
     CommonModule,

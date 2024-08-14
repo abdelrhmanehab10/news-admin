@@ -18,7 +18,6 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 @Component({
   selector: 'app-choose-from-daily-news',
   templateUrl: './choose-from-daily-news.component.html',
-  styleUrl: './choose-from-daily-news.component.scss',
 })
 export class ChooseFromDailyNewsComponent implements OnInit {
   private unsubscribe: Subscription[] = [];
@@ -49,6 +48,9 @@ export class ChooseFromDailyNewsComponent implements OnInit {
   };
 
   searchForm: FormGroup;
+  pageNumber: number = 2;
+
+  @Output() onNewUrgentContentAddedEmitter = new EventEmitter<boolean>();
 
   constructor(
     private urgentNewsService: UrgentNewsService,
@@ -66,7 +68,6 @@ export class ChooseFromDailyNewsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
-    this.getDailyNews();
   }
 
   initForm() {
@@ -78,6 +79,7 @@ export class ChooseFromDailyNewsComponent implements OnInit {
   }
 
   async openModal() {
+    this.getDailyNews();
     return await this.modalComponent.open();
   }
 
@@ -114,6 +116,7 @@ export class ChooseFromDailyNewsComponent implements OnInit {
     this.hasError = false;
     const getDailyNewsSubscr = this.urgentNewsService
       .getDailyNewsContent(
+        this.pageNumber,
         this.f.search.value,
         this.f.categoryId.value,
         this.f.subCategoryId.value
@@ -122,9 +125,12 @@ export class ChooseFromDailyNewsComponent implements OnInit {
         next: (data: any) => {
           if (data) {
             this.items = data.map(
-              (item: { date: string; dailyNewsContent: {} }) => ({
+              (item: { date: string; dailyNewsContent: [] }) => ({
                 date: item.date,
-                news: item.dailyNewsContent,
+                news: item.dailyNewsContent.map((news: { newId: string }) => ({
+                  id: news.newId,
+                  ...news,
+                })),
               })
             );
             this.cdr.detectChanges();
@@ -140,13 +146,23 @@ export class ChooseFromDailyNewsComponent implements OnInit {
 
   addUrgentContent() {
     this.hasError = false;
+
+    if (!this.selectedItems.length) {
+      this.toast.error('يجب عليك اختيار الأخبار المراد اضافاتها');
+      return;
+    }
+    this.onNewUrgentContentAddedEmitter.emit(false);
+
     const addUrgentContentSubscr = this.urgentNewsService
       .addUrgentContent(this.selectedItems)
       .subscribe({
-        next: (data: any) => {
-          if (data) {
-            this.toast.success(data);
+        next: (data: { status: number; message: string }) => {
+          if (data.status === 200) {
+            this.toast.success(data.message);
             this.getDailyNews();
+            this.onNewUrgentContentAddedEmitter.emit(true);
+          } else {
+            this.toast.error('حدث خطأ ما');
           }
         },
         error: (error: any) => {

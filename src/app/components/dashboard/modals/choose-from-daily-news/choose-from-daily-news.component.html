@@ -77,10 +77,12 @@
         [items]="items"
         [groupListOptions]="groupListOptions"
         [selectedItems]="selectedItems"
+        [isLoading]="isLoading$ | async"
       ></app-group-list>
     </div>
     <!-- end::Body -->
   </div>
+  <app-pagination></app-pagination>
 </app-modal>
 <button class="btn btn-primary btn-sm mx-2" (click)="openModal()">
   اضافة خبر عاجل من المحتويات اليومية

@@ -17,12 +17,18 @@ export class PublishService {
   isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
 
+  rolePassList$: Observable<any[]>;
+  rolePassListSubject: BehaviorSubject<any[]>;
+
   constructor(
     private authService: AuthService,
     private publishHTTPService: PublishHTTPService
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.isLoading$ = this.isLoadingSubject.asObservable();
+
+    this.rolePassListSubject = new BehaviorSubject<any[]>([]);
+    this.rolePassList$ = this.rolePassListSubject.asObservable();
   }
 
   getNewsToPublish(
@@ -59,6 +65,7 @@ export class PublishService {
     this.isLoadingSubject.next(true);
     return this.publishHTTPService.getRolesPassList(auth.authToken).pipe(
       map((data) => {
+        this.rolePassListSubject.next(data.data);
         return data.data;
       }),
       catchError((err) => {
@@ -97,7 +104,7 @@ export class PublishService {
     this.isLoadingSubject.next(true);
     return this.publishHTTPService.publishNews(auth.authToken, ids).pipe(
       map((data) => {
-        return data.message;
+        return data;
       }),
       catchError((err) => {
         console.error('err', err);

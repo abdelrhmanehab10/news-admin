@@ -51,7 +51,7 @@ export class CategoryComponent implements OnInit {
       .getAllCategories()
       .subscribe({
         next: (data: any[]) => {
-          this.items = data;
+          this.items = data.map((item) => ({ id: item.categoryID, ...item }));
           this.cdr.detectChanges();
         },
         error: (error: any) => {
@@ -73,6 +73,8 @@ export class CategoryComponent implements OnInit {
             this.toast.error(data);
             this.selectedCategories = [];
             this.getAllCategories();
+          } else {
+            this.toast.error('لا يمكن حذف باب يوجد بداخله باب فرعي');
           }
         },
         error: (error: any) => {

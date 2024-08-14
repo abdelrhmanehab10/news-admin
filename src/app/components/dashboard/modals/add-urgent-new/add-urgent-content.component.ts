@@ -19,14 +19,6 @@ import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent
   styleUrl: './add-urgent-content.component.scss',
 })
 export class AddUrgentContentComponent implements OnInit {
-  defaultUrgentContent: {
-    Title: string;
-    isUrgentNew: boolean;
-  } = {
-    Title: '',
-    isUrgentNew: false,
-  };
-
   urgentContentForm: FormGroup;
 
   private unsubscribe: Subscription[] = [];
@@ -36,6 +28,7 @@ export class AddUrgentContentComponent implements OnInit {
   @Output() onNewUrgentContentAddedEmitter = new EventEmitter<boolean>();
 
   hasError: boolean = false;
+  submitted: boolean = false;
 
   isLoading$: Observable<boolean>;
 
@@ -44,10 +37,7 @@ export class AddUrgentContentComponent implements OnInit {
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'اغلاق',
     customDismiss: () => {
-      if (!this.urgentContentForm.invalid) {
-        // this.addUrgentContent();
-        this.modalComponent.close();
-      }
+      this.addUrgentContentWithTitle();
     },
   };
 
@@ -69,8 +59,8 @@ export class AddUrgentContentComponent implements OnInit {
 
   initForm() {
     this.urgentContentForm = this.fb.group({
-      Title: [this.defaultUrgentContent.Title, Validators.required],
-      isUrgentNew: [this.defaultUrgentContent.isUrgentNew],
+      Title: ['', [Validators.required]],
+      isUrgentNew: [false],
     });
   }
 
@@ -78,28 +68,29 @@ export class AddUrgentContentComponent implements OnInit {
     return await this.modalComponent.open();
   }
 
-  // addUrgentContent() {
-  //   this.hasError = false;
-  //   this.onNewUrgentContentAddedEmitter.emit(false);
-  //   const addUrgentContentSubscr = this.urgentNewsService
-  //     .addUrgentContent({
-  //       Title: this.f.Title.value,
-  //       isUrgentNew: this.f.isUrgentNew.value,
-  //     })
-  //     .subscribe({
-  //       next: (data: any) => {
-  //         if (data) {
-  //           this.toast.success(data.message);
-  //           this.onNewUrgentContentAddedEmitter.emit(true);
-  //         }
-  //       },
-  //       error: (error: any) => {
-  //         console.log('[ADD_URGENT_CONTENT]', error);
-  //         this.hasError = true;
-  //       },
-  //     });
-  //   this.unsubscribe.push(addUrgentContentSubscr);
-  // }
+  addUrgentContentWithTitle() {
+    this.hasError = false;
+    this.submitted = true;
+    this.onNewUrgentContentAddedEmitter.emit(false);
+    const addUrgentContentSubscr = this.urgentNewsService
+      .addUrgentContentWithTitle(this.f.Title.value, this.f.isUrgentNew.value)
+      .subscribe({
+        next: (data: { status: number; message: string }) => {
+          if (data.status === 200) {
+            this.toast.success(data.message);
+            this.onNewUrgentContentAddedEmitter.emit(true);
+            this.modalComponent.close();
+            this.submitted = false;
+          }
+        },
+        error: (error: any) => {
+          console.log('[ADD_URGENT_CONTENT]', error);
+          this.hasError = true;
+          this.submitted = false;
+        },
+      });
+    this.unsubscribe.push(addUrgentContentSubscr);
+  }
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());

@@ -29,9 +29,36 @@ export class UrgentNewsHTTPService {
       Authorization: `Bearer ${token}`,
     });
 
-    return this.http.post<any>(`${API_URL}AddUrgentContent`, ids, {
-      headers: httpHeaders,
+    return this.http.post<any>(
+      `${API_URL}AddUrgentContent`,
+      { dailyNewsIds: ids },
+      {
+        headers: httpHeaders,
+      }
+    );
+  }
+
+  addUrgentContentWithTitle(
+    token: string,
+    title: string,
+    isUrgentNew: boolean
+  ): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
     });
+
+    const formData = new FormData();
+
+    formData.append('Tital', title);
+    formData.append('IsUrgentNew', String(isUrgentNew));
+
+    return this.http.post<any>(
+      `${API_URL}AddUrgentContentWithTitle`,
+      formData,
+      {
+        headers: httpHeaders,
+      }
+    );
   }
 
   toggleEnableUrgentNew(token: string, urgentNewId: string): Observable<any> {
@@ -70,6 +97,7 @@ export class UrgentNewsHTTPService {
 
   getDailyNewsContent(
     token: string,
+    pageNumber?: number,
     search?: string,
     categoryId?: string,
     subCategoryId?: string
@@ -79,9 +107,11 @@ export class UrgentNewsHTTPService {
     });
 
     return this.http.get<any>(
-      `${API_URL}GetDailyNewsContent?Search=${search ?? ''}${
-        categoryId ? '&CategoryId' + categoryId : ''
-      }${subCategoryId ? '&SectionId' + subCategoryId : ''}`,
+      `${API_URL}GetDailyNewsContent?PageNumber=${pageNumber ?? 1}${
+        search ? '&Search' + search : ''
+      }${categoryId ? '&CategoryId' + categoryId : ''}${
+        subCategoryId ? '&SectionId' + subCategoryId : ''
+      }`,
       {
         headers: httpHeaders,
       }

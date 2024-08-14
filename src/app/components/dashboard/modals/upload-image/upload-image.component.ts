@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -19,7 +20,9 @@ import { ModalConfig } from 'src/app/models/components.model';
   templateUrl: './upload-image.component.html',
   styleUrl: './upload-image.component.scss',
 })
-export class UploadImageComponent implements OnInit, OnDestroy {
+export class UploadImageComponent implements OnDestroy {
+  @Input() type: 'upload' | 'link' = 'upload';
+
   uploadImageForm: FormGroup;
   imageChangedEvent: Event | null = null;
   croppedImage: SafeUrl = '';
@@ -35,7 +38,7 @@ export class UploadImageComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
 
   modalConfig: ModalConfig = {
-    modalTitle: 'رفع صورة',
+    modalTitle: this.type === 'upload' ? 'أضافة صورة' : 'رفع صورة',
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'الغاء',
     customDismiss: () => {
@@ -60,12 +63,6 @@ export class UploadImageComponent implements OnInit, OnDestroy {
     this.isLoading$ = this.addNewService.isLoading$;
   }
 
-  ngOnInit(): void {
-    this.initUploadImageForm();
-    this.getGalleryTypes();
-    this.getGalleryByType();
-  }
-
   get f() {
     return this.uploadImageForm.controls;
   }
@@ -79,6 +76,9 @@ export class UploadImageComponent implements OnInit, OnDestroy {
   }
 
   async openModal() {
+    this.initUploadImageForm();
+    this.getGalleryTypes();
+    this.getGalleryByType();
     return await this.modalComponent.open();
   }
 
@@ -155,21 +155,22 @@ export class UploadImageComponent implements OnInit, OnDestroy {
   fileChangeEvent(event: Event): void {
     this.imageChangedEvent = event;
   }
-  imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(
-      event.objectUrl as string
-    );
-    // event.blob can be used to upload the cropped image
-  }
-  imageLoaded(image: LoadedImage) {
-    // show cropper
-  }
-  cropperReady() {
-    // cropper ready
-  }
-  loadImageFailed() {
-    // show message
-  }
+
+  // imageCropped(event: ImageCroppedEvent) {
+  //   this.croppedImage = this.sanitizer.bypassSecurityTrustUrl(
+  //     event.objectUrl as string
+  //   );
+  //   // event.blob can be used to upload the cropped image
+  // }
+  // imageLoaded(image: LoadedImage) {
+  //   // show cropper
+  // }
+  // cropperReady() {
+  //   // cropper ready
+  // }
+  // loadImageFailed() {
+  //   // show message
+  // }
 
   recieveImage(data: any) {
     this.image = data;

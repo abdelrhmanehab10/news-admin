@@ -15,6 +15,7 @@ import { ModalComponent } from 'src/app/components/shared/modal/modal.component'
 import { ModalConfig } from 'src/app/models/components.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { VoteService } from 'src/app/services/dashboard/vote/vote.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-add-vote',
@@ -36,6 +37,7 @@ export class AddVoteComponent implements OnInit {
   @Input() title: string = 'أضافة باب فرعي';
   @Input() btnStyle: string = '';
   hasError: boolean = false;
+  submitted: boolean = false;
 
   isLoading$: Observable<boolean>;
   newsCategories: any[] = [];
@@ -46,16 +48,14 @@ export class AddVoteComponent implements OnInit {
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'اغلاق',
     customDismiss: () => {
-      if (!this.voteForm.invalid) {
-        this.addVote();
-        this.modalComponent.close();
-      }
+      this.addVote();
     },
   };
 
   constructor(
     private fb: FormBuilder,
     private voteService: VoteService,
+    private utilsService: UtilsService,
     private dashboardService: DashboardService,
     private toast: ToastrService
   ) {
@@ -75,11 +75,11 @@ export class AddVoteComponent implements OnInit {
 
   initForm() {
     this.voteForm = this.fb.group({
-      sectionId: ['', Validators.required],
-      pollBody: ['', Validators.required],
+      sectionId: ['', [Validators.required]],
+      pollBody: ['', [Validators.required]],
       voteOptions: this.fb.array([
-        this.fb.control('', Validators.required),
-        this.fb.control('', Validators.required),
+        this.fb.control('', [Validators.required]),
+        this.fb.control('', [Validators.required]),
       ]),
     });
   }
@@ -93,7 +93,7 @@ export class AddVoteComponent implements OnInit {
   }
 
   addVoteOption(): void {
-    this.voteOptions.push(this.fb.control('', Validators.required));
+    this.voteOptions.push(this.fb.control('', [Validators.required]));
   }
 
   removeVoteOption(index: number): void {
@@ -102,6 +102,11 @@ export class AddVoteComponent implements OnInit {
 
   addVote() {
     this.hasError = false;
+    this.submitted = true;
+    if (this.voteForm.invalid) {
+      this.utilsService.scrollToFirstInvalidControl('addVote');
+      return;
+    }
     this.onNewSectionAddedEmitter.emit(false);
     const addVoteSubscr = this.voteService
       .addVote({
@@ -116,10 +121,15 @@ export class AddVoteComponent implements OnInit {
           if (data) {
             this.toast.success(data.message);
             this.onNewSectionAddedEmitter.emit(true);
+            this.modalComponent.close();
+          } else {
+            this.toast.error('يوجد خطأ ف البيانات');
           }
+          this.submitted = false;
         },
         error: (error: any) => {
           console.log('[ADD_VOTE]', error);
+          this.submitted = false;
           this.hasError = true;
         },
       });

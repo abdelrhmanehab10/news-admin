@@ -58,12 +58,10 @@ export class AddNewHTTPService {
 
   getGalleryImages(
     token: string,
-    filterOptions: {
-      pageNumber: string;
-      GalleryTypeId?: string;
-      GalleryId?: string;
-      searchText?: string;
-    } = { pageNumber: '1' }
+    pageNumber?: number,
+    galleryTypeId?: string,
+    galleryId?: string,
+    searchText?: string
   ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -75,13 +73,10 @@ export class AddNewHTTPService {
       message: string | null;
       errors: string[] | null;
     }>(
-      `${API_URL}/Image/GetGalleryImages?pageNumber=${
-        filterOptions.pageNumber
-      }${
-        filterOptions.GalleryTypeId &&
-        `&GalleryTypeId=${filterOptions.GalleryTypeId}`
-      }${filterOptions.GalleryId && `&GalleryId=${filterOptions.GalleryId}`}${
-        filterOptions.searchText && `&searchText=${filterOptions.searchText}`
+      `${API_URL}/Image/GetGalleryImages?pageNumber=${pageNumber ?? '1'}${
+        galleryTypeId ? `&GalleryTypeId=${galleryTypeId}` : ''
+      }${galleryId ? `&GalleryId=${galleryId}` : ''}${
+        searchText ? `&searchText=${searchText}` : ''
       }`,
       {
         headers: httpHeaders,

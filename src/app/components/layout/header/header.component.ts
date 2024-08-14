@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationCancel, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { MenuComponent } from '../../../_metronic/kt/components';
+import { MenuComponent } from '../../../core/kt/components';
 import { ILayout, LayoutType } from '../../../core/configs/config';
 import { LayoutService } from 'src/app/services/layout/layout.service';
 

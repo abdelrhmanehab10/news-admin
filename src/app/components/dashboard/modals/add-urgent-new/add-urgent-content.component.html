@@ -26,7 +26,8 @@
     >
       <ng-container
         *ngIf="
-          control.hasError(validation) && (control.dirty || control.touched)
+          control.hasError(validation) &&
+          (control.dirty || control.touched || (!control.valid && submitted))
         "
       >
         <div class="fv-plugins-message-container">

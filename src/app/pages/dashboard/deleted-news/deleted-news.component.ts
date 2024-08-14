@@ -12,7 +12,6 @@ import { DeletedNewsService } from 'src/app/services/dashboard/deleted-news/dele
 @Component({
   selector: 'app-deleted-news',
   templateUrl: './deleted-news.component.html',
-  styleUrl: './deleted-news.component.scss',
 })
 export class DeletedNewsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
@@ -39,8 +38,7 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
 
   constructor(
     private deletedNewsService: DeletedNewsService,
-    private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private cdr: ChangeDetectorRef
   ) {
     this.isLoading$ = this.deletedNewsService.isLoading$;
   }
@@ -51,26 +49,19 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
 
   onSearch(e: any) {
     this.search = e.target.value;
-    this.getDeletedNews(
-      300,
-      1,
-      this.search,
-      this.filterOption.categoryId,
-      this.filterOption.subCategoryId
-    );
+    this.getDeletedNews(300, e.target.value);
   }
 
-  getDeletedNews(
-    delay: number = 0,
-    pageNumber?: number,
-    search?: string,
-    categoryId?: string,
-    subCategoryId?: string
-  ) {
+  getDeletedNews(delay: number = 0, search?: string) {
     this.hasError = false;
 
     const getDeletedNewsSubscr = this.deletedNewsService
-      .getDeletedNews(pageNumber, search, categoryId, subCategoryId)
+      .getDeletedNews(
+        this.pageNumber,
+        search,
+        this.filterOption.categoryId,
+        this.filterOption.subCategoryId
+      )
       .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
         next: (data: { news: any[] }) => {
