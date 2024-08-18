@@ -15,7 +15,6 @@ import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.servic
 @Component({
   selector: 'app-add-image',
   templateUrl: './add-image.component.html',
-  styleUrl: './add-image.component.scss',
 })
 export class AddImageComponent implements OnInit {
   selectedImage: {} = {};

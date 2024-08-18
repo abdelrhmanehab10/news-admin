@@ -6,7 +6,6 @@ import { EditorNewsStatusService } from 'src/app/services/dashboard/editor-news-
 @Component({
   selector: 'app-editor-news-state',
   templateUrl: './editor-news-state.component.html',
-  styleUrl: './editor-news-state.component.scss',
 })
 export class EditorNewsStateComponent implements OnDestroy {
   private unsubscribe: Subscription[] = [];

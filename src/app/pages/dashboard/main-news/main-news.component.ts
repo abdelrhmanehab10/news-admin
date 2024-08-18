@@ -11,7 +11,6 @@ import { MainNewsService } from 'src/app/services/dashboard/main-news/main-news.
 @Component({
   selector: 'app-main-news',
   templateUrl: './main-news.component.html',
-  styleUrl: './main-news.component.scss',
 })
 export class MainNewsComponent implements OnDestroy, OnInit {
   private unsubscribe: Subscription[] = [];

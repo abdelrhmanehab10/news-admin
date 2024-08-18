@@ -25,7 +25,6 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-add-new',
   templateUrl: './add-new.component.html',
-  styleUrl: './add-new.component.scss',
 })
 export class AddNewComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];

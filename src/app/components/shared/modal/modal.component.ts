@@ -5,7 +5,6 @@ import { ModalConfig } from 'src/app/models/components.model';
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
-  styleUrl: './modal.component.scss',
 })
 export class ModalComponent {
   @Input() public modalConfig: ModalConfig;

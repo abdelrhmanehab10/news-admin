@@ -16,7 +16,6 @@ import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent
 @Component({
   selector: 'app-add-urgent-new',
   templateUrl: './add-urgent-content.component.html',
-  styleUrl: './add-urgent-content.component.scss',
 })
 export class AddUrgentContentComponent implements OnInit {
   urgentContentForm: FormGroup;
