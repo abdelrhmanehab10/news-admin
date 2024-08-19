@@ -130,6 +130,31 @@ export class UrgentNewsService {
       );
   }
 
+  updateUrgentContent(
+    urgentNewId: string,
+    title: string,
+    isUrgentNew: boolean
+  ) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.urgentNewsHTTPService
+      .updateUrgentContent(auth.authToken, urgentNewId, title, isUrgentNew)
+      .pipe(
+        map((data) => {
+          return data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
   getDailyNewsContent(
     pageNumber: number,
     search?: string,

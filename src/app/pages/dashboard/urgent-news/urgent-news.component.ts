@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
 import { FilterOption, ListOptions } from 'src/app/models/components.model';
+import { NewWithDate } from 'src/app/models/data.model';
 import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent-news.service';
 
 @Component({
@@ -13,16 +14,17 @@ export class UrgentNewsComponent implements OnInit {
 
   items: any[];
   pageNumber: number = 1;
-  pageNumbers: number = 0;
+  availablePages: number = 0;
 
-  hasError: boolean = false;
   isLoading$: Observable<boolean>;
 
   groupListOptions: ListOptions = {
-    isEdit: true,
+    isEditWithModal: true,
     isEnable: true,
     isDelete: true,
-    edit: () => {},
+
+    type: 'edit-urgent',
+
     enable: (id: string) => {
       this.toggleEnableUrgentNew(id);
     },
@@ -50,25 +52,23 @@ export class UrgentNewsComponent implements OnInit {
   }
 
   getUrgentNews() {
-    this.hasError = false;
     const getUrgentNewsSubscr = this.urgentNewsService
       .getUrgentNews(String(this.pageNumber))
       .subscribe({
-        next: (data: { news: any[]; pageNumbers: number }) => {
+        next: (data: NewWithDate) => {
           this.items = data.news;
-          this.pageNumbers = data.pageNumbers;
+          this.availablePages = data.pageNumbers ?? 1;
           this.cdr.detectChanges();
         },
         error: (error: any) => {
           console.log('[GET_URGENT_NEWS]', error);
-          this.hasError = true;
+          this.toast.error(error.message);
         },
       });
     this.unsubscribe.push(getUrgentNewsSubscr);
   }
 
   deleteUrgentContent(id: string) {
-    this.hasError = false;
     const deleteUrgentContentSubscr = this.urgentNewsService
       .deleteUrgentContent(id)
       .subscribe({
@@ -80,14 +80,12 @@ export class UrgentNewsComponent implements OnInit {
         },
         error: (error: any) => {
           console.log('[DELETE_URGENT_CONTENT]', error);
-          this.hasError = true;
         },
       });
     this.unsubscribe.push(deleteUrgentContentSubscr);
   }
 
   toggleEnableUrgentNew(id: string) {
-    this.hasError = false;
     const toggleEnableUrgentNewSubscr = this.urgentNewsService
       .toggleEnableUrgentNew(id)
       .subscribe({
@@ -99,7 +97,6 @@ export class UrgentNewsComponent implements OnInit {
         },
         error: (error: any) => {
           console.log('[TOGGLE_ENABLE_URGENT_NEW]', error);
-          this.hasError = true;
         },
       });
     this.unsubscribe.push(toggleEnableUrgentNewSubscr);

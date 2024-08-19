@@ -95,6 +95,32 @@ export class UrgentNewsHTTPService {
     });
   }
 
+  updateUrgentContent(
+    token: string,
+    urgentNewId: string,
+    title: string,
+    isUrgentNew: boolean
+  ): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    formData.append('NewsId', urgentNewId);
+    formData.append('Title', title);
+    formData.append('IsUrgentNew', String(isUrgentNew));
+
+    return this.http.put<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}UpdateUrgentContent`, formData, {
+      headers: httpHeaders,
+    });
+  }
+
   getDailyNewsContent(
     token: string,
     pageNumber?: number,
