@@ -10,7 +10,6 @@ import { VotesComponent } from './votes/votes.component';
 import { SectionsComponent } from './sections/sections.component';
 import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
 import { MainNewsComponent } from './main-news/main-news.component';
-import { CommentsComponent } from './comments/comments.component';
 import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
 import { EditorsComponent } from './editors/editors.component';
 import { VersionsComponent } from './versions/versions.component';
@@ -78,10 +77,6 @@ export const routes: Routes = [
       {
         path: 'urgent-news',
         component: UrgentNewsComponent,
-      },
-      {
-        path: 'comments',
-        component: CommentsComponent,
       },
       {
         path: 'deleted-news',

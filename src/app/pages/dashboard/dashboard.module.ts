@@ -13,7 +13,6 @@ import { VotesComponent } from './votes/votes.component';
 import { SectionsComponent } from './sections/sections.component';
 import { UrgentNewsComponent } from './urgent-news/urgent-news.component';
 import { MainNewsComponent } from './main-news/main-news.component';
-import { CommentsComponent } from './comments/comments.component';
 import { DeletedNewsComponent } from './deleted-news/deleted-news.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditorsComponent } from './editors/editors.component';
@@ -30,6 +29,7 @@ import { OrderEditorsComponent } from './order-editors/order-editors.component';
 import { OrderCategoriesComponent } from './order-category/order-category.component';
 import { OrderSectionsComponent } from './order-sections/order-sections.component';
 import { GalleriesComponent } from './galleries/galleries.component';
+import { ModalsModule } from 'src/app/components/dashboard/modals/modals.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +43,6 @@ import { GalleriesComponent } from './galleries/galleries.component';
     VotesComponent,
     UrgentNewsComponent,
     MainNewsComponent,
-    CommentsComponent,
     DeletedNewsComponent,
     EditorsComponent,
     CategoryComponent,
@@ -67,6 +66,7 @@ import { GalleriesComponent } from './galleries/galleries.component';
     DragDropModule,
     ReactiveFormsModule,
     EditorComponent,
+    ModalsModule,
   ],
 })
 export class DashboardModule {}
