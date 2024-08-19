@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
 import { ModalConfig } from 'src/app/models/components.model';
+import { Vote } from 'src/app/models/data.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { VoteService } from 'src/app/services/dashboard/vote/vote.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
@@ -20,31 +21,26 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 @Component({
   selector: 'app-add-vote',
   templateUrl: './add-vote.component.html',
-  styleUrl: './add-vote.component.scss',
 })
 export class AddVoteComponent implements OnInit {
-  model: NgbDateStruct;
+  private unsubscribe: Subscription[] = [];
 
   voteForm: FormGroup;
-  filterForm: FormGroup;
-
-  private unsubscribe: Subscription[] = [];
 
   @ViewChild('modal') private modalComponent: ModalComponent;
 
-  @Output() onNewSectionAddedEmitter = new EventEmitter<boolean>();
+  @Output() onAddVoteEmitter = new EventEmitter<Vote>();
 
-  @Input() title: string = 'أضافة باب فرعي';
-  @Input() btnStyle: string = '';
-  hasError: boolean = false;
   submitted: boolean = false;
-
   isLoading$: Observable<boolean>;
-  newsCategories: any[] = [];
+
+  categories: any[] = [];
+
   startDate: string;
   endDate: string;
+
   modalConfig: ModalConfig = {
-    modalTitle: 'أضافة باب فرعي',
+    modalTitle: 'أضافة استطلاع رأي',
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'اغلاق',
     customDismiss: () => {
@@ -61,7 +57,7 @@ export class AddVoteComponent implements OnInit {
   ) {
     this.isLoading$ = this.voteService.isLoading$;
     this.dashboardService.categories$.subscribe((categories) => {
-      this.newsCategories = categories;
+      this.categories = categories;
     });
   }
 
@@ -92,56 +88,51 @@ export class AddVoteComponent implements OnInit {
     return this.voteForm.get('voteOptions') as FormArray;
   }
 
-  addVoteOption(): void {
-    this.voteOptions.push(this.fb.control('', [Validators.required]));
-  }
-
-  removeVoteOption(index: number): void {
-    this.voteOptions.removeAt(index);
+  toggleVoteOption(index?: number): void {
+    if (index) {
+      this.voteOptions.removeAt(index);
+    } else {
+      this.voteOptions.push(this.fb.control('', [Validators.required]));
+    }
   }
 
   addVote() {
-    this.hasError = false;
     this.submitted = true;
+
     if (this.voteForm.invalid) {
       this.utilsService.scrollToFirstInvalidControl('addVote');
       return;
     }
-    this.onNewSectionAddedEmitter.emit(false);
-    const addVoteSubscr = this.voteService
-      .addVote({
-        sectionId: this.f.sectionId.value,
-        pollBody: this.f.pollBody.value,
-        startDate: this.startDate,
-        endDate: this.endDate,
-        voteOptions: this.voteOptions.controls.map((control) => control.value),
-      })
-      .subscribe({
-        next: (data: any) => {
-          if (data) {
-            this.toast.success(data.message);
-            this.onNewSectionAddedEmitter.emit(true);
-            this.modalComponent.close();
-          } else {
-            this.toast.error('يوجد خطأ ف البيانات');
-          }
-          this.submitted = false;
-        },
-        error: (error: any) => {
-          console.log('[ADD_VOTE]', error);
-          this.submitted = false;
-          this.hasError = true;
-        },
-      });
+
+    const vote = {
+      sectionId: this.f.sectionId.value,
+      pollBody: this.f.pollBody.value,
+      startDate: this.startDate,
+      endDate: this.endDate,
+      voteOptions: this.voteOptions.controls.map((control) => control.value),
+    };
+
+    const addVoteSubscr = this.voteService.addVote(vote).subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.toast.success(data.message);
+          this.onAddVoteEmitter.emit(vote);
+          this.modalComponent.close();
+        } else {
+          this.toast.error('يوجد خطأ ف البيانات');
+        }
+        this.submitted = false;
+      },
+      error: (error: any) => {
+        console.log('[ADD_VOTE]', error);
+        this.submitted = false;
+      },
+    });
     this.unsubscribe.push(addVoteSubscr);
   }
 
-  recieveStartDate(date: any) {
-    this.startDate = date;
-  }
-
-  recieveEndDate(date: any) {
-    this.endDate = date;
+  receiver(recevier: string, data: any) {
+    (this as any)[recevier] = data;
   }
 
   ngOnDestroy() {

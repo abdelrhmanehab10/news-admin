@@ -10,7 +10,7 @@
           data-allow-clear="true"
           formControlName="sectionId"
         >
-          @for(item of newsCategories; track item;){
+          @for(item of categories; track item;){
           <option value="{{ item.categoryID }}">{{ item.name }}</option>
           }
         </select>
@@ -69,11 +69,11 @@
             [ngClass]="i + 1 === voteOptions.length ? 'flex-shrink-1' : ''"
           />
           @if(i + 1 === voteOptions.length){
-          <button (click)="addVoteOption()" class="btn bg-primary btn-icon">
+          <button (click)="toggleVoteOption()" class="btn bg-primary btn-icon">
             <app-keenicon name="plus" class="fs-2 text-white"></app-keenicon>
           </button>
           @if(i + 1 > 2){
-          <button (click)="removeVoteOption(i)" class="btn bg-danger btn-icon">
+          <button (click)="toggleVoteOption(i)" class="btn bg-danger btn-icon">
             <app-keenicon
               name="minus"
               class="fs-2 text-white"
@@ -122,7 +122,7 @@
       >
       <div class="col-lg-8 d-flex">
         <app-date-time-picker
-          (dateEmitter)="recieveStartDate($event)"
+          (dateEmitter)="receiver('startDate', $event)"
         ></app-date-time-picker>
       </div>
     </div>
@@ -132,16 +132,12 @@
       >
       <div class="col-lg-8 d-flex">
         <app-date-time-picker
-          (dateEmitter)="recieveEndDate($event)"
+          (dateEmitter)="receiver('endDate', $event)"
         ></app-date-time-picker>
       </div>
     </div>
   </form>
 </app-modal>
-<button
-  class="btn btn-sm mx-2"
-  [ngClass]="btnStyle ? btnStyle : 'btn-primary'"
-  (click)="openModal()"
->
-  {{ title }}
+<button class="btn btn-sm mx-2 btn-primary" (click)="openModal()">
+  أضافة أستطلاع
 </button>
