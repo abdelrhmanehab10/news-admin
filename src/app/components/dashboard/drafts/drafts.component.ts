@@ -109,14 +109,16 @@ export class DraftsComponent implements OnDestroy, OnInit {
     this.unsubscribe.push(restoreDraftSubscr);
   }
 
-  addDraft(draft: any) {
+  addDraft(form: any, tags: string[], selectedImage: any, date: string) {
     this.hasError = false;
-    const addDraftSubscr = this.addNewService.addDraft(draft).subscribe({
-      error: (error: any) => {
-        console.log('[ADD_DRAFTS]', error);
-        this.hasError = true;
-      },
-    });
+    const addDraftSubscr = this.addNewService
+      .addDraft(form, tags, selectedImage, date)
+      .subscribe({
+        error: (error: any) => {
+          console.log('[ADD_DRAFTS]', error);
+          this.hasError = true;
+        },
+      });
     this.unsubscribe.push(addDraftSubscr);
   }
 

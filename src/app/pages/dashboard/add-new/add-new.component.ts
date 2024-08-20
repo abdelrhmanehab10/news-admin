@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { EditorComponent } from '@tinymce/tinymce-angular';
 import { ToastrService } from 'ngx-toastr';
 import { distinctUntilChanged, Observable, Subscription } from 'rxjs';
@@ -13,6 +14,7 @@ import {
   Category,
   ContentType,
   ContentTypeSetting,
+  Editor,
   SubCategory,
   ValidationRule,
 } from 'src/app/models/data.model';
@@ -32,28 +34,29 @@ export class AddNewComponent implements OnInit, OnDestroy {
   addNewForm: FormGroup;
 
   isLoading$: Observable<boolean>;
-  hasError: boolean = false;
   submitted: boolean = false;
 
   contentTypesSetting: ContentTypeSetting[] = [];
-
   contentTypes: ContentType[] = [];
   categories: Category[] = [];
   subCategories: SubCategory[] = [];
   albums: Album[] = [];
-  editors: any[] = [];
+  editors: Editor[] = [];
 
   contentTypeID: number = 1;
 
   selectedAlbums: Album[] = [];
   selectedImage: any = null;
-  addDraft: (draft: any) => void;
-  restoredDraft: any;
-  attachment: any = null;
-  story: any;
   tags: string[] = [];
   date: string = '';
+  addDraft: (
+    form: any,
+    tags: string[],
+    selectedImage: any,
+    date: string
+  ) => void;
   interval: any;
+
   constructor(
     private dashboardService: DashboardService,
     private addNewService: AddNewService,
@@ -61,7 +64,8 @@ export class AddNewComponent implements OnInit, OnDestroy {
     private utilsService: UtilsService,
     private cdr: ChangeDetectorRef,
     private toast: ToastrService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private route: ActivatedRoute
   ) {
     this.isLoading$ = this.addNewService.isLoading$;
   }
@@ -71,6 +75,7 @@ export class AddNewComponent implements OnInit, OnDestroy {
     this.getContentTypeSetting();
     this.getGalleries();
     this.getAllEditors();
+
     this.dashboardService.contentTypes$.subscribe((conetntTypes) => {
       this.contentTypes = conetntTypes;
     });
@@ -80,43 +85,20 @@ export class AddNewComponent implements OnInit, OnDestroy {
 
     this.interval = setInterval(() => {
       if (this.addDraft && this.f.CatId.value && this.f.sectionId.value) {
-        this.addDraft({
-          NewAutoSaveID: -1,
-          SectionId: this.f.sectionId.value,
-          CategoryId: this.f.CatId.value,
-          ContentId: this.f.NewsType.value,
-          Title: this.f.Title.value,
-          SubTitle: this.f.SubTitle.value,
-          Brief: this.f.Brief.value,
-          Story: this.f.Story.value,
-          Tags: this.tags,
-          Image1Id: this.selectedImage ? this.selectedImage.id : '',
-          PictureCaption1: this.f.PictureCaption1.value,
-          ByLine: this.f.ByLine.value,
-          Notes: this.f.Notes.value,
-          ChkNewsTicker: this.f.ChkNewsTicker.value,
-          ChkTopNews: this.f.ChkTopNews.value,
-          ChkTopNewCategory: this.f.ChkTopNewCategory.value,
-          ChkReadNow: this.f.ChkReadNow.value,
-          ChkImportantNews: this.f.ChkImportantNews.value,
-          ChkFilesNews: this.f.ChkFilesNews.value,
-          ChkIsVideo: this.f.ChkIsVideo.value,
-          ChkNewInstall: this.f.ChkIsInstall.value,
-          ChkAkhbarKhassa: this.f.ChkIsAkbhbarKhassa.value,
-          ChkImage: this.f.ChkIsImage.value,
-          AutoPublishDate: this.date,
-        });
+        this.addDraft(this.f, this.tags, this.selectedImage, this.date);
       }
     }, 30000);
+
+    const id = this.route.snapshot.queryParamMap.get('id');
   }
 
   //TinyMCE
-  TINY_MCE_API_KEY: string = environment.TINY_MCE_API_KEY;
-  init: EditorComponent['init'] = {
-    plugins: 'lists link image table code help wordcount',
-    directionality: 'rtl',
-    language: 'ar',
-  };
+  // TINY_MCE_API_KEY: string = environment.TINY_MCE_API_KEY;
+  // init: EditorComponent['init'] = {
+  //   plugins: 'lists link image table code help wordcount',
+  //   directionality: 'rtl',
+  //   language: 'ar',
+  // };
 
   onNewsTypeChange(e: any) {
     this.contentTypeID = e.target.value;
@@ -124,7 +106,6 @@ export class AddNewComponent implements OnInit, OnDestroy {
   }
 
   onCategoryChange(e: any) {
-    this.hasError = false;
     this.subCategories = [];
     const getNewsSubCategoriesSubscr = this.dashboardService
       .getNewsSubCategories(e.target.value)
@@ -136,14 +117,12 @@ export class AddNewComponent implements OnInit, OnDestroy {
         },
         error: (err: any) => {
           console.log('NEWS_SUB_CATEGORIES', err);
-          this.hasError = true;
         },
       });
     this.unsubscribe.push(getNewsSubCategoriesSubscr);
   }
 
   getGalleries() {
-    this.hasError = false;
     const getGalleriesSubscr = this.addNewService.getGalleries().subscribe({
       next: (data: any) => {
         if (data) {
@@ -153,7 +132,6 @@ export class AddNewComponent implements OnInit, OnDestroy {
       },
       error: (error: any) => {
         console.log('[GET_GALLERIES]', error);
-        this.hasError = true;
       },
     });
     this.unsubscribe.push(getGalleriesSubscr);
@@ -169,15 +147,21 @@ export class AddNewComponent implements OnInit, OnDestroy {
     rules.forEach((rule) => {
       if (rule.value) {
         const control = formGroup.get(rule.keyName);
+
         const existingValidators =
-          control && control.validator
+          control && typeof control.validator === 'function'
             ? control.validator({} as AbstractControl)
             : null;
+
         const newValidators = [];
 
         if (existingValidators) {
           Object.keys(existingValidators).forEach((key) => {
-            if (key !== 'minlength' && key !== 'maxlength') {
+            if (
+              key !== 'minlength' &&
+              key !== 'maxlength' &&
+              typeof existingValidators[key] === 'function'
+            ) {
               newValidators.push(existingValidators[key]);
             }
           });
@@ -210,10 +194,7 @@ export class AddNewComponent implements OnInit, OnDestroy {
     this.addNewForm = this.fb.group({
       NewsType: [contentTypeID, [Validators.required]],
       CatId: ['', [Validators.required]],
-      sectionId: [
-        { value: '', disabled: !!this.subCategories.length },
-        [Validators.required],
-      ],
+      sectionId: ['', [Validators.required]],
       ByLine: ['', [Validators.required]],
       Title: ['', [Validators.required]],
       SubTitle: [''],
@@ -238,6 +219,7 @@ export class AddNewComponent implements OnInit, OnDestroy {
     const relevantRules = rules.filter(
       (rule) => rule.contentTypeID == contentTypeID
     );
+
     this.applyValidationRules(this.addNewForm, relevantRules);
   }
 
@@ -270,7 +252,6 @@ export class AddNewComponent implements OnInit, OnDestroy {
   }
 
   addNew(newAction: number) {
-    this.hasError = false;
     this.submitted = true;
 
     if (!this.selectedImage) {
@@ -331,7 +312,6 @@ export class AddNewComponent implements OnInit, OnDestroy {
         },
         error: (error: any) => {
           console.log('[ADD_NEW]', error);
-          this.hasError = true;
           this.submitted = false;
         },
       });
@@ -343,7 +323,6 @@ export class AddNewComponent implements OnInit, OnDestroy {
   }
 
   getContentTypeSetting() {
-    this.hasError = false;
     const getContentTypeSettingSubscr = this.dashboardService
       .getContentTypeSetting()
       .subscribe({
@@ -355,14 +334,12 @@ export class AddNewComponent implements OnInit, OnDestroy {
         },
         error: (error: any) => {
           console.log('[CONTENT_TYPE_SETTING]', error);
-          this.hasError = true;
         },
       });
     this.unsubscribe.push(getContentTypeSettingSubscr);
   }
 
   getAllEditors() {
-    this.hasError = false;
     const getAllEditorsSubscr = this.editorsService.getAllEditors().subscribe({
       next: (data: any) => {
         if (data) {
@@ -372,7 +349,6 @@ export class AddNewComponent implements OnInit, OnDestroy {
       },
       error: (error: any) => {
         console.log('[GET_ALL_EDITORS]', error);
-        this.hasError = true;
       },
     });
     this.unsubscribe.push(getAllEditorsSubscr);

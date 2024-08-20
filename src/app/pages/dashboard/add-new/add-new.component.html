@@ -431,11 +431,57 @@
           جسم الخبر
         </label>
         <div class="col-lg-10 fv-row">
-          <editor
+          <div class="input-group mb-5">
+            <textarea
+              type="text"
+              class="form-control form-control-lg form-control-solid"
+              [ngClass]="Story.value.length ? 'rounded-start-0' : ''"
+              formControlName="Story"
+              #Story
+            ></textarea>
+            @if(Story.value.length){
+            <span
+              class="input-group-text rounded-end-0 rounded-start"
+              id="basic-addon2"
+            >
+              {{ Story.value.length }}
+            </span>
+            }
+            <ng-container
+              [ngTemplateOutlet]="formError"
+              [ngTemplateOutletContext]="{
+                  validation: 'minlength',
+                  message: ' يجب ان لا يقل المقدمة عن ' + this.addNewForm.controls.Story.errors?.minlength 
+                  ?.requiredLength + ' حرف ',
+                  control: addNewForm.controls['Story'],
+                }
+              "
+            ></ng-container>
+            <ng-container
+              [ngTemplateOutlet]="formError"
+              [ngTemplateOutletContext]="{
+                  validation: 'maxlength',
+                  message: ' يجب ان لا يزيد المقدمة عن ' + this.addNewForm.controls.Story.errors?.maxlength 
+                  ?.requiredLength + ' حرف ',
+                  control: addNewForm.controls['Story'],
+                }
+              "
+            ></ng-container>
+            <ng-container
+              [ngTemplateOutlet]="formError"
+              [ngTemplateOutletContext]="{
+                validation: 'required',
+                message: 'المقدمة مطلوبة',
+                control: addNewForm.controls['Story']
+              }"
+            ></ng-container>
+          </div>
+          <!-- TODO: Implement tinyMce again -->
+          <!-- <editor
             [init]="init"
             [apiKey]="TINY_MCE_API_KEY"
             formControlName="Story"
-          />
+          /> -->
         </div>
       </div>
       <!-- <div class="row mb-6" *ngIf="addNewForm.get('AssociatedID')">
@@ -636,7 +682,6 @@
         </ng-container>
       </ng-template>
       <div class="separator my-3 opacity-75"></div>
-
       <div class="row mb-6">
         <label class="col-lg-3 col-form-label fw-bold fs-6"
           >شريط الاخبار

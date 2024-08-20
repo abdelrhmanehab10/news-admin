@@ -219,16 +219,49 @@ export class AddNewHTTPService {
     });
   }
 
-  addDraft(token: string, draft: { [key: string]: any }) {
+  addDraft(
+    token: string,
+    form: any,
+    tags: string[],
+    selectedImage: any,
+    date: string
+  ) {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
     const formData = new FormData();
 
-    for (const key in draft) {
-      if (draft.hasOwnProperty(key)) {
-        const value = draft[key];
+    const body: { [key: string]: any } = {
+      NewAutoSaveID: -1,
+      SectionId: form.sectionId.value,
+      CategoryId: form.CatId.value,
+      ContentId: form.NewsType.value,
+      Title: form.Title.value,
+      SubTitle: form.SubTitle.value,
+      Brief: form.Brief.value,
+      Story: form.Story.value,
+      Tags: tags,
+      Image1Id: selectedImage ? selectedImage.id : '',
+      PictureCaption1: form.PictureCaption1.value,
+      ByLine: form.ByLine.value,
+      Notes: form.Notes.value,
+      ChkNewsTicker: form.ChkNewsTicker.value,
+      ChkTopNews: form.ChkTopNews.value,
+      ChkTopNewCategory: form.ChkTopNewCategory.value,
+      ChkReadNow: form.ChkReadNow.value,
+      ChkImportantNews: form.ChkImportantNews.value,
+      ChkFilesNews: form.ChkFilesNews.value,
+      ChkIsVideo: form.ChkIsVideo.value,
+      ChkNewInstall: form.ChkIsInstall.value,
+      ChkAkhbarKhassa: form.ChkIsAkbhbarKhassa.value,
+      ChkImage: form.ChkIsImage.value,
+      AutoPublishDate: date,
+    };
+
+    for (const key in body) {
+      if (body.hasOwnProperty(key)) {
+        const value = body[key];
         if (Array.isArray(value)) {
           value.forEach((item: any) => formData.append(key, item));
         } else {
