@@ -6,8 +6,11 @@ import {
   distinctUntilChanged,
   Observable,
   Subscription,
+  timeout,
 } from 'rxjs';
 import { FilterOption, ListOptions } from 'src/app/models/components.model';
+import { NewWithDate, Status } from 'src/app/models/data.model';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 
 @Component({
@@ -17,9 +20,10 @@ import { PublishService } from 'src/app/services/dashboard/publish/publish.servi
 export class PublishComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
-  newsToPublish: any[] = [];
+  newsToPublish: NewWithDate[] = [];
   selectedNews: string[] = [];
-  rolePassList: { id: string; name: string }[] = [];
+  status: Status[] = [];
+
   filterOptions: FilterOption = {
     isCategories: true,
     isSubCategories: true,
@@ -29,21 +33,20 @@ export class PublishComponent implements OnInit, OnDestroy {
   };
 
   search: string = '';
-  selectedRole: number = 1;
+  selectedStatus: number = 1;
 
   groupLisOptions: ListOptions = {
-    isDelete: true,
     isEdit: true,
     isVersion: true,
     isCheckList: true,
-    delete: () => {},
-    edit: () => {},
+    isPreview: true,
   };
 
-  hasError: boolean;
   isLoading$: Observable<boolean>;
+
   constructor(
     private publishService: PublishService,
+    private dashboardService: DashboardService,
     private toast: ToastrService,
     private cdr: ChangeDetectorRef
   ) {
@@ -52,7 +55,11 @@ export class PublishComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getNewsToPublish();
-    this.getRolesPassList();
+    this.dashboardService.rolePassListSubject.subscribe({
+      next: (data: any) => {
+        this.status = data;
+      },
+    });
   }
 
   onSearch(e: any) {
@@ -60,26 +67,7 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.getNewsToPublish(300);
   }
 
-  getRolesPassList(): void {
-    this.hasError = false;
-    const getRolesPassListSubscr = this.publishService
-      .getRolesPassList()
-      .subscribe({
-        next: (data: { id: string; name: string }[]) => {
-          this.rolePassList = data;
-          this.cdr.detectChanges();
-        },
-        error: (error: any) => {
-          console.log('ROLES_PASSLIST', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getRolesPassListSubscr);
-  }
-
   getNewsToPublish(delay: number = 0): void {
-    this.hasError = false;
-
     const getNewsToPublishSubscr = this.publishService
       .getNewsToPublish(
         this.search,
@@ -88,7 +76,7 @@ export class PublishComponent implements OnInit, OnDestroy {
       )
       .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
-        next: (data: any[]) => {
+        next: (data: NewWithDate[]) => {
           if (data) {
             this.newsToPublish = data;
             this.cdr.detectChanges();
@@ -97,18 +85,20 @@ export class PublishComponent implements OnInit, OnDestroy {
           }
         },
         error: (error: any) => {
-          console.log('[NEWS_TO_PUBLISH]', error);
-          this.hasError = true;
+          console.log('[GET_NEWS_TO_PUBLISH]', error);
         },
       });
     this.unsubscribe.push(getNewsToPublishSubscr);
   }
 
   returnNews(): void {
-    this.hasError = false;
-    if (!this.selectedNews.length) return;
+    if (!this.selectedNews.length) {
+      this.toast.error('يجب ان تختار خبر علي الأقل');
+      return;
+    }
+
     const returnNewsSubscr = this.publishService
-      .returnNews(this.selectedRole, this.selectedNews)
+      .returnNews(this.selectedStatus, this.selectedNews)
       .subscribe({
         next: (data: string) => {
           if (data) {
@@ -118,7 +108,6 @@ export class PublishComponent implements OnInit, OnDestroy {
         },
         error: (error: any) => {
           console.log('[RETURN_NEWS]', error);
-          this.hasError = true;
         },
       });
     this.unsubscribe.push(returnNewsSubscr);
@@ -128,37 +117,38 @@ export class PublishComponent implements OnInit, OnDestroy {
     this.selectedNews = data;
   }
 
-  deleteNews(id?: string) {
-    this.hasError = false;
-    if (id) {
-      this.selectedNews.push(id);
+  deleteNews() {
+    if (!this.selectedNews.length) {
+      this.toast.error('يجب ان تختار خبر علي الأقل');
+      return;
     }
+
     const deleteNewSubscr = this.publishService
       .deleteNew(this.selectedNews)
       .subscribe({
-        next: (data: string) => {
-          if (data) {
-            this.toast.error(data);
+        next: (data: { message: string; status: number }) => {
+          if (data.status === 200) {
+            this.toast.error(data.message);
             this.getNewsToPublish();
           }
         },
         error: (error: any) => {
           console.log('[DELETE]', error);
-          this.hasError = true;
+          this.toast.error(error.message);
         },
       });
     this.unsubscribe.push(deleteNewSubscr);
   }
 
-  publishNews(id?: string) {
-    this.hasError = false;
-
-    if (id) {
-      this.selectedNews.push(id);
+  publishNews() {
+    if (!this.selectedNews.length) {
+      this.toast.error('يجب ان تختار خبر علي الأقل');
+      return;
     }
 
     const publishNewSubscr = this.publishService
       .publishNews(this.selectedNews)
+      .pipe(timeout(7000))
       .subscribe({
         next: (data: { message: string; status: number }) => {
           if (data) {
@@ -170,14 +160,16 @@ export class PublishComponent implements OnInit, OnDestroy {
         },
         error: (error: any) => {
           console.log('[PUBLISH]', error);
-          this.hasError = true;
+          if (error.name === 'TimeoutError') {
+            this.toast.error('حدث خطأ ما. حاول في وقت لاحق');
+          }
         },
       });
     this.unsubscribe.push(publishNewSubscr);
   }
 
   onSelectedRoleChange(e: any) {
-    this.selectedRole = e.target.value;
+    this.selectedStatus = e.target.value;
   }
 
   recieveFilterOptions(data: any) {
@@ -187,8 +179,8 @@ export class PublishComponent implements OnInit, OnDestroy {
 
   toggleSelectAll(e: any) {
     if (e.target.checked) {
-      this.selectedNews = this.newsToPublish[0]?.news.map(
-        (item: { id: string }) => item.id
+      this.selectedNews = this.newsToPublish[0]?.news.map((item) =>
+        String(item.id)
       );
     } else {
       this.selectedNews = [];

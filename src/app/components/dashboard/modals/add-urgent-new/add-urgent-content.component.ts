@@ -2,6 +2,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  Input,
   OnInit,
   Output,
   ViewChild,
@@ -11,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
 import { ModalConfig } from 'src/app/models/components.model';
+import { NewWithDate } from 'src/app/models/data.model';
 import { UrgentNewsService } from 'src/app/services/dashboard/urgent-news/urgent-news.service';
 
 @Component({
@@ -24,9 +26,11 @@ export class AddUrgentContentComponent implements OnInit {
 
   @ViewChild('modal') private modalComponent: ModalComponent;
 
+  @Input() type: string = '';
+  @Input() urgentNew: any;
+
   @Output() onNewUrgentContentAddedEmitter = new EventEmitter<boolean>();
 
-  hasError: boolean = false;
   submitted: boolean = false;
 
   isLoading$: Observable<boolean>;
@@ -36,7 +40,11 @@ export class AddUrgentContentComponent implements OnInit {
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'اغلاق',
     customDismiss: () => {
-      this.addUrgentContentWithTitle();
+      if (this.type === 'edit') {
+        this.updateUrgentContent();
+      } else {
+        this.addUrgentContentWithTitle();
+      }
     },
   };
 
@@ -58,8 +66,11 @@ export class AddUrgentContentComponent implements OnInit {
 
   initForm() {
     this.urgentContentForm = this.fb.group({
-      Title: ['', [Validators.required]],
-      isUrgentNew: [false],
+      Title: [
+        this.type === 'edit' ? this.urgentNew.title : '',
+        [Validators.required],
+      ],
+      isUrgentNew: [this.type === 'edit' ? this.urgentNew.active : false],
     });
   }
 
@@ -68,7 +79,6 @@ export class AddUrgentContentComponent implements OnInit {
   }
 
   addUrgentContentWithTitle() {
-    this.hasError = false;
     this.submitted = true;
     this.onNewUrgentContentAddedEmitter.emit(false);
     const addUrgentContentSubscr = this.urgentNewsService
@@ -84,11 +94,37 @@ export class AddUrgentContentComponent implements OnInit {
         },
         error: (error: any) => {
           console.log('[ADD_URGENT_CONTENT]', error);
-          this.hasError = true;
           this.submitted = false;
         },
       });
     this.unsubscribe.push(addUrgentContentSubscr);
+  }
+
+  updateUrgentContent() {
+    this.submitted = true;
+    this.onNewUrgentContentAddedEmitter.emit(false);
+    const updateUrgentContentSubscr = this.urgentNewsService
+      .updateUrgentContent(
+        this.urgentNew.id,
+        this.f.Title.value,
+        this.f.isUrgentNew.value
+      )
+      .subscribe({
+        next: (data: { status: number; message: string }) => {
+          if (data.status === 200) {
+            this.toast.success(data.message);
+            this.onNewUrgentContentAddedEmitter.emit(true);
+            this.modalComponent.close();
+            this.submitted = false;
+          }
+        },
+        error: (error: any) => {
+          console.log('[UPDATE_URGENT_CONTENT]', error);
+          this.submitted = false;
+          this.toast.error(error.message);
+        },
+      });
+    this.unsubscribe.push(updateUrgentContentSubscr);
   }
 
   ngOnDestroy() {

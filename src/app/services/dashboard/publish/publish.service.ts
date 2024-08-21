@@ -56,26 +56,6 @@ export class PublishService {
       );
   }
 
-  getRolesPassList() {
-    const auth = this.authService.getAuthFromLocalStorage();
-    if (!auth || !auth.authToken) {
-      return of(undefined);
-    }
-
-    this.isLoadingSubject.next(true);
-    return this.publishHTTPService.getRolesPassList(auth.authToken).pipe(
-      map((data) => {
-        this.rolePassListSubject.next(data.data);
-        return data.data;
-      }),
-      catchError((err) => {
-        console.error('err', err);
-        return of(undefined);
-      }),
-      finalize(() => this.isLoadingSubject.next(false))
-    );
-  }
-
   deleteNew(ids: string[]) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
@@ -85,7 +65,7 @@ export class PublishService {
     this.isLoadingSubject.next(true);
     return this.publishHTTPService.deleteNew(auth.authToken, ids).pipe(
       map((data) => {
-        return data.message;
+        return data;
       }),
       catchError((err) => {
         console.error('err', err);

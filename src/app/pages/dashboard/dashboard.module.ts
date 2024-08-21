@@ -30,6 +30,9 @@ import { OrderCategoriesComponent } from './order-category/order-category.compon
 import { OrderSectionsComponent } from './order-sections/order-sections.component';
 import { GalleriesComponent } from './galleries/galleries.component';
 import { ModalsModule } from 'src/app/components/dashboard/modals/modals.module';
+import { NewsFilesComponent } from './news-files/news-files.component';
+import { NewsUrgentFilesComponent } from './news-urgent-files/news-urgent-files.component';
+import { TagProfilesComponent } from './tag-profiles/tag-profiles.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +60,9 @@ import { ModalsModule } from 'src/app/components/dashboard/modals/modals.module'
     OrderCategoriesComponent,
     OrderSectionsComponent,
     GalleriesComponent,
+    NewsFilesComponent,
+    NewsUrgentFilesComponent,
+    TagProfilesComponent,
   ],
   imports: [
     CommonModule,

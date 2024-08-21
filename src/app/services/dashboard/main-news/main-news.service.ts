@@ -29,7 +29,8 @@ export class MainNewsService {
     pageNumber?: number,
     search?: string,
     categoryId?: string,
-    subCategoryId?: string
+    subCategoryId?: string,
+    typeId?: string
   ) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
@@ -43,7 +44,8 @@ export class MainNewsService {
         pageNumber,
         search,
         categoryId,
-        subCategoryId
+        subCategoryId,
+        typeId
       )
       .pipe(
         map((data) => {

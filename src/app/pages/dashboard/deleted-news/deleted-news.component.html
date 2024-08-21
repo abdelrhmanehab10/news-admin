@@ -2,6 +2,19 @@
   <div class="card-header justify-content-between border-0 mt-2">
     <h3 class="card-title fw-bolder text-gray-900">المحتوي المحذوف</h3>
     <div class="w-100 d-flex gap-2 my-5">
+      <label
+        class="checkbox checkbox-xl checkbox-inline ms-2 d-flex align-items-center"
+      >
+        <input
+          class="form-check-input"
+          type="checkbox"
+          (change)="toggleSelectAll($event)"
+          [checked]="items.length === selectedNews.length"
+          data-kt-check="true"
+          data-kt-check-target=".widget-9-check"
+        />
+        <span class="me-2">الكل</span>
+      </label>
       <div class="flex-grow-1 position-relative">
         <app-keenicon
           name="magnifier"
@@ -12,7 +25,7 @@
           class="form-control form-control-solid pe-5"
           name="search"
           placeholder="ابحث عن الأخبار المحذوفة من هنا.."
-          (keydown)="onSearch($event)"
+          (input)="onSearch($event)"
         />
       </div>
       <div class="card-toolbar">
@@ -30,7 +43,13 @@
           [filterOptions]="filterOption"
           (filterOptionsEmitter)="recieveFilterOption($event)"
         ></app-dropdown-menu>
-        <!-- end::Menu -->
+        <button
+          (click)="deleteDeletedNew()"
+          class="btn btn-sm btn-danger d-flex align-items-center gap-3 me-2"
+          [disabled]="isLoading$ | async"
+        >
+          حذف
+        </button>
       </div>
     </div>
   </div>
@@ -38,10 +57,11 @@
     <app-group-list
       [isLoading]="isLoading$ | async"
       [groupListOptions]="groupListOptions"
+      [selectedItems]="selectedNews"
       [items]="items"
     ></app-group-list>
   </div>
   <div class="card-footer text-center">
-    <app-pagination></app-pagination>
+    <app-pagination [pagination]="pagination"></app-pagination>
   </div>
 </div>

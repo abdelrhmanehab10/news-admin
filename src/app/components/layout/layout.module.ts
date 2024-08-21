@@ -24,6 +24,7 @@ import { ComponentsModule } from '../components.module';
 import { TranslationModule } from 'src/app/modules/i18n';
 import { LayoutScrollTopComponent } from '../extras/scroll-top/scroll-top.component';
 import { UserInnerComponent } from '../extras/user-inner/user-inner.component';
+import { ModalsModule } from '../dashboard/modals/modals.module';
 
 const routes: Routes = [
   {
@@ -59,6 +60,7 @@ const routes: Routes = [
     NgbTooltipModule,
     TranslateModule,
     ThemeModeModule,
+    ModalsModule,
   ],
   exports: [RouterModule],
 })

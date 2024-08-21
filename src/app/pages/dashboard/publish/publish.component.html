@@ -4,12 +4,15 @@
     <div
       class="d-flex flex-nowrap align-items-center justify-content-between gap-5 w-100"
     >
-      <div class="form-check form-check-sm form-check-custom form-check-solid">
+      <div
+        *ngIf="newsToPublish.length"
+        class="form-check form-check-sm form-check-custom form-check-solid"
+      >
         <input
           class="form-check-input"
           type="checkbox"
           (change)="toggleSelectAll($event)"
-          [checked]="newsToPublish[0]?.news.length === selectedNews.length"
+          [checked]="newsToPublish[0].news.length === selectedNews.length"
           data-kt-check="true"
           data-kt-check-target=".widget-9-check"
         />
@@ -24,8 +27,9 @@
           type="text"
           class="form-control form-control-solid pe-5"
           name="search"
+          autocomplete="off"
           placeholder="ابحث عن الأخبار من هنا.."
-          (change)="onSearch($event)"
+          (input)="onSearch($event)"
         />
       </form>
       <div class="card-toolbar">
@@ -35,6 +39,7 @@
           data-kt-menu-trigger="click"
           data-kt-menu-placement="bottom-end"
           data-kt-menu-flip="top-end"
+          title="تصفية"
         >
           <app-keenicon name="category" class="fs-2"></app-keenicon>
         </button>
@@ -49,10 +54,10 @@
               data-kt-select2="true"
               data-placeholder="Select option"
               data-allow-clear="true"
-              [value]="selectedRole"
+              [value]="selectedStatus"
               (change)="onSelectedRoleChange($event)"
             >
-              @for(item of rolePassList; track item; let idx = $index){
+              @for(item of status; track item; let idx = $index){
               <option value="{{ idx + 1 }}">{{ item.name }}</option>
               }
             </select>

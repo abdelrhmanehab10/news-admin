@@ -41,6 +41,8 @@ export class AddSectionComponent implements OnInit {
     SectionId: null,
   };
 
+  @Input() item: any;
+
   hasError: boolean = false;
 
   isLoading$: Observable<boolean>;

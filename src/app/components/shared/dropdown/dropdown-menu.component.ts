@@ -13,8 +13,10 @@ import { Subscription, distinctUntilChanged } from 'rxjs';
 import { FilterOption } from 'src/app/models/components.model';
 import {
   Category,
+  ContentType,
   OrderCategory,
   orderSubCategory,
+  Role,
   RolePassList,
   Status,
   SubCategory,
@@ -46,9 +48,10 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
   subCategories: SubCategory[] = [];
   orderCategories: OrderCategory[] = [];
   orderSubCategories: orderSubCategory[] = [];
-  status: Status[] = [];
+  roles: Role[] = [];
   galleries: any[] = [];
   galleryTypes: any[] = [];
+  contentTypes: ContentType[] = [];
 
   isError: boolean = false;
 
@@ -79,14 +82,20 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
     }
 
     if (this.filterOptions.isStatus) {
-      this.layoutService.newsStatusCount$.subscribe((newsStatus) => {
-        this.status = newsStatus;
+      this.layoutService.newsStatusCount$.subscribe((status) => {
+        this.roles = status;
       });
     }
 
     if (this.filterOptions.isGalleryType) {
-      this.getGalleryTypes();
+      this.dashboardService.galleryTypes$.subscribe((types) => {
+        this.galleryTypes = types;
+      });
     }
+
+    this.dashboardService.contentTypes$.subscribe((conetntTypes) => {
+      this.contentTypes = conetntTypes;
+    });
 
     this.initForm();
   }
@@ -105,6 +114,7 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
       statusId: [''],
       galleryId: [''],
       galleryTypeId: [''],
+      typeId: [''],
     });
   }
 
@@ -123,25 +133,6 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
         },
       });
     this.unsubscribe.push(getNewsOrderCategoriesSubscr);
-  }
-
-  getGalleryTypes() {
-    this.isError = false;
-    const getGalleryTypesSubscr = this.addNewService
-      .getGalleryTypes()
-      .subscribe({
-        next: (data: typeof this.galleryTypes) => {
-          if (data) {
-            this.galleryTypes = data;
-            this.cdr.detectChanges();
-          }
-        },
-        error: (error: any) => {
-          console.log('[GalleryTypes]', error);
-          this.isError = true;
-        },
-      });
-    this.unsubscribe.push(getGalleryTypesSubscr);
   }
 
   onSelectedNewsOrderCategoriesChange(e: any) {
@@ -231,6 +222,22 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
       orderSubCategoryId: this.f.orderSubCategoryId.value,
       galleryId: this.f.galleryId.value,
       galleryTypeId: this.f.galleryTypeId.value,
+      typeId: this.f.typeId.value,
+    });
+  }
+
+  reset() {
+    this.filterOptionsEmitter.emit({
+      ...this.filterOptions,
+      categoryId: '',
+      statusId: '',
+      roleId: '',
+      subCategoryId: '',
+      orderCategoryId: '',
+      orderSubCategoryId: '',
+      galleryId: '',
+      galleryTypeId: '',
+      typeId: '',
     });
   }
 

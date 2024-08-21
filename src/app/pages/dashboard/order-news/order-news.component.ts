@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -12,7 +12,7 @@ import { FilterOption } from 'src/app/models/components.model';
   selector: 'app-order-news',
   templateUrl: './order-news.component.html',
 })
-export class OrderNewsComponent implements OnInit {
+export class OrderNewsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
   items: {
     newId: string;
@@ -67,6 +67,8 @@ export class OrderNewsComponent implements OnInit {
       .getOrderNews(this.filterOption.orderCategoryId)
       .subscribe({
         next: (data: typeof this.items) => {
+          console.log(data);
+
           if (data) {
             this.items = data;
             this.cdr.detectChanges();
@@ -107,5 +109,9 @@ export class OrderNewsComponent implements OnInit {
   recieveFilterOption(data: any) {
     this.filterOption = data;
     this.getNewsOrder();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 }

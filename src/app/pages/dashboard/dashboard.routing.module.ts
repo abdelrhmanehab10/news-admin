@@ -24,6 +24,9 @@ import { OrderEditorsComponent } from './order-editors/order-editors.component';
 import { OrderCategoriesComponent } from './order-category/order-category.component';
 import { OrderSectionsComponent } from './order-sections/order-sections.component';
 import { GalleriesComponent } from './galleries/galleries.component';
+import { NewsFilesComponent } from './news-files/news-files.component';
+import { NewsUrgentFilesComponent } from './news-urgent-files/news-urgent-files.component';
+import { TagProfilesComponent } from './tag-profiles/tag-profiles.component';
 
 export const routes: Routes = [
   {
@@ -129,6 +132,18 @@ export const routes: Routes = [
       {
         path: 'galleries',
         component: GalleriesComponent,
+      },
+      {
+        path: 'news-files',
+        component: NewsFilesComponent,
+      },
+      {
+        path: 'news-urgent-files',
+        component: NewsUrgentFilesComponent,
+      },
+      {
+        path: 'tag-profiles',
+        component: TagProfilesComponent,
       },
     ],
   },

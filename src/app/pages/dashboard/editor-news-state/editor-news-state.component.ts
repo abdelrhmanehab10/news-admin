@@ -1,6 +1,7 @@
-import { Component, EventEmitter, OnDestroy, Output } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { FilterOption, TableOption } from 'src/app/models/components.model';
+import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
+import { FilterOption, ListOptions } from 'src/app/models/components.model';
+import { NEW } from 'src/app/models/data.model';
 import { EditorNewsStatusService } from 'src/app/services/dashboard/editor-news-status/editor-news-status.service';
 
 @Component({
@@ -10,48 +11,59 @@ import { EditorNewsStatusService } from 'src/app/services/dashboard/editor-news-
 export class EditorNewsStateComponent implements OnDestroy {
   private unsubscribe: Subscription[] = [];
 
-  news: any[] = [];
+  news: NEW[] = [];
+  searchQuery: string = '';
   selectedNews: string[] = [];
   pageNumber: number = 1;
-  filterOption: FilterOption = {
-    categoryId: '',
-    subCategoryId: '',
-    statusId: '',
-    roleId: '',
+
+  groupListOptions: ListOptions = {
+    isPreview: true,
+    isVersion: true,
+    isState: true,
+    isEmployee: true,
   };
-  hasError: boolean = false;
-  status: string;
 
-  constructor(private editorNewsStatusService: EditorNewsStatusService) {}
+  filterOptions: FilterOption = {
+    isStatus: true,
 
-  getMyNews() {
-    this.hasError = false;
-    const getMyNewsSubscr = this.editorNewsStatusService
-      .getMyNews(this.pageNumber, this.filterOption.statusId)
+    statusId: '',
+  };
+
+  isLoading$: Observable<boolean>;
+
+  constructor(
+    private editorNewsStateService: EditorNewsStatusService,
+    private cdr: ChangeDetectorRef
+  ) {
+    this.editorNewsStateService.isLoading$ = this.isLoading$;
+  }
+
+  ngOnInit(): void {
+    this.getEditorNews();
+  }
+
+  getEditorNews() {
+    const getEditorNewsSubscr = this.editorNewsStateService
+      .getMyNews(this.pageNumber, this.filterOptions.statusId)
       .subscribe({
-        next: (data: { news: any[] }[]) => {
+        next: (data: any) => {
           if (data) {
-            this.news = data[0]?.news;
+            this.news = data.news;
+            this.cdr.detectChanges();
+          } else {
+            this.news = [];
           }
         },
         error: (error: any) => {
-          console.log('[MY_NEWS]', error);
-          this.hasError = true;
+          console.log('[NEWS]', error);
         },
       });
-    this.unsubscribe.push(getMyNewsSubscr);
-  }
-
-  receiveSelectedNews(data: string[]) {
-    this.selectedNews = data;
-  }
-
-  recievePageNumber(data: number) {
-    this.pageNumber = data;
+    this.unsubscribe.push(getEditorNewsSubscr);
   }
 
   recieveFilterOption(data: FilterOption) {
-    this.filterOption = data;
+    this.filterOptions = data;
+    this.getEditorNews();
   }
 
   ngOnDestroy(): void {

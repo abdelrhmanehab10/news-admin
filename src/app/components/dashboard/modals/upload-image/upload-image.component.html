@@ -12,7 +12,6 @@
           data-kt-select2="true"
           data-placeholder="Select option"
           data-allow-clear="true"
-          formControlName="GalleryTypeId"
           (change)="getGalleryByType($event)"
         >
           @for(item of galleryTypes; track item; let idx = $index;){
@@ -28,7 +27,7 @@
           data-kt-select2="true"
           data-placeholder="Select option"
           data-allow-clear="true"
-          formControlName="GalleryTypeId"
+          formControlName="subCategoryId"
         >
           @if(gallery.length){ @for(item of gallery; track item; let idx =
           $index){
@@ -82,6 +81,7 @@
             class="form-check-input w-45px h-30px"
             type="checkbox"
             id="allowmarketing"
+            formControlName="CHKWaterMark"
           /><label class="form-check-label"></label>
         </div>
       </div>

@@ -51,6 +51,10 @@
     </div>
   </form>
 </app-modal>
-<button class="btn btn-primary btn-sm mx-2" (click)="openModal()">
-  اضافة محتوي عاجل
+<button
+  class="btn btn-sm mx-2"
+  [ngClass]="type === 'edit' ? 'btn-outline-light border' : 'btn-primary'"
+  (click)="openModal()"
+>
+  @if(type === 'edit'){ تعديل }@else{ اضافة محتوي عاجل }
 </button>

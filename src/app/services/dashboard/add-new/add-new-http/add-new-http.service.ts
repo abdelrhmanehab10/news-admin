@@ -26,7 +26,11 @@ export class AddNewHTTPService {
     });
   }
 
-  getGalleryTypes(token: string): Observable<any> {
+  getGalleryByType(
+    token: string,
+    galleryId?: string,
+    search?: string
+  ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -36,24 +40,14 @@ export class AddNewHTTPService {
       data: any[];
       message: string | null;
       errors: string[] | null;
-    }>(`${API_URL}/Image/GetGalleryTypes`, {
-      headers: httpHeaders,
-    });
-  }
-
-  getGalleryByType(token: string, galleryId: string = '0'): Observable<any> {
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<{
-      status: number;
-      data: any[];
-      message: string | null;
-      errors: string[] | null;
-    }>(`${API_URL}/Image/GetGalleryByType?categoryId=${galleryId}`, {
-      headers: httpHeaders,
-    });
+    }>(
+      `${API_URL}/Image/GetGalleryByType${
+        galleryId ? '?categoryId=' + galleryId : ''
+      }${search ? '&Search=' + search : ''}`,
+      {
+        headers: httpHeaders,
+      }
+    );
   }
 
   getGalleryImages(

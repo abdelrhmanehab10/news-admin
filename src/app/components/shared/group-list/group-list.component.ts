@@ -1,13 +1,6 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
-import { DateTimeFormatOptions } from '@eonasdan/tempus-dominus';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ListOptions } from 'src/app/models/components.model';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-group-list',
@@ -22,23 +15,9 @@ export class GroupListComponent {
   @Input() selectedItems: string[] = [];
 
   @Output() selectedItemsChange = new EventEmitter<string[]>();
+  @Output() isAddedEmitter = new EventEmitter<boolean>();
 
-  constructor() {}
-
-  convertDateToArabicFormat(dateString: string) {
-    const date = new Date(dateString);
-
-    const options: DateTimeFormatOptions = {
-      day: 'numeric',
-      month: 'numeric',
-      year: 'numeric',
-    };
-
-    const formatter = new Intl.DateTimeFormat('ar-EG', options);
-    const formattedDate = formatter.format(date);
-
-    return formattedDate;
-  }
+  constructor(private utilsService: UtilsService) {}
 
   convertTimeToArabic12HourFormat(timeString: string) {
     const [hours, minutes] = timeString.split(':');
@@ -54,6 +33,10 @@ export class GroupListComponent {
     const formattedTime = `[${formattedHour}:${formattedMinutes} ${period}]`;
 
     return formattedTime;
+  }
+
+  convertDateToArabicFormat(dateString: string) {
+    return this.utilsService.convertDateToArabicFormat(dateString);
   }
 
   toggleSelect(e: any) {
@@ -72,5 +55,9 @@ export class GroupListComponent {
 
   isSelected(id: string) {
     return this.selectedItems.find((si) => si === id);
+  }
+
+  recieveIsAdded(data: boolean) {
+    this.isAddedEmitter.emit(data);
   }
 }

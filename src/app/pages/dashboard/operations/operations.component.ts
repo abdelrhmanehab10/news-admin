@@ -4,6 +4,7 @@ import { get } from 'jquery';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
 import { FilterOption, ListOptions } from 'src/app/models/components.model';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { OperationsService } from 'src/app/services/dashboard/operations/operations.service';
 import { PublishService } from 'src/app/services/dashboard/publish/publish.service';
 import { VersionsService } from 'src/app/services/dashboard/versions/versions.service';
@@ -52,6 +53,7 @@ export class OperationsComponent implements OnInit, OnDestroy {
 
   constructor(
     private publishService: PublishService,
+    private dashboardService: DashboardService,
     private pageInfoServices: PageInfoService,
     private utilsService: UtilsService,
     private cdr: ChangeDetectorRef,
@@ -63,29 +65,16 @@ export class OperationsComponent implements OnInit, OnDestroy {
     this.pageInfoServices.updateTitle('العمليات' + ' - El Wakeel');
 
     this.getOperations();
-    this.getRolesPassList();
+    this.dashboardService.rolePassListSubject.subscribe({
+      next: (data: any) => {
+        this.rolePassList = data;
+      },
+    });
   }
 
   onSearch(e: any) {
     this.search = e.target.value;
     this.getOperations(300);
-  }
-
-  getRolesPassList(): void {
-    this.hasError = false;
-    const getRolesPassListSubscr = this.publishService
-      .getRolesPassList()
-      .subscribe({
-        next: (data: { id: string; name: string }[]) => {
-          this.rolePassList = data;
-          this.cdr.detectChanges();
-        },
-        error: (error: any) => {
-          console.log('ROLES_PASSLIST', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getRolesPassListSubscr);
   }
 
   returnNews(): void {

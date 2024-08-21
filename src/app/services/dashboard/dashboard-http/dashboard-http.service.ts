@@ -9,6 +9,21 @@ const API_URL = `${environment.apiUrl}`;
 export class DashboardHTTPService {
   constructor(private http: HttpClient) {}
 
+  getGalleryTypes(token: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/Image/GetGalleryTypes`, {
+      headers: httpHeaders,
+    });
+  }
+
   getContentNews(token: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -95,6 +110,21 @@ export class DashboardHTTPService {
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}/News/ContentTypeSetting`, {
+      headers: httpHeaders,
+    });
+  }
+
+  getRolesPassList(token: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<{
+      status: number;
+      data: { id: string; name: string }[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/News/GetRolesPassList`, {
       headers: httpHeaders,
     });
   }

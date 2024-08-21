@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -15,7 +15,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-order-category',
   templateUrl: './order-category.component.html',
 })
-export class OrderCategoriesComponent implements OnInit {
+export class OrderCategoriesComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
   categories: any[] = [];
 
@@ -95,5 +95,9 @@ export class OrderCategoriesComponent implements OnInit {
         },
       });
     this.unsubscribe.push(orderCategoriesSubscr);
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 }

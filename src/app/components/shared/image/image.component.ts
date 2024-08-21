@@ -15,8 +15,6 @@ export class ImageComponent {
   filePreview: string | ArrayBuffer | null | undefined = null;
   @Input() selectedImage: any;
 
-  @Input() formControlName: string = '';
-
   @Output() selectedImageEmitter = new EventEmitter<any>();
 
   constructor(private cdr: ChangeDetectorRef) {}

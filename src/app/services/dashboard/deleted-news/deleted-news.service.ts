@@ -56,4 +56,25 @@ export class DeletedNewsService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+
+  deleteDeletedNew(ids: string[]) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.deletedNewsHTTPService
+      .deleteDeletedNew(auth.authToken, ids)
+      .pipe(
+        map((data) => {
+          return data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          return of(undefined);
+        }),
+        finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
 }

@@ -79,6 +79,7 @@ export class AddNewComponent implements OnInit, OnDestroy {
     this.dashboardService.contentTypes$.subscribe((conetntTypes) => {
       this.contentTypes = conetntTypes;
     });
+
     this.dashboardService.categories$.subscribe((categories) => {
       this.categories = categories;
     });

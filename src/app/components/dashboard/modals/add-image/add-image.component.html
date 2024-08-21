@@ -53,15 +53,30 @@
     </div>
   </div>
   <div class="row g-6 g-xl-9 mb-6 mb-xl-9">
-    @for(item of images; track item){
-    <div class="col-12 col-sm-12 col-xl">
+    @if(isLoading$ | async){<span
+      clas="indicator-progress"
+      [style.textAlign]="'center'"
+      [style.display]="'block'"
+    >
+      <p class="mx-auto text-gray-900 fw-bolder fs-6 d-inline">
+        انتظر قليلا...{{ " " }}
+      </p>
+      <span
+        class="spinner-border spinner-border-sm align-middle me-1"
+      ></span> </span
+    >}@else{ @for(item of images; track item){
+    <div class="col-12 col-sm-12 col-xl-4">
       <app-image-card
         [image]="item"
         (selectedImageEmitter)="recieveSelectedImage($event)"
       ></app-image-card>
     </div>
-    }
+    }}
   </div>
+  <app-pagination
+    [pagination]="pagination"
+    (pageChange)="recieveChangedPage($event)"
+  ></app-pagination>
 </app-modal>
 <button
   class="btn btn-primary d-flex align-items-center gap-3"

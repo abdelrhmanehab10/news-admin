@@ -17,9 +17,20 @@
   </div>
   }
   <div class="symbol symbol-75px my-3 mb-6">
-    <img class="object-fit-cover" [src]="image.icon" alt="{{ image.title }}" />
+    <img
+      class="object-fit-cover transition"
+      (load)="onImageLoad()"
+      [src]="
+        !imageLoaded
+          ? '../../../../assets/media/svg/files/blank-image.svg'
+          : image.icon
+      "
+      alt="{{ image.title }}"
+    />
   </div>
-  <div class="fs-5 fw-bolder mb-2">{{ image.title }}</div>
+  <div class="fs-5 fw-bolder mb-2 text-nowrap">
+    <span class=""> ...{{ image.title.substr(0, 10) }} </span>
+  </div>
   <div class="fs-7 fw-bold text-gray-500 mt-auto">{{ image.description }}</div>
   @if(type==='link'){
   <div class="d-flex justify-content-between gap-3">

@@ -44,26 +44,7 @@ export class AddNewService {
     );
   }
 
-  getGalleryTypes() {
-    const auth = this.authService.getAuthFromLocalStorage();
-    if (!auth || !auth.authToken) {
-      return of(undefined);
-    }
-
-    this.isLoadingSubject.next(true);
-    return this.AddNewHTTPService.getGalleryTypes(auth.authToken).pipe(
-      map((data) => {
-        return data.data;
-      }),
-      catchError((err) => {
-        console.error('err', err);
-        return of(undefined);
-      }),
-      finalize(() => this.isLoadingSubject.next(false))
-    );
-  }
-
-  getGalleryByType(galleryId: string = '0') {
+  getGalleryByType(galleryId?: string, search?: string) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
@@ -72,7 +53,8 @@ export class AddNewService {
     this.isLoadingSubject.next(true);
     return this.AddNewHTTPService.getGalleryByType(
       auth.authToken,
-      galleryId
+      galleryId,
+      search
     ).pipe(
       map((data) => {
         return data.data;

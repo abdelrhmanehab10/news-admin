@@ -9,16 +9,23 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import { GalleryImage, ModalConfig } from 'src/app/models/components.model';
+import {
+  GalleryImage,
+  ModalConfig,
+  Pagination,
+} from 'src/app/models/components.model';
+import { Image } from 'src/app/models/data.model';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-add-image',
   templateUrl: './add-image.component.html',
 })
-export class AddImageComponent implements OnInit {
+export class AddImageComponent {
   selectedImage: {} = {};
   filterForm: FormGroup;
+  pagination: Pagination = { current: 1 };
 
   private unsubscribe: Subscription[] = [];
   @ViewChild('modal') private modalComponent: ModalComponent;
@@ -34,6 +41,7 @@ export class AddImageComponent implements OnInit {
     modalTitle: 'اختيار صورة',
     dismissButtonLabel: 'تأكيد',
     closeButtonLabel: 'الغاء',
+    hideDismissButton: true,
   };
 
   @Output() selectedImageEmitter = new EventEmitter<{
@@ -46,16 +54,10 @@ export class AddImageComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private addNewService: AddNewService,
+    private dashboardService: DashboardService,
     private cdr: ChangeDetectorRef
   ) {
     this.isLoading$ = this.addNewService.isLoading$;
-  }
-
-  ngOnInit(): void {
-    this.initForm();
-    this.getGalleryTypes();
-    this.getGalleryByType();
-    this.getGalleryImages();
   }
 
   get f() {
@@ -71,26 +73,13 @@ export class AddImageComponent implements OnInit {
   }
 
   async openModal() {
+    this.initForm();
+    this.dashboardService.galleryTypes$.subscribe((types) => {
+      this.galleryTypes = types;
+    });
+    this.getGalleryByType();
+    this.getGalleryImages();
     return await this.modalComponent.open();
-  }
-
-  getGalleryTypes() {
-    this.hasError = false;
-    const getGalleryTypesSubscr = this.addNewService
-      .getGalleryTypes()
-      .subscribe({
-        next: (data: typeof this.galleryTypes) => {
-          if (data) {
-            this.galleryTypes = data;
-            this.cdr.detectChanges();
-          }
-        },
-        error: (error: any) => {
-          console.log('[GalleryTypes]', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getGalleryTypesSubscr);
   }
 
   getGalleryByType(e?: any) {
@@ -120,7 +109,7 @@ export class AddImageComponent implements OnInit {
     this.hasError = false;
     const getGalleryImagesSubscr = this.addNewService
       .getGalleryImages(
-        this.f.pageNumber.value,
+        this.pagination.current,
         this.f.GalleryId.value,
         this.f.GalleryTypeId.value,
         this.f.searchText.value
@@ -130,23 +119,21 @@ export class AddImageComponent implements OnInit {
         next: (data: {
           pageNumbers: number;
           count: number;
-          images: {
-            id: number;
-            picName: string;
-            picPath: string;
-            picCaption: string;
-            addedDate: string;
-          }[];
+          images: Image[];
         }) => {
           if (data) {
-            const items = data.images.map((img) => ({
+            this.pagination = {
+              count: data.count,
+              current: this.pagination.current,
+              pages: Array.from({ length: data.pageNumbers }, (_, i) => i + 1),
+            };
+            this.images = data.images.map((img) => ({
               id: img.id,
               icon: img.picPath,
               title: img.picName,
               description: img.picCaption,
               date: img.addedDate,
             }));
-            this.images = items;
             this.cdr.detectChanges();
           } else {
             this.images = [];
@@ -168,5 +155,10 @@ export class AddImageComponent implements OnInit {
   }) {
     this.selectedImageEmitter.emit(data);
     this.modalComponent.close();
+  }
+
+  recieveChangedPage(data: number) {
+    this.pagination.current = data;
+    this.getGalleryImages();
   }
 }

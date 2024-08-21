@@ -16,7 +16,8 @@ export class MainNewsHTTPService {
     pageNumber?: number,
     search?: string,
     categoryId?: string,
-    subCategoryId?: string
+    subCategoryId?: string,
+    typeId?: string
   ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -32,7 +33,7 @@ export class MainNewsHTTPService {
         search ? '&Search=' + search : ''
       }${categoryId ? '&MainCategoryId=' + categoryId : ''}${
         subCategoryId ? '&SecCategoryId=' + subCategoryId : ''
-      }`,
+      }${typeId ? '&TypeId=' + typeId : ''}`,
       {
         headers: httpHeaders,
       }

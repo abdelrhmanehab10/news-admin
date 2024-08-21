@@ -23,6 +23,12 @@ export class DashboardService {
   contentTypes$: Observable<any[]>;
   contentTypesSubject: BehaviorSubject<any[]>;
 
+  galleryTypes$: Observable<any[]>;
+  galleryTypesSubject: BehaviorSubject<any[]>;
+
+  rolePassList$: Observable<any[]>;
+  rolePassListSubject: BehaviorSubject<any[]>;
+
   constructor(
     private authService: AuthService,
     private dashboardHTTPService: DashboardHTTPService
@@ -35,6 +41,12 @@ export class DashboardService {
 
     this.contentTypesSubject = new BehaviorSubject<any[]>([]);
     this.contentTypes$ = this.contentTypesSubject.asObservable();
+
+    this.galleryTypesSubject = new BehaviorSubject<any[]>([]);
+    this.galleryTypes$ = this.galleryTypesSubject.asObservable();
+
+    this.rolePassListSubject = new BehaviorSubject<any[]>([]);
+    this.rolePassList$ = this.rolePassListSubject.asObservable();
   }
 
   getContentTypes() {
@@ -147,17 +159,53 @@ export class DashboardService {
     }
 
     this.isLoadingSubject.next(true);
-    return this.dashboardHTTPService
-      .getContentTypeSetting(auth.authToken)
-      .pipe(
-        map((data) => {
-          return data.data;
-        }),
-        catchError((err) => {
-          console.error('err', err);
-          return of(undefined);
-        }),
-        finalize(() => this.isLoadingSubject.next(false))
-      );
+    return this.dashboardHTTPService.getContentTypeSetting(auth.authToken).pipe(
+      map((data) => {
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  getGalleryTypes() {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.dashboardHTTPService.getGalleryTypes(auth.authToken).pipe(
+      map((data) => {
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
+
+  getRolesPassList() {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.dashboardHTTPService.getRolesPassList(auth.authToken).pipe(
+      map((data) => {
+        return data.data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
   }
 }

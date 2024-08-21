@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -13,7 +13,7 @@ import { OrderEditorsService } from 'src/app/services/dashboard/order-editors/or
   selector: 'app-order-editors',
   templateUrl: './order-editors.component.html',
 })
-export class OrderEditorsComponent implements OnInit {
+export class OrderEditorsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
   editors: any[] = [];
 
@@ -104,5 +104,9 @@ export class OrderEditorsComponent implements OnInit {
   recieveFilterOption(data: any) {
     this.filterOption = data;
     this.getNewsOrder();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 }

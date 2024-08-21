@@ -1,6 +1,7 @@
 <div *ngIf="pagination" class="d-flex flex-stack flex-wrap">
   <div class="fs-6 fw-bold text-gray-700">
-    معروض 1 - {{ pagination.count < 25 ? pagination.count : 25 }} من
+    معروض 1 -
+    {{ pagination.count && pagination.count < 25 ? pagination.count : 25 }} من
     {{ pagination.count }}
   </div>
 
@@ -31,7 +32,7 @@
       class="page-item previous"
       (click)="
         setCurrent(
-          pagination.current !== pagination.pages.length
+          pagination.pages && pagination.current !== pagination.pages.length
             ? pagination.current + 1
             : pagination.current
         )

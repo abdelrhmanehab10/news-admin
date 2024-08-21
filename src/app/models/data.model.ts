@@ -66,7 +66,61 @@ export interface SubCategory {
   secTitle: string;
 }
 
-export interface Status {
+export interface Role {
   roleId: string;
   roleName: string;
+}
+
+export interface Vote {
+  sectionId: string;
+  pollBody: string;
+  voteOptions: string[];
+  startDate: string;
+  endDate: string;
+  activated?: number;
+  totalVotes?: number;
+}
+
+export interface Status {
+  id: string;
+  name: string;
+}
+
+export interface NewWithDate {
+  date: string;
+  news: [
+    {
+      id: number;
+      title: string;
+      category: string | null;
+      active: boolean;
+      time: string;
+      date: string;
+    }
+  ];
+  pageNumbers?: number;
+}
+
+export interface NEW {
+  id: number;
+  date: string;
+  title: string;
+  subTitle: string;
+  state: string;
+  views: number;
+  employee: string;
+}
+
+export interface Editor {
+  editorId: number;
+  editorName: string;
+  active: boolean;
+}
+
+export interface Image {
+  id: number;
+  picName: string;
+  picPath: string;
+  picCaption: string;
+  addedDate: string;
 }

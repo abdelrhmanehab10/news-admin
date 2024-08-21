@@ -14,6 +14,7 @@ import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.servic
 import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ModalConfig } from 'src/app/models/components.model';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 
 @Component({
   selector: 'app-upload-image',
@@ -42,10 +43,7 @@ export class UploadImageComponent implements OnDestroy {
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'الغاء',
     customDismiss: () => {
-      if (!this.uploadImageForm.invalid) {
-        this.addImage();
-        this.modalComponent.dismiss();
-      }
+      this.addImage();
     },
   };
 
@@ -56,6 +54,7 @@ export class UploadImageComponent implements OnDestroy {
   constructor(
     private fb: FormBuilder,
     private addNewService: AddNewService,
+    private dashboardService: DashboardService,
     private cdr: ChangeDetectorRef,
     private toast: ToastrService,
     private sanitizer: DomSanitizer
@@ -77,28 +76,11 @@ export class UploadImageComponent implements OnDestroy {
 
   async openModal() {
     this.initUploadImageForm();
-    this.getGalleryTypes();
+    this.dashboardService.galleryTypes$.subscribe((types) => {
+      this.galleryTypes = types;
+    });
     this.getGalleryByType();
     return await this.modalComponent.open();
-  }
-
-  getGalleryTypes() {
-    this.hasError = false;
-    const getGalleryTypesSubscr = this.addNewService
-      .getGalleryTypes()
-      .subscribe({
-        next: (data: typeof this.galleryTypes) => {
-          if (data) {
-            this.galleryTypes = data;
-            this.cdr.detectChanges();
-          }
-        },
-        error: (error: any) => {
-          console.log('[GalleryTypes]', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getGalleryTypesSubscr);
   }
 
   getGalleryByType(e?: any) {
@@ -111,6 +93,7 @@ export class UploadImageComponent implements OnDestroy {
         next: (data: typeof this.gallery) => {
           if (data) {
             this.gallery = data;
+            this.f.subCategoryId.setValue(data[0].galleryID);
             this.cdr.detectChanges();
           } else {
             this.gallery = [];

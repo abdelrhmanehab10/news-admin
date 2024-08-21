@@ -5,7 +5,24 @@
 <div class="separator border-gray-200"></div>
 
 <form [formGroup]="filterForm" (ngSubmit)="onFilter()" class="px-7 py-5">
-  @if(filterOptions.isStatus){
+  @if(filterOptions.isType){
+  <div class="mb-10">
+    <label class="form-label fw-bold">نوع الخبر:</label>
+    <div>
+      <select
+        class="form-select form-select-solid"
+        data-kt-select2="true"
+        data-placeholder="Select option"
+        data-allow-clear="true"
+        formControlName="typeId"
+      >
+        @for(item of contentTypes; track item; let idx = $index){
+        <option value="{{ item.typeId }}">{{ item.contentType1 }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  } @if(filterOptions.isStatus){
   <div class="mb-10">
     <label class="form-label fw-bold">المرحلة:</label>
     <div>
@@ -16,7 +33,7 @@
         data-allow-clear="true"
         formControlName="statusId"
       >
-        @for(item of status; track item; let idx = $index){
+        @for(item of roles; track item; let idx = $index){
         <option value="{{ item.roleId }}">{{ item.roleName }}</option>
         }
       </select>
@@ -171,6 +188,7 @@
     </button>
     <button
       type="reset"
+      (click)="reset()"
       class="btn btn-sm btn-light btn-active-light-primary me-2"
       data-kt-menu-dismiss="true"
     >

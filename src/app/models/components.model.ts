@@ -1,9 +1,20 @@
 export interface ListOptions {
   isEdit?: boolean;
+  isEditWithModal?: boolean;
   isEnable?: boolean;
   isDelete?: boolean;
   isVersion?: boolean;
   isCheckList?: boolean;
+  isResult?: boolean;
+  isPreview?: boolean;
+  isDate?: boolean;
+  isViews?: boolean;
+  isState?: boolean;
+  isEmployee?: boolean;
+  isCustom?: boolean;
+
+  type?: string;
+
   edit?: () => void;
   enable?: (id: string) => void;
   delete?: (id: string) => void;
@@ -11,8 +22,8 @@ export interface ListOptions {
 
 export interface Pagination {
   current: number;
-  pages: number[];
-  count: number;
+  pages?: number[];
+  count?: number;
 }
 
 export interface FilterOption {

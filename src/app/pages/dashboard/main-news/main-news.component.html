@@ -12,7 +12,8 @@
           type="text"
           class="form-control form-control-solid pe-5"
           name="search"
-          placeholder=""
+          placeholder="ابحث عن الخبر المنشور من هنا.."
+          (input)="onSearch($event)"
         />
       </form>
       <div class="card-toolbar">
@@ -35,7 +36,7 @@
   <div class="card-body pt-2">
     <app-group-list
       [groupListOptions]="groupListOptions"
-      [items]="items"
+      [items]="news"
       [isLoading]="isLoading$ | async"
     ></app-group-list>
   </div>

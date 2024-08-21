@@ -29,7 +29,7 @@ export class DeletedNewsHTTPService {
       errors: string[] | null;
     }>(
       `${API_URL}/News/GetDeletedNews?pageNumber=${pageNumber ?? 1}${
-        search ? '&search=' + search : ''
+        search ? '&Search=' + search : ''
       }${MainCategoryId ? '&MainCategoryId=' + MainCategoryId : ''}${
         SecCategoryId ? '&SecCategoryId=' + SecCategoryId : ''
       }`,
@@ -37,5 +37,25 @@ export class DeletedNewsHTTPService {
         headers: httpHeaders,
       }
     );
+  }
+
+  deleteDeletedNew(token: string, ids: string[]): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    ids.forEach((id) => formData.append('DeleteDeletedNews', id));
+
+    return this.http.delete<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/News/DeleteDeletedNews`, {
+      body: formData,
+      headers: httpHeaders,
+    });
   }
 }

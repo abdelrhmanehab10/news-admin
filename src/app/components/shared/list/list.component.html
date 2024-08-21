@@ -1,4 +1,6 @@
-@if(isLoading){
+@if(listOptions.isCustom){
+<ng-content></ng-content>
+}@else {@if(isLoading){
 <span
   clas="indicator-progress"
   [style.textAlign]="'center'"
@@ -33,9 +35,12 @@ $index){
     >}
     <span class="fw-bold d-block">{{ item.secTitle }}</span>
   </div>
-  @if(listOptions.isEnable && listOptions.enable){<button
+  @if(listOptions.isResult){
+  <app-vote-result [votes]="item.totalVotes"></app-vote-result>
+
+  } @if(listOptions.isEnable && listOptions.enable){<button
     (click)="listOptions.enable(item.id)"
-    class="btn btn-sm btn-outline-dark border b d-flex align-items-center gap-3 me-2"
+    class="btn btn-sm btn-outline-light border b d-flex align-items-center gap-3 me-2"
   >
     {{ item.active ? "ايقاف" : "تفعيل" }}</button
   >} @if(listOptions.isEdit){<app-add-section
@@ -58,4 +63,4 @@ $index){
 </div>
 }} @else {
 <p class="text-center text-gray-900 fw-bolder fs-6">لا يوجد بيانات</p>
-}
+}}

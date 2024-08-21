@@ -11,7 +11,7 @@ import { CompareVersionsComponent } from './compare-versions/compare-versions.co
 import { UploadImageComponent } from './upload-image/upload-image.component';
 import { VoteResultComponent } from './vote-result/vote-result.component';
 import { ModalComponent } from '../../shared/modal/modal.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { KeeniconComponent } from '../../shared/keenicon/keenicon.component';
 import { ImageComponent } from '../../shared/image/image.component';
@@ -24,6 +24,9 @@ import {
   OwlDateTimeModule,
   OwlNativeDateTimeModule,
 } from '@danielmoncada/angular-datetime-picker';
+import { AddEventComponent } from './add-event/add-event.component';
+import { FilesEventsComponent } from './files-events/files-events.component';
+import { AddGalleryComponent } from './add-gallery/add-gallery.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,9 @@ import {
     CompareVersionsComponent,
     UploadImageComponent,
     VoteResultComponent,
+    FilesEventsComponent,
+    AddEventComponent,
+    AddGalleryComponent,
 
     ModalComponent,
     KeeniconComponent,
@@ -53,6 +59,7 @@ import {
     RouterModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
+    FormsModule,
   ],
   exports: [
     KeeniconComponent,
@@ -71,6 +78,9 @@ import {
     ImageComponent,
     AddImageComponent,
     VoteResultComponent,
+    FilesEventsComponent,
+    AddEventComponent,
+    AddGalleryComponent,
   ],
 })
 export class ModalsModule {}

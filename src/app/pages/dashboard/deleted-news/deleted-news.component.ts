@@ -1,13 +1,19 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import {
   debounceTime,
   distinctUntilChanged,
   Observable,
   Subscription,
 } from 'rxjs';
-import { FilterOption, ListOptions } from 'src/app/models/components.model';
+import {
+  FilterOption,
+  ListOptions,
+  Pagination,
+} from 'src/app/models/components.model';
 import { DeletedNewsService } from 'src/app/services/dashboard/deleted-news/deleted-news.service';
+import { UtilsService } from 'src/app/services/utils/utils.service';
 
 @Component({
   selector: 'app-deleted-news',
@@ -17,16 +23,22 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
   items: any[] = [];
+  selectedNews: string[] = [];
+
   groupListOptions: ListOptions = {
-    isEdit: false,
-    isEnable: false,
     isDelete: true,
-    edit: () => {},
-    enable: () => {},
-    delete: this.onDelete,
+    isCheckList: true,
+    isViews: true,
+    delete: (id: string) => {
+      this.selectedNews.push(id);
+      this.deleteDeletedNew();
+    },
   };
 
-  pageNumber: number = 1;
+  pagination: Pagination = {
+    current: 1,
+  };
+
   search = '';
   filterOption: FilterOption = {
     categoryId: '',
@@ -34,11 +46,12 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
   };
 
   isLoading$: Observable<boolean>;
-  hasError: boolean = false;
 
   constructor(
     private deletedNewsService: DeletedNewsService,
-    private cdr: ChangeDetectorRef
+    private utilsService: UtilsService,
+    private cdr: ChangeDetectorRef,
+    private toast: ToastrService
   ) {
     this.isLoading$ = this.deletedNewsService.isLoading$;
   }
@@ -53,19 +66,22 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
   }
 
   getDeletedNews(delay: number = 0, search?: string) {
-    this.hasError = false;
-
     const getDeletedNewsSubscr = this.deletedNewsService
       .getDeletedNews(
-        this.pageNumber,
+        this.pagination.current,
         search,
         this.filterOption.categoryId,
         this.filterOption.subCategoryId
       )
       .pipe(debounceTime(delay), distinctUntilChanged())
       .subscribe({
-        next: (data: { news: any[] }) => {
+        next: (data: { news: any[]; pageNumbers: number; count: number }) => {
           if (data) {
+            this.pagination = {
+              current: this.pagination.current,
+              pages: Array.from({ length: data.pageNumbers }, (_, i) => i + 1),
+              count: data.count,
+            };
             this.items = data.news;
             this.cdr.detectChanges();
           } else {
@@ -74,7 +90,6 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
         },
         error: (error: any) => {
           console.log('[GET_DELETED_NEWS]', error);
-          this.hasError = true;
         },
       });
     this.unsubscribe.push(getDeletedNewsSubscr);
@@ -87,7 +102,31 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDelete() {}
+  deleteDeletedNew() {
+    const deleteDeletedNewSubscr = this.deletedNewsService
+      .deleteDeletedNew(this.selectedNews)
+      .pipe()
+      .subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.toast.error(data.message);
+          } else {
+            this.items = [];
+          }
+        },
+        error: (error: any) => {
+          console.log('[DELETE_DELETED_NEW]', error);
+        },
+      });
+    this.unsubscribe.push(deleteDeletedNewSubscr);
+  }
+
+  toggleSelectAll(e: any) {
+    this.selectedNews = this.utilsService.toggleSelectAll(
+      e,
+      this.items.map((items) => items.news).flat(1)
+    );
+  }
 
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());

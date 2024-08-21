@@ -301,7 +301,7 @@
               [ngTemplateOutlet]="formError"
               [ngTemplateOutletContext]="{
                   validation: 'maxlength',
-                  message: ' يجب ان لا يقل العنوان عن ' + this.addNewForm.controls.Title.errors?.maxlength 
+                  message: ' يجب ان لا يزيد العنوان عن ' + this.addNewForm.controls.Title.errors?.maxlength 
                   ?.requiredLength + ' حرف ',
                   control: addNewForm.controls['Title'],
                 }
@@ -379,7 +379,7 @@
               [ngTemplateOutlet]="formError"
               [ngTemplateOutletContext]="{
                   validation: 'minlength',
-                  message: ' يجب ان لا يقل المقدمة عن ' + this.addNewForm.controls.Brief.errors?.minlength 
+                  message: ' يجب ان لا تقل المقدمة عن ' + this.addNewForm.controls.Brief.errors?.minlength 
                   ?.requiredLength + ' حرف ',
                   control: addNewForm.controls['Brief'],
                 }
@@ -389,7 +389,7 @@
               [ngTemplateOutlet]="formError"
               [ngTemplateOutletContext]="{
                   validation: 'maxlength',
-                  message: ' يجب ان لا يزيد المقدمة عن ' + this.addNewForm.controls.Brief.errors?.maxlength 
+                  message: ' يجب ان لا تزيد المقدمة عن ' + this.addNewForm.controls.Brief.errors?.maxlength 
                   ?.requiredLength + ' حرف ',
                   control: addNewForm.controls['Brief'],
                 }
@@ -512,10 +512,11 @@
             [selectedImage]="selectedImage"
             (selectedImageEmitter)="receiver('selectedImage', $event)"
           ></app-image
-          >}
+          >}@else{
           <app-add-image
             (selectedImageEmitter)="receiver('selectedImage', $event)"
           ></app-add-image>
+          }
           <app-upload-image></app-upload-image>
         </div>
       </div>

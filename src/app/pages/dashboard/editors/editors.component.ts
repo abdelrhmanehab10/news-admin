@@ -25,15 +25,12 @@ export class EditorsComponent implements OnDestroy, OnInit {
   hasError: boolean = false;
 
   listOptions: ListOptions = {
-    isCheckList: false,
     isEdit: true,
     isEnable: true,
     isDelete: true,
-    edit: () => {},
     enable: (editorId: string) => {
       this.onEnable(editorId);
     },
-    delete: () => {},
   };
 
   constructor(

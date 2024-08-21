@@ -36,21 +36,6 @@ export class PublishHTTPService {
     );
   }
 
-  getRolesPassList(token: string): Observable<any> {
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<{
-      status: number;
-      data: { id: string; name: string }[];
-      message: string | null;
-      errors: string[] | null;
-    }>(`${API_URL}/News/GetRolesPassList`, {
-      headers: httpHeaders,
-    });
-  }
-
   deleteNew(token: string, ids: string[]): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -59,7 +44,7 @@ export class PublishHTTPService {
     const formData = new FormData();
 
     ids.forEach((id) => {
-      formData.append(`NewsIDs`, id);
+      formData.append(`NewsIDs`, String(id));
     });
 
     return this.http.delete<{

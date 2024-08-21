@@ -79,8 +79,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
 
   constructor(
     private initService: LayoutInitService,
-    private dashboardService: DashboardService,
-    private publishService: PublishService,
     private layout: LayoutService,
     private router: Router,
     private activatedRoute: ActivatedRoute
@@ -109,9 +107,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
         this.updateProps(config);
       });
     this.unsubscribe.push(subscr);
-    this.getCategories();
-    this.getContentTypes();
-    this.getRolesPassList();
   }
 
   updateProps(config: ILayout) {
@@ -418,51 +413,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
         }
       }
     }, 0);
-  }
-
-  getCategories(): void {
-    this.hasError = false;
-    const getNewsCategoriesSubscr = this.dashboardService
-      .getCategories()
-      .subscribe({
-        next: (data: any[]) => {
-          this.dashboardService.categoriesSubject.next(data);
-        },
-        error: (error: any) => {
-          console.log('[NEWS_STATUS_COUNT]', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getNewsCategoriesSubscr);
-  }
-
-  getContentTypes(): void {
-    this.hasError = false;
-    const getNewsCategoriesSubscr = this.dashboardService
-      .getContentTypes()
-      .subscribe({
-        next: (data: ContentType[]) => {
-          this.dashboardService.contentTypesSubject.next(data);
-        },
-        error: (error: any) => {
-          console.log('[NEWS_STATUS_COUNT]', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getNewsCategoriesSubscr);
-  }
-
-  getRolesPassList(): void {
-    this.hasError = false;
-    const getRolesPassListSubscr = this.publishService
-      .getRolesPassList()
-      .subscribe({
-        error: (error: any) => {
-          console.log('ROLES_PASSLIST', error);
-          this.hasError = true;
-        },
-      });
-    this.unsubscribe.push(getRolesPassListSubscr);
   }
 
   ngOnDestroy() {

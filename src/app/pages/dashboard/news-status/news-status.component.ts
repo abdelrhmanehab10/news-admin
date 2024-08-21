@@ -11,6 +11,7 @@ import {
   ListOptions,
   TableOption,
 } from 'src/app/models/components.model';
+import { NEW } from 'src/app/models/data.model';
 import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-status.service';
 
 @Component({
@@ -20,12 +21,17 @@ import { NewsStatusService } from 'src/app/services/dashboard/news-status/news-s
 export class NewsStatusComponent implements OnDestroy, OnInit {
   private unsubscribe: Subscription[] = [];
 
-  news: any[] = [];
+  news: NEW[] = [];
   searchQuery: string = '';
   selectedNews: string[] = [];
   pageNumber: number = 1;
 
-  groupListOptions: ListOptions = {};
+  groupListOptions: ListOptions = {
+    isPreview: true,
+    isVersion: true,
+    isState: true,
+    isEmployee: true,
+  };
 
   filterOptions: FilterOption = {
     isCategories: true,
@@ -88,6 +94,7 @@ export class NewsStatusComponent implements OnDestroy, OnInit {
 
   recieveFilterOption(data: FilterOption) {
     this.filterOptions = data;
+    this.getNews();
   }
 
   ngOnDestroy(): void {

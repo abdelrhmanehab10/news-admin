@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { DateTimeFormatOptions } from '@eonasdan/tempus-dominus';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class UtilsService {
 
   toggleSelectAll(e: any, items: any[]) {
     if (e.target.checked) {
-      return items.map((item) => String(item.id));
+      return items.map((item) => item.id);
     } else {
       return [];
     }
@@ -67,5 +68,20 @@ export class UtilsService {
     } else {
       return 'الآن';
     }
+  }
+
+  convertDateToArabicFormat(dateString: string) {
+    const date = new Date(dateString);
+
+    const options: DateTimeFormatOptions = {
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+    };
+
+    const formatter = new Intl.DateTimeFormat('ar-EG', options);
+    const formattedDate = formatter.format(date);
+
+    return formattedDate;
   }
 }

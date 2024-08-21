@@ -10,7 +10,8 @@
         class="form-control form-control-solid pe-5"
         name="search"
         placeholder="ابحث عن استطلاع الرأي من هنا.."
-        (keydown)="onSearch($event)"
+        autocomplete="off"
+        (input)="onSearch($event)"
       />
     </div>
     <div class="card-toolbar">
@@ -23,7 +24,10 @@
       >
         <app-keenicon name="category" class="fs-2"></app-keenicon>
       </button>
-      <app-dropdown-menu [filterOptions]="filterOptions"></app-dropdown-menu>
+      <app-dropdown-menu
+        [filterOptions]="filterOptions"
+        (filterOptionsEmitter)="recieveFilterOption($event)"
+      ></app-dropdown-menu>
     </div>
   </div>
   <div class="card-body pt-2">
