@@ -128,6 +128,7 @@
         data-placeholder="Select option"
         data-allow-clear="true"
         formControlName="orderSubCategoryId"
+        [disabled]="!!orderSubCategories.length"
       >
         <option></option>
         @for(item of orderSubCategories; track item; let idx = $index){

@@ -11,9 +11,13 @@
         type="checkbox"
         data-kt-check="true"
         data-kt-check-target=".widget-9-check"
+        (change)="onSelect($event)"
+        [checked]="isAllImagesSelected"
       />
     </label>
-    <div class="mb-2" style="font-size: 12px">{{ timeSince(image.date) }}</div>
+    <div class="mb-2" style="font-size: 12px">
+      {{ timeSince(image.addedDate) }}
+    </div>
   </div>
   }
   <div class="symbol symbol-75px my-3 mb-6">
@@ -23,20 +27,35 @@
       [src]="
         !imageLoaded
           ? '../../../../assets/media/svg/files/blank-image.svg'
-          : image.icon
+          : image.picPath
       "
-      alt="{{ image.title }}"
+      alt="{{ image.picName }}"
     />
   </div>
   <div class="fs-5 fw-bolder mb-2 text-nowrap">
-    <span class=""> ...{{ image.title.substr(0, 10) }} </span>
+    <span *ngIf="image.picName"> ...{{ image.picName.substr(0, 10) }} </span>
   </div>
-  <div class="fs-7 fw-bold text-gray-500 mt-auto">{{ image.description }}</div>
+  <div class="fs-7 fw-bold text-gray-500 mt-auto">{{ image.picCaption }}</div>
   @if(type==='link'){
   <div class="d-flex justify-content-between gap-3">
-    <button class="btn btn-sm btn-primary text-center my-2 w-100">تعديل</button>
-    <button class="btn btn-sm btn-danger text-center my-2 w-100">حذف</button>
+    <app-upload-image
+      class="w-100"
+      [type]="'edit'"
+      [editedImage]="image"
+    ></app-upload-image>
+    <button
+      class="btn btn-sm btn-danger text-center my-2 w-100"
+      (click)="deleteImage(image.id)"
+    >
+      حذف
+    </button>
   </div>
+  <button
+    class="btn btn-sm btn-secondary text-center my-2 w-100"
+    (click)="setMainImage(image.id)"
+  >
+    أضافة كصورة ألبوم
+  </button>
   }@else {
   <button class="btn btn-primary text-center gap-3 my-2" (click)="onSelect()">
     اختيار

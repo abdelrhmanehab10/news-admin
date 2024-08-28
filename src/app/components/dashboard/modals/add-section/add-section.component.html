@@ -1,5 +1,5 @@
 <app-modal #modal [modalConfig]="modalConfig">
-  <form [formGroup]="sectionForm" novalidate="novalidate">
+  <form *ngIf="sectionForm" [formGroup]="sectionForm" novalidate="novalidate">
     <div class="row mb-6">
       <label class="col-lg-2 col-form-label required fw-bold fs-6"
         >العنوان</label
@@ -94,7 +94,7 @@
         ></ng-container>
       </div>
     </div>
-    <div class="row mb-6">
+    <div *ngIf="f.CategoryId" class="row mb-6">
       <label class="col-lg-2 col-form-label fw-bold fs-6">الباب</label>
       <div class="col-lg-8">
         <select
@@ -152,9 +152,6 @@
     </div>
   </form>
 </app-modal>
-<button
-  class="btn btn-sm btn-outline-light border b d-flex align-items-center gap-3 me-2"
-  (click)="onOpen()"
->
-  {{ title }}
+<button class="btn btn-sm btn-outline-light border me-2" (click)="openModal()">
+  @if(type==='edit'){ تعديل }@else{ اضافة باب فرعي }
 </button>

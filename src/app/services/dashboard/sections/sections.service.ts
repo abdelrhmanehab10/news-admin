@@ -44,7 +44,28 @@ export class SectionsService {
     );
   }
 
-  getAllSections(pageNumber: number, category: number, searchQuery?: string) {
+  editSection(data: { [key: string]: any }) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    return this.sectionsHTTPService.editSection(auth.authToken, data).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        return of(undefined);
+      })
+    );
+  }
+
+  getAllSections(
+    pageNumber: number,
+    categoryId?: string,
+    searchQuery?: string
+  ) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
@@ -52,14 +73,14 @@ export class SectionsService {
 
     this.isLoadingSubject.next(true);
     return this.sectionsHTTPService
-      .getAllSections(auth.authToken, pageNumber, category)
+      .getAllSections(auth.authToken, pageNumber, categoryId)
       .pipe(
         map((data) => {
           return data.data;
         }),
         catchError((err) => {
           console.error('err', err);
-          return of(undefined);
+          throw err;
         }),
         finalize(() => this.isLoadingSubject.next(false))
       );
@@ -125,6 +146,25 @@ export class SectionsService {
           return of(undefined);
         }),
         finalize(() => this.isLoadingSubject.next(false))
+      );
+  }
+
+  getSectionById(sectionId: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    return this.sectionsHTTPService
+      .getSectionById(auth.authToken, sectionId)
+      .pipe(
+        map((data) => {
+          return data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          throw err;
+        })
       );
   }
 }

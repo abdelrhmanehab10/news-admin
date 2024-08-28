@@ -71,8 +71,6 @@ export class GalleriesComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data: any[]) => {
           if (data) {
-            console.log(data);
-
             this.galleries = data;
             this.cdr.detectChanges();
           } else {
@@ -127,6 +125,10 @@ export class GalleriesComponent implements OnInit, OnDestroy {
 
   recieveFilterOption(data: any) {
     this.filterOptions = data;
+    this.getGalleriesByType();
+  }
+
+  recieveEvent(data: any) {
     this.getGalleriesByType();
   }
 

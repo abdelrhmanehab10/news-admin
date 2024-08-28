@@ -109,10 +109,10 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
       roleId: [''],
       categoryId: [''],
       orderCategoryId: [''],
-      subCategoryId: [''],
+      subCategoryId: [{ value: '', disabled: this.subCategories.length }],
       orderSubCategoryId: [''],
       statusId: [''],
-      galleryId: [''],
+      galleryId: [{ value: '', disabled: true }],
       galleryTypeId: [''],
       typeId: [''],
     });
@@ -182,6 +182,7 @@ export class DropdownMenuComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data: any[]) => {
           this.galleries = data;
+          this.filterForm.controls.galleryId.enable();
           this.cdr.detectChanges();
         },
         error: (err: any) => {

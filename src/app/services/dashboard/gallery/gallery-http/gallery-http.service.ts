@@ -29,6 +29,19 @@ export class GalleryHTTPService {
     });
   }
 
+  getGalleryById(token: string, galleryId: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<any>(
+      `${API_URL}GetGalleryById?GalleryId=${galleryId}`,
+      {
+        headers: httpHeaders,
+      }
+    );
+  }
+
   editGallery(token: string, gallery: { [key: string]: any }): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
@@ -42,7 +55,7 @@ export class GalleryHTTPService {
       }
     }
 
-    return this.http.post<any>(`${API_URL}EditGallery`, formData, {
+    return this.http.put<any>(`${API_URL}EditGallery`, formData, {
       headers: httpHeaders,
     });
   }

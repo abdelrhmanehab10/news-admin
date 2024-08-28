@@ -89,7 +89,7 @@ export class AddNewHTTPService {
     XAccess?: number,
     YAccess?: number,
     Image?: File
-  ) {
+  ): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -122,6 +122,88 @@ export class AddNewHTTPService {
     }>(`${API_URL}/Image/AddImage`, formData, {
       headers: httpHeaders,
     });
+  }
+
+  updateImage(
+    token: string,
+    ImageId?: string,
+    Caption?: string,
+    CHKWaterMark?: boolean,
+    ImageUrl?: string,
+    Width?: number,
+    Hieght?: number,
+    XAccess?: number,
+    YAccess?: number,
+    Image?: File
+  ): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const data: { [key: string]: any } = {
+      ImageId,
+      Caption,
+      CHKWaterMark,
+      ImageUrl,
+      Width,
+      Hieght,
+      XAccess,
+      YAccess,
+      Image,
+    };
+
+    console.log(data);
+
+    const formData = new FormData();
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        formData.append(key, data[key]?.toString());
+      }
+    }
+
+    return this.http.put<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/Image/UpdateImage`, formData, {
+      headers: httpHeaders,
+    });
+  }
+
+  deleteImage(token: string, id?: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.delete<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}/Image/DeleteImage?Id=${id}`, {
+      headers: httpHeaders,
+    });
+  }
+
+  setMainImage(token: string, id?: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.put<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(
+      `${API_URL}/Image/SetMainImage?Id=${id}`,
+      {},
+      {
+        headers: httpHeaders,
+      }
+    );
   }
 
   addNew(

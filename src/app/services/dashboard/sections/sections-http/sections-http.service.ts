@@ -18,8 +18,6 @@ export class SectionsHTTPService {
 
     const formData = new FormData();
 
-    console.log(data);
-
     for (const key in data) {
       if (data.hasOwnProperty(key)) {
         formData.append(key, data[key].toString());
@@ -31,10 +29,30 @@ export class SectionsHTTPService {
     });
   }
 
+  editSection(token: string, data: { [key: string]: any }): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    console.log(data);
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        formData.append(key, data[key].toString());
+      }
+    }
+
+    return this.http.put<any>(`${API_URL}UpdateSection`, formData, {
+      headers: httpHeaders,
+    });
+  }
+
   getAllSections(
     token: string,
     pageNumber: number,
-    category: number,
+    categoryId?: string,
     searchQuery?: string
   ): Observable<any> {
     const httpHeaders = new HttpHeaders({
@@ -42,7 +60,7 @@ export class SectionsHTTPService {
     });
 
     return this.http.get<any>(
-      `${API_URL}GetAllSection?PageNumber=${pageNumber}&CatId=${category}${
+      `${API_URL}GetAllSection?PageNumber=${pageNumber}&CatId=${categoryId}${
         searchQuery ? '&Search=' + searchQuery : ''
       }`,
       {
@@ -90,6 +108,16 @@ export class SectionsHTTPService {
     formData.append('CategoryId', categoryId);
 
     return this.http.put<any>(`${API_URL}OrderSectionList`, formData, {
+      headers: httpHeaders,
+    });
+  }
+
+  getSectionById(token: string, sectionId: string) {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<any>(`${API_URL}GetSectionById?Id=${sectionId}`, {
       headers: httpHeaders,
     });
   }

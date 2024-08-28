@@ -50,7 +50,6 @@ export class AddNewService {
       return of(undefined);
     }
 
-    this.isLoadingSubject.next(true);
     return this.AddNewHTTPService.getGalleryByType(
       auth.authToken,
       galleryId,
@@ -62,8 +61,7 @@ export class AddNewService {
       catchError((err) => {
         console.error('err', err);
         return of(undefined);
-      }),
-      finalize(() => this.isLoadingSubject.next(false))
+      })
     );
   }
 
@@ -87,7 +85,7 @@ export class AddNewService {
       searchText
     ).pipe(
       map((data) => {
-        return data.data;
+        return data;
       }),
       catchError((err) => {
         console.error('err', err);
@@ -113,7 +111,6 @@ export class AddNewService {
       return of(undefined);
     }
 
-    this.isLoadingSubject.next(true);
     return this.AddNewHTTPService.addImage(
       auth.authToken,
       subCategoryId,
@@ -127,13 +124,84 @@ export class AddNewService {
       Image
     ).pipe(
       map((data) => {
-        return data.message;
+        return data;
       }),
       catchError((err) => {
         console.error('err', err);
-        return of(undefined);
+        throw err;
+      })
+    );
+  }
+
+  updateImage(
+    ImageId?: string,
+    Caption?: string,
+    CHKWaterMark?: boolean,
+    ImageUrl?: string,
+    Width?: number,
+    Hieght?: number,
+    XAccess?: number,
+    YAccess?: number,
+    Image?: File
+  ) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    return this.AddNewHTTPService.updateImage(
+      auth.authToken,
+      ImageId,
+      Caption,
+      CHKWaterMark,
+      ImageUrl,
+      Width,
+      Hieght,
+      XAccess,
+      YAccess,
+      Image
+    ).pipe(
+      map((data) => {
+        return data;
       }),
-      finalize(() => this.isLoadingSubject.next(false))
+      catchError((err) => {
+        console.error('err', err);
+        throw err;
+      })
+    );
+  }
+
+  deleteImage(id?: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    return this.AddNewHTTPService.deleteImage(auth.authToken, id).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        throw err;
+      })
+    );
+  }
+
+  setMainImage(id?: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    return this.AddNewHTTPService.setMainImage(auth.authToken, id).pipe(
+      map((data) => {
+        return data;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        throw err;
+      })
     );
   }
 

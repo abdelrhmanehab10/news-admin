@@ -118,9 +118,22 @@ export interface Editor {
 }
 
 export interface Image {
-  id: number;
+  id: string;
   picName: string;
   picPath: string;
   picCaption: string;
   addedDate: string;
+  subCategoryId?: string;
+  CHKWaterMark?: boolean;
+}
+
+export interface Section {
+  sectionId: number;
+  secTitle: string;
+  hide: boolean;
+
+  weeklySection: boolean;
+  keywords: string;
+  description: string;
+  categoryId: number;
 }

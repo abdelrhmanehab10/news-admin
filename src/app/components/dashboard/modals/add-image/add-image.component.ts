@@ -2,18 +2,14 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  OnInit,
+  OnDestroy,
   Output,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
-import {
-  GalleryImage,
-  ModalConfig,
-  Pagination,
-} from 'src/app/models/components.model';
+import { ModalConfig, Pagination } from 'src/app/models/components.model';
 import { Image } from 'src/app/models/data.model';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
@@ -22,7 +18,7 @@ import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
   selector: 'app-add-image',
   templateUrl: './add-image.component.html',
 })
-export class AddImageComponent {
+export class AddImageComponent implements OnDestroy {
   selectedImage: {} = {};
   filterForm: FormGroup;
   pagination: Pagination = { current: 1 };
@@ -32,7 +28,7 @@ export class AddImageComponent {
 
   galleryTypes: { galleryTypeID: string; galleryTypeTitle: string }[] = [];
   gallery: { galleryID: string; galleryTitle: string }[] = [];
-  images: GalleryImage[] = [];
+  images: Image[] = [];
   hasError: boolean = false;
 
   isLoading$: Observable<boolean>;
@@ -44,12 +40,7 @@ export class AddImageComponent {
     hideDismissButton: true,
   };
 
-  @Output() selectedImageEmitter = new EventEmitter<{
-    id: number;
-    icon: string;
-    title: string;
-    description: string;
-  }>();
+  @Output() selectedImageEmitter = new EventEmitter<Image>();
 
   constructor(
     private fb: FormBuilder,
@@ -127,13 +118,7 @@ export class AddImageComponent {
               current: this.pagination.current,
               pages: Array.from({ length: data.pageNumbers }, (_, i) => i + 1),
             };
-            this.images = data.images.map((img) => ({
-              id: img.id,
-              icon: img.picPath,
-              title: img.picName,
-              description: img.picCaption,
-              date: img.addedDate,
-            }));
+            this.images = data.images;
             this.cdr.detectChanges();
           } else {
             this.images = [];
@@ -147,12 +132,7 @@ export class AddImageComponent {
     this.unsubscribe.push(getGalleryImagesSubscr);
   }
 
-  recieveSelectedImage(data: {
-    icon: string;
-    title: string;
-    description: string;
-    id: number;
-  }) {
+  recieveSelectedImage(data: Image) {
     this.selectedImageEmitter.emit(data);
     this.modalComponent.close();
   }
@@ -160,5 +140,9 @@ export class AddImageComponent {
   recieveChangedPage(data: number) {
     this.pagination.current = data;
     this.getGalleryImages();
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }
 }

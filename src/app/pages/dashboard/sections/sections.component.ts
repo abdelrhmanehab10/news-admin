@@ -1,7 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
-import { FilterOption, ListOptions } from 'src/app/models/components.model';
+import {
+  FilterOption,
+  ListOptions,
+  Pagination,
+} from 'src/app/models/components.model';
+import { Section } from 'src/app/models/data.model';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 import { SectionsService } from 'src/app/services/dashboard/sections/sections.service';
 import { UtilsService } from 'src/app/services/utils/utils.service';
 
@@ -12,70 +18,66 @@ import { UtilsService } from 'src/app/services/utils/utils.service';
 export class SectionsComponent implements OnInit {
   private unsubscribe: Subscription[] = [];
 
-  items: {
-    sectionId: number;
-    secTitle: string;
-    hide: boolean;
-    weeklySection: boolean;
-    keywords: string;
-    description: string;
-    categoryId: number;
-  }[] = [];
+  sections: Section[] = [];
+  selectedSections: string[] = [];
 
-  filterOptions: FilterOption = { isCategories: true };
+  filterOptions: FilterOption = { isCategories: true, categoryId: '' };
+
   listOptions: ListOptions = {
     isCheckList: true,
     isEdit: true,
     edit: () => {},
   };
-  selectedSections: string[] = [];
-  pageNumber: number = 1;
+
+  pagination: Pagination = { current: 1 };
 
   isLoading$: Observable<boolean>;
-  hasError: boolean = false;
 
   constructor(
     private sectionsService: SectionsService,
     private utilsService: UtilsService,
     private cdr: ChangeDetectorRef,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private dashboardService: DashboardService
   ) {
     this.isLoading$ = this.sectionsService.isLoading$;
   }
 
   toggleSelectAll(e: any) {
-    this.selectedSections = this.utilsService.toggleSelectAll(e, this.items);
+    this.selectedSections = this.utilsService.toggleSelectAll(e, this.sections);
   }
 
   ngOnInit(): void {
-    this.getAllSections();
+    this.dashboardService.categories$.subscribe((categories) => {
+      this.getAllSections(categories[0]?.categoryID);
+    });
   }
 
-  getAllSections() {
-    this.hasError = false;
-
+  getAllSections(categoryId?: string) {
+    if (!categoryId && !this.filterOptions.categoryId) return;
     const getAllSectionSubscr = this.sectionsService
-      .getAllSections(this.pageNumber, 2)
+      .getAllSections(
+        this.pagination.current,
+        categoryId ?? this.filterOptions.categoryId
+      )
       .subscribe({
         next: (data: any[]) => {
           if (data) {
-            this.items = data;
+            this.sections = data;
             this.cdr.detectChanges();
           } else {
-            this.items = [];
+            this.sections = [];
           }
         },
         error: (error: any) => {
           console.log('[GET_ALL_SECTIONS]', error);
-          this.hasError = true;
+          this.toast.error(error.error.message);
         },
       });
     this.unsubscribe.push(getAllSectionSubscr);
   }
 
   deleteSections() {
-    this.hasError = false;
-
     const deleteSectionsSubscr = this.sectionsService
       .deleteSections(this.selectedSections)
       .subscribe({
@@ -87,8 +89,7 @@ export class SectionsComponent implements OnInit {
           }
         },
         error: (error: any) => {
-          console.log('[DELETE]', error);
-          this.hasError = true;
+          console.log('[DELETE_SECTIONS]', error);
         },
       });
     this.unsubscribe.push(deleteSectionsSubscr);
@@ -96,12 +97,6 @@ export class SectionsComponent implements OnInit {
 
   recieveSelectedItems(data: string[]) {
     this.selectedSections = data;
-  }
-
-  recieveIsNewSectionAdded(data: boolean) {
-    if (data) {
-      this.getAllSections();
-    }
   }
 
   ngOnDestroy() {

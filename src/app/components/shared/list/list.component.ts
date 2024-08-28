@@ -4,10 +4,11 @@ import { ListOptions } from 'src/app/models/components.model';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styleUrl: './list.style.scss',
+  styleUrl: './list.component.scss',
 })
 export class ListComponent {
   @Output() selectedItemsEmitter = new EventEmitter<string[]>();
+  @Output() eventEmitter = new EventEmitter<boolean>();
 
   @Input() items: any[] = [];
   @Input() isAllSectionSelected: boolean = false;
@@ -53,5 +54,9 @@ export class ListComponent {
     }
 
     this.selectedItemsEmitter.emit(this.selectedItems);
+  }
+
+  recieveEvent(data: boolean) {
+    this.eventEmitter.emit(data);
   }
 }

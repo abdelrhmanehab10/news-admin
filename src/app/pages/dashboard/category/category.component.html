@@ -12,19 +12,12 @@
       <span class="me-2">الكل</span>
     </div>
     <div class="card-toolbar">
-      <button
-        type="button"
-        class="btn btn-sm btn-icon btn-color-primary btn-active-light-primary"
-        data-kt-menu-trigger="click"
-        data-kt-menu-placement="bottom-end"
-        data-kt-menu-flip="top-end"
-      >
-        <app-keenicon name="category" class="fs-2"></app-keenicon>
-      </button>
       <app-add-category
         (onNewCategoryAddedEmitter)="recieveIsNewCategoryAdded($event)"
       ></app-add-category>
-      <button (click)="deleteCategories()" class="btn btn-danger btn-sm mx-2">حذف</button>
+      <button (click)="deleteCategories()" class="btn btn-danger btn-sm mx-2">
+        حذف
+      </button>
     </div>
   </div>
   <div class="card-body pt-2">

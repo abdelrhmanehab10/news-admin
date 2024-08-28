@@ -3,21 +3,28 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
 } from '@angular/core';
+import { Image } from 'src/app/models/data.model';
 
 @Component({
   selector: 'app-image',
   templateUrl: './image.component.html',
   styleUrl: './image.component.scss',
 })
-export class ImageComponent {
+export class ImageComponent implements OnChanges {
   filePreview: string | ArrayBuffer | null | undefined = null;
   @Input() selectedImage: any;
 
-  @Output() selectedImageEmitter = new EventEmitter<any>();
+  @Output() selectedImageEmitter = new EventEmitter<Image | File | null>();
 
   constructor(private cdr: ChangeDetectorRef) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;

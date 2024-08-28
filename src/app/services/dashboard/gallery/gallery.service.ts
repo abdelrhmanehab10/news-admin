@@ -44,13 +44,31 @@ export class GalleryService {
     );
   }
 
+  getGalleryById(galleryId: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    return this.galleryHTTPService
+      .getGalleryById(auth.authToken, galleryId)
+      .pipe(
+        map((data) => {
+          return data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          throw err;
+        })
+      );
+  }
+
   editGallery(gallery: { [key: string]: any }) {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
       return of(undefined);
     }
 
-    this.isLoadingSubject.next(true);
     return this.galleryHTTPService.editGallery(auth.authToken, gallery).pipe(
       map((data) => {
         return data;
@@ -58,8 +76,7 @@ export class GalleryService {
       catchError((err) => {
         console.error('err', err);
         throw err;
-      }),
-      finalize(() => this.isLoadingSubject.next(false))
+      })
     );
   }
 

@@ -62,7 +62,7 @@ export class OperationsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.pageInfoServices.updateTitle('العمليات' + ' - El Wakeel');
+    this.pageInfoServices.updateTitle('العمليات' + ' - ALWakeel');
 
     this.getOperations();
     this.dashboardService.rolePassListSubject.subscribe({

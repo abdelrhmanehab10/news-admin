@@ -39,7 +39,7 @@ export class VersionsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.pageInfoServices.updateTitle('الأصدارات' + ' - El Wakeel');
+    this.pageInfoServices.updateTitle('الأصدارات' + ' - ALWakeel');
     this.versionId = this.route.snapshot.params.id;
 
     this.getNewsVersions();

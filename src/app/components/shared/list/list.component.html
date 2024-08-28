@@ -44,8 +44,9 @@ $index){
   >
     {{ item.active ? "ايقاف" : "تفعيل" }}</button
   >} @if(listOptions.isEdit){<app-add-section
-    [title]="'تعديل'"
-    [btnStyle]="'btn-light'"
+    [type]="'edit'"
+    [sectionId]="item.id"
+    (eventEmitter)="recieveEvent($event)"
   ></app-add-section
   >} @if(listOptions.isDelete && listOptions.delete){<button
     (click)="listOptions.delete(item.id)"

@@ -3,7 +3,6 @@ import {
   Component,
   Input,
   OnDestroy,
-  OnInit,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,10 +10,10 @@ import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
 import { AddNewService } from 'src/app/services/dashboard/add-new/add-new.service';
-import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { ModalConfig } from 'src/app/models/components.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
+import { Image } from 'src/app/models/data.model';
 
 @Component({
   selector: 'app-upload-image',
@@ -22,7 +21,9 @@ import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
   styleUrl: './upload-image.component.scss',
 })
 export class UploadImageComponent implements OnDestroy {
-  @Input() type: 'upload' | 'link' = 'upload';
+  @Input() type: 'upload' | 'link' | 'edit' | 'upload-with-album' = 'upload';
+  @Input() editedImage: Image;
+  @Input() galleryId: string;
 
   uploadImageForm: FormGroup;
   imageChangedEvent: Event | null = null;
@@ -34,16 +35,23 @@ export class UploadImageComponent implements OnDestroy {
   galleryTypes: { galleryTypeID: string; galleryTypeTitle: string }[] = [];
   gallery: { galleryID: string; galleryTitle: string }[] = [];
 
-  hasError: boolean = false;
-
   isLoading$: Observable<boolean>;
 
   modalConfig: ModalConfig = {
-    modalTitle: this.type === 'upload' ? 'أضافة صورة' : 'رفع صورة',
+    modalTitle:
+      this.type === 'upload'
+        ? 'أضافة صورة'
+        : this.type === 'edit'
+        ? 'تعديل صورة'
+        : 'رفع صورة',
     dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'الغاء',
     customDismiss: () => {
-      this.addImage();
+      if (this.type === 'edit') {
+        this.updateImage();
+      } else {
+        this.addImage();
+      }
     },
   };
 
@@ -68,9 +76,17 @@ export class UploadImageComponent implements OnDestroy {
 
   initUploadImageForm() {
     this.uploadImageForm = this.fb.group({
-      subCategoryId: ['', [Validators.required]],
-      Caption: ['', [Validators.required]],
-      CHKWaterMark: [false],
+      subCategoryId: [
+        {
+          value: this.editedImage?.subCategoryId ?? '',
+          disabled:
+            !!this.editedImage?.subCategoryId ||
+            this.type === 'upload-with-album',
+        },
+        [Validators.required],
+      ],
+      Caption: [this.editedImage?.picCaption ?? '', [Validators.required]],
+      CHKWaterMark: [this.editedImage?.CHKWaterMark ?? false],
     });
   }
 
@@ -80,12 +96,14 @@ export class UploadImageComponent implements OnDestroy {
       this.galleryTypes = types;
     });
     this.getGalleryByType();
+    if (this.type === 'upload-with-album') {
+      this.f.subCategoryId.setValue(this.galleryId);
+    }
     return await this.modalComponent.open();
   }
 
   getGalleryByType(e?: any) {
     const galleryId = e ? e.target.value : this.galleryTypes[0]?.galleryTypeID;
-    this.hasError = false;
     const getGalleryByTypeSubscr = this.addNewService
       .getGalleryByType(galleryId)
       .pipe(distinctUntilChanged())
@@ -93,7 +111,9 @@ export class UploadImageComponent implements OnDestroy {
         next: (data: typeof this.gallery) => {
           if (data) {
             this.gallery = data;
-            this.f.subCategoryId.setValue(data[0].galleryID);
+            if (this.type !== 'upload-with-album') {
+              this.f.subCategoryId.setValue(data[0].galleryID);
+            }
             this.cdr.detectChanges();
           } else {
             this.gallery = [];
@@ -101,14 +121,12 @@ export class UploadImageComponent implements OnDestroy {
         },
         error: (error: any) => {
           console.log('[Gallery]', error);
-          this.hasError = true;
         },
       });
     this.unsubscribe.push(getGalleryByTypeSubscr);
   }
 
   addImage() {
-    this.hasError = false;
     const addImageSubscr = this.addNewService
       .addImage(
         this.f.subCategoryId.value,
@@ -124,12 +142,39 @@ export class UploadImageComponent implements OnDestroy {
       .subscribe({
         next: (data: any) => {
           if (data) {
-            this.toast.success(data);
+            this.toast.success(data.message);
           }
         },
         error: (error: any) => {
           console.log('[ADD_IMAGE]', error);
-          this.hasError = true;
+          this.toast.error(error.error.message);
+        },
+      });
+    this.unsubscribe.push(addImageSubscr);
+  }
+
+  updateImage() {
+    const addImageSubscr = this.addNewService
+      .updateImage(
+        this.editedImage.id,
+        this.f.Caption.value,
+        this.f.CHKWaterMark.value,
+        this.imageUrl,
+        0,
+        0,
+        0,
+        0,
+        this.image
+      )
+      .subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.toast.success(data.message);
+          }
+        },
+        error: (error: any) => {
+          console.log('[UPDATE_IMAGE]', error);
+          this.toast.error(error.error.message);
         },
       });
     this.unsubscribe.push(addImageSubscr);

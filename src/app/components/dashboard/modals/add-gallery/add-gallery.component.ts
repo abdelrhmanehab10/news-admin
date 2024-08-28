@@ -10,32 +10,31 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, Subscription, distinctUntilChanged } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ModalComponent } from 'src/app/components/shared/modal/modal.component';
 import { ModalConfig } from 'src/app/models/components.model';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
-import { EditorsService } from 'src/app/services/dashboard/editors/editors.service';
 import { GalleryService } from 'src/app/services/dashboard/gallery/gallery.service';
 
 @Component({
   selector: 'app-add-gallery',
   templateUrl: './add-gallery.component.html',
 })
-export class AddGalleryComponent implements OnInit, OnDestroy {
+export class AddGalleryComponent implements OnDestroy {
   private unsubscribe: Subscription[] = [];
 
   galleryForm: FormGroup;
 
   @ViewChild('modal') private modalComponent: ModalComponent;
 
-  @Output() isGalleryAddedEmitter = new EventEmitter<boolean>(false);
+  @Output() eventEmitter = new EventEmitter<boolean>(false);
 
   isLoading$: Observable<boolean>;
 
-  @Input() gallery: any;
+  @Input() galleryId: string;
+  @Input() type: 'add' | 'edit' = 'add';
 
   galleryTypes: any[] = [];
-  type: string = '';
 
   modalConfig: ModalConfig = {
     modalTitle: this.type === 'edit' ? 'تعديل البوم' : 'أضافة البوم',
@@ -59,29 +58,20 @@ export class AddGalleryComponent implements OnInit, OnDestroy {
     this.isLoading$ = this.galleryService.isLoading$;
   }
 
-  ngOnInit(): void {}
-
   get f() {
     return this.galleryForm.controls;
   }
 
   initForm() {
     this.galleryForm = this.fb.group({
-      GalleryTypeId: [this.gallery.GalleryTypeId ?? '', Validators.required],
-      GalleryName: [this.gallery.GalleryName ?? '', Validators.required],
-      GalleryDescription: [
-        this.gallery.GalleryDescription ?? '',
-        Validators.required,
-      ],
-      GalleryKeywords: [
-        this.gallery.GalleryKeywords ?? '',
-        Validators.required,
-      ],
+      GalleryTypeId: ['', Validators.required],
+      GalleryName: ['', Validators.required],
+      GalleryDescription: ['', Validators.required],
+      GalleryKeywords: ['', Validators.required],
     });
   }
 
   addGallery() {
-    this.isGalleryAddedEmitter.emit(false);
     const addGallerySubscr = this.galleryService
       .addGallery({
         GalleryTypeId: this.f.GalleryTypeId.value,
@@ -93,7 +83,7 @@ export class AddGalleryComponent implements OnInit, OnDestroy {
         next: (data: any) => {
           if (data) {
             this.toast.success(data.message);
-            this.isGalleryAddedEmitter.emit(true);
+            this.eventEmitter.emit(true);
             this.galleryForm.reset();
             this.modalComponent.dismiss();
           }
@@ -106,12 +96,31 @@ export class AddGalleryComponent implements OnInit, OnDestroy {
     this.unsubscribe.push(addGallerySubscr);
   }
 
+  getGalleryById(galleryId: string) {
+    const getGalleryByIdSubscr = this.galleryService
+      .getGalleryById(galleryId)
+      .subscribe({
+        next: (data: any) => {
+          if (data.status === 200) {
+            this.f.GalleryTypeId.setValue(data.data.galleryTypeId);
+            this.f.GalleryName.setValue(data.data.galleryName);
+            this.f.GalleryDescription.setValue(data.data.galleryDescription);
+            this.f.GalleryKeywords.setValue(data.data.galleryKeywords);
+          }
+        },
+        error: (error: any) => {
+          console.log('[GET_GALLERY_BY_ID]', error);
+          this.toast.error(error.error.message);
+        },
+      });
+    this.unsubscribe.push(getGalleryByIdSubscr);
+  }
+
   editGallery() {
-    this.isGalleryAddedEmitter.emit(false);
     const editGallerySubscr = this.galleryService
       .editGallery({
         GalleryTypeId: this.f.GalleryTypeId.value,
-        GalleryId: this.gallery.id,
+        GalleryId: this.galleryId,
         GalleryName: this.f.GalleryName.value,
         GalleryDescription: this.f.GalleryDescription.value,
         GalleryKeywords: this.f.GalleryKeywords.value,
@@ -120,7 +129,7 @@ export class AddGalleryComponent implements OnInit, OnDestroy {
         next: (data: any) => {
           if (data) {
             this.toast.success(data.message);
-            this.isGalleryAddedEmitter.emit(true);
+            this.eventEmitter.emit(true);
             this.galleryForm.reset();
             this.modalComponent.dismiss();
           }
@@ -138,6 +147,10 @@ export class AddGalleryComponent implements OnInit, OnDestroy {
     this.dashboardService.galleryTypes$.subscribe((types) => {
       this.galleryTypes = types;
     });
+    if (this.type === 'edit') {
+      this.getGalleryById(this.galleryId);
+    }
+
     return await this.modalComponent.open();
   }
 

@@ -58,7 +58,10 @@
         <span class="required">صورة</span>
       </label>
       <div class="col-lg-10 fv-row mb-6">
-        <app-image (selectedImageEmitter)="recieveImage($event)"></app-image>
+        <app-image
+          [selectedImage]="editedImage"
+          (selectedImageEmitter)="recieveImage($event)"
+        ></app-image>
       </div>
       <!-- <image-cropper
         [imageChangedEvent]="imageChangedEvent"
@@ -89,11 +92,17 @@
   </form>
 </app-modal>
 <button
-  class="btn btn-primary d-flex align-items-center gap-3"
-  [ngClass]="type === 'link' ? 'btn-sm' : ''"
+  class="btn"
+  [ngClass]="[
+    type !== 'upload' ? 'btn-sm' : 'd-flex align-items-center gap-3',
+    type === 'edit' ? 'my-2 w-100' : '',
+    type === 'upload-with-album'
+      ? 'btn btn-sm btn-outline-light border me-2'
+      : 'btn-primary'
+  ]"
   (click)="openModal()"
 >
   @if(type==='upload'){ رفع صورة
   <app-keenicon name="file-up" class="fs-1 text-white"></app-keenicon>
-  }@else{ أضافة صورة }
+  }@else if(type==='edit'){تعديل}@else{ أضافة صورة }
 </button>
