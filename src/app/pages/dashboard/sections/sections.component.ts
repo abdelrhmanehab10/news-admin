@@ -99,6 +99,11 @@ export class SectionsComponent implements OnInit {
     this.selectedSections = data;
   }
 
+  recieveFilterOptions(filterOptions: FilterOption) {
+    this.filterOptions = filterOptions;
+    this.getAllSections();
+  }
+
   ngOnDestroy() {
     this.unsubscribe.forEach((sb) => sb.unsubscribe());
   }

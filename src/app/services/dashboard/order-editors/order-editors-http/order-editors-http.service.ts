@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-const API_URL = `${environment.apiUrl}`;
+const API_URL = `${environment.apiUrl}/OrderEditors/`;
 
 @Injectable({
   providedIn: 'root',
@@ -21,22 +21,12 @@ export class OrderEditorsHTTPService {
       data: any[];
       message: string | null;
       errors: string[] | null;
-    }>(
-      `${API_URL}/OrderNews/GetNewsOrder${
-        categoryId && `?categoryId=${categoryId}`
-      }`,
-      {
-        headers: httpHeaders,
-      }
-    );
+    }>(`${API_URL}GetEditorsOrder`, {
+      headers: httpHeaders,
+    });
   }
 
-  saveOrder(
-    token: string,
-    newsOrder: string[],
-    categoryId?: string,
-    subCategoryId?: string
-  ): Observable<any> {
+  saveOrder(token: string, newsOrder: string[]): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
@@ -47,20 +37,12 @@ export class OrderEditorsHTTPService {
       formData.append('Ids', id);
     });
 
-    if (categoryId) {
-      formData.append('categoryId', categoryId);
-    }
-
-    if (subCategoryId) {
-      formData.append('sectionId', subCategoryId);
-    }
-
     return this.http.put<{
       status: number;
       data: any[];
       message: string | null;
       errors: string[] | null;
-    }>(`${API_URL}/OrderNews/SaveOrder`, formData, {
+    }>(`${API_URL}SaveOrder`, formData, {
       headers: httpHeaders,
     });
   }

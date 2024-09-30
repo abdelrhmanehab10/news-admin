@@ -1,5 +1,5 @@
 <app-modal #modal [modalConfig]="modalConfig">
-  <form [formGroup]="categoryForm" novalidate="novalidate">
+  <form *ngIf="categoryForm" [formGroup]="categoryForm">
     <div class="row mb-6">
       <label class="col-lg-2 col-form-label required fw-bold fs-6"
         >العنوان</label
@@ -134,5 +134,5 @@
   class="btn btn-sm btn-outline-dark border b d-flex align-items-center gap-3 me-2"
   (click)="openModal()"
 >
-  {{ title }}
+  @if(type==='edit'){ تعديل }@else { أضافة باب رئيسي }
 </button>

@@ -36,7 +36,7 @@
             type="checkbox"
             value="{{ subItem.id }}"
             (change)="toggleSelect($event)"
-            [checked]="isSelected(subItem.id)"
+            [checked]="isItemChecked(subItem.id)"
             data-kt-check="true"
             data-kt-check-target=".widget-9-check"
           />

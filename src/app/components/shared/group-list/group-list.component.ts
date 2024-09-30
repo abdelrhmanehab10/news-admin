@@ -14,7 +14,7 @@ export class GroupListComponent {
 
   @Input() selectedItems: string[] = [];
 
-  @Output() selectedItemsChange = new EventEmitter<string[]>();
+  @Output() selectedItemsEmitter = new EventEmitter<string[]>();
   @Output() isAddedEmitter = new EventEmitter<boolean>();
 
   constructor(private utilsService: UtilsService) {}
@@ -41,20 +41,19 @@ export class GroupListComponent {
 
   toggleSelect(e: any) {
     if (e.target.checked) {
-      if (!this.selectedItems.some((si) => si == e.target.value)) {
-        this.selectedItems.push(e.target.value);
-      }
+      this.selectedItems.push(e.target.value);
     } else {
       this.selectedItems = this.selectedItems.filter(
         (id) => id != e.target.value
       );
+      console.log(this.selectedItems);
     }
 
-    this.selectedItemsChange.emit(this.selectedItems);
+    this.selectedItemsEmitter.emit(this.selectedItems);
   }
 
-  isSelected(id: string) {
-    return this.selectedItems.find((si) => si === id);
+  isItemChecked(id: string) {
+    return this.selectedItems.some((itemId) => itemId == id);
   }
 
   recieveIsAdded(data: boolean) {

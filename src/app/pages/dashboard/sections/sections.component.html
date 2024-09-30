@@ -21,9 +21,12 @@
       >
         <app-keenicon name="category" class="fs-2"></app-keenicon>
       </button>
-      <app-dropdown-menu [filterOptions]="filterOptions"></app-dropdown-menu>
+      <app-dropdown-menu
+        [filterOptions]="filterOptions"
+        (filterOptionsEmitter)="recieveFilterOptions($event)"
+      ></app-dropdown-menu>
       <app-add-section
-        (onNewSectionAddedEmitter)="getAllSections(filterOptions.categoryId)"
+        (eventEmitter)="getAllSections(filterOptions.categoryId)"
       ></app-add-section>
       <button (click)="deleteSections()" class="btn btn-danger btn-sm mx-2">
         حذف
@@ -33,7 +36,6 @@
   <div class="card-body pt-2">
     <app-list
       [items]="sections"
-      [isAllSectionSelected]="sections.length === selectedSections.length"
       (selectedItemsEmitter)="recieveSelectedItems($event)"
       [isLoading]="isLoading$ | async"
       [listOptions]="listOptions"

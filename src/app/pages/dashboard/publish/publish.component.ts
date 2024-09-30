@@ -179,12 +179,17 @@ export class PublishComponent implements OnInit, OnDestroy {
 
   toggleSelectAll(e: any) {
     if (e.target.checked) {
-      this.selectedNews = this.newsToPublish[0]?.news.map((item) =>
-        String(item.id)
-      );
+      this.selectedNews = this.getNewsToPublishIds();
     } else {
       this.selectedNews = [];
     }
+  }
+
+  getNewsToPublishIds() {
+    return this.newsToPublish
+      .map((item) => item.news)
+      .flat(1)
+      .map((item) => String(item.id));
   }
 
   ngOnDestroy() {

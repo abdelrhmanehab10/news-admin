@@ -44,6 +44,23 @@ export class CategoryService {
     );
   }
 
+  editCategory(data: { [key: string]: any }) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    return this.categoryHTTPService.editCategory(auth.authToken, data).pipe(
+      map((data) => {
+        return data.message;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        throw err;
+      })
+    );
+  }
+
   getAllCategories() {
     const auth = this.authService.getAuthFromLocalStorage();
     if (!auth || !auth.authToken) {
@@ -61,6 +78,25 @@ export class CategoryService {
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );
+  }
+
+  getCategoryById(categoryId: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    return this.categoryHTTPService
+      .getCategoryById(auth.authToken, categoryId)
+      .pipe(
+        map((data) => {
+          return data.data;
+        }),
+        catchError((err) => {
+          console.error('err', err);
+          throw err;
+        })
+      );
   }
 
   deleteCategories(categoriesIds: string[]) {

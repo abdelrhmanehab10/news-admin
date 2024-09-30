@@ -53,6 +53,24 @@ export class EditorsHTTPService {
     });
   }
 
+  deleteEditor(token: string, editorId: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+    formData.append('EditorId', editorId);
+
+    return this.http.put<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}DeleteEditor`, formData, {
+      headers: httpHeaders,
+    });
+  }
+
   addEditor(
     token: string,
     EditorName: string,

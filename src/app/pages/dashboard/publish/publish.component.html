@@ -12,7 +12,7 @@
           class="form-check-input"
           type="checkbox"
           (change)="toggleSelectAll($event)"
-          [checked]="newsToPublish[0].news.length === selectedNews.length"
+          [checked]="getNewsToPublishIds().length === selectedNews.length"
           data-kt-check="true"
           data-kt-check-target=".widget-9-check"
         />
@@ -92,7 +92,7 @@
       [items]="newsToPublish"
       [groupListOptions]="groupLisOptions"
       [selectedItems]="selectedNews"
-      (selectedItemsChange)="receiveSelectedNews($event)"
+      (selectedItemsEmitter)="receiveSelectedNews($event)"
     ></app-group-list>
   </div>
 </div>

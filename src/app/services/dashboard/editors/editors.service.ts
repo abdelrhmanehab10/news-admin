@@ -92,4 +92,23 @@ export class EditorsService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+
+  deleteEditor(editorId: string) {
+    const auth = this.authService.getAuthFromLocalStorage();
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+    return this.editorsHTTPService.deleteEditor(auth.authToken, editorId).pipe(
+      map((data) => {
+        return data.message;
+      }),
+      catchError((err) => {
+        console.error('err', err);
+        throw err;
+      }),
+      finalize(() => this.isLoadingSubject.next(false))
+    );
+  }
 }

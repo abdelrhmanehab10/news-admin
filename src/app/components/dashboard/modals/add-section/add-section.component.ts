@@ -90,7 +90,7 @@ export class AddSectionComponent implements OnInit {
   }
 
   addMainSection() {
-    if (!this.sectionForm.invalid) {
+    if (this.sectionForm.invalid) {
       return;
     }
     const addMainSectionSubscr = this.sectionsService

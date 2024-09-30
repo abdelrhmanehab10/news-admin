@@ -7,7 +7,7 @@ import {
   Observable,
   Subscription,
 } from 'rxjs';
-import { ListOptions } from 'src/app/models/components.model';
+import { ListOptions, Pagination } from 'src/app/models/components.model';
 import { EditorsService } from 'src/app/services/dashboard/editors/editors.service';
 
 @Component({
@@ -19,7 +19,7 @@ export class EditorsComponent implements OnDestroy, OnInit {
 
   items: any[] = [];
   search = '';
-  pageNumber: number = 1;
+  pagination: Pagination = { current: 1 };
 
   isLoading$: Observable<boolean>;
   hasError: boolean = false;
@@ -31,11 +31,13 @@ export class EditorsComponent implements OnDestroy, OnInit {
     enable: (editorId: string) => {
       this.onEnable(editorId);
     },
+    delete: (editorId: string) => {
+      this.deleteEditor(editorId);
+    },
   };
 
   constructor(
     private editorsService: EditorsService,
-    private fb: FormBuilder,
     private toast: ToastrService,
     private cdr: ChangeDetectorRef
   ) {
@@ -48,7 +50,7 @@ export class EditorsComponent implements OnDestroy, OnInit {
 
   onSearch(e: any) {
     this.search = e.target.value;
-    this.getAllEditors(300, this.pageNumber, this.search);
+    this.getAllEditors(300, this.pagination.current, this.search);
   }
 
   getAllEditors(delay: number = 0, pageNumber?: number, search?: string) {
@@ -95,8 +97,22 @@ export class EditorsComponent implements OnDestroy, OnInit {
     this.unsubscribe.push(toggleEnableEditorSubscr);
   }
 
-  recievePageNumber(data: number) {
-    this.pageNumber = data;
+  deleteEditor(editorId: string) {
+    this.hasError = false;
+    const deleteEditorSubscr = this.editorsService
+      .deleteEditor(editorId)
+      .subscribe({
+        next: (data: any) => {
+          if (data) {
+            this.toast.success(data.message);
+          }
+        },
+        error: (error: any) => {
+          console.log('[DELETE_EDITOR]', error);
+          this.hasError = true;
+        },
+      });
+    this.unsubscribe.push(deleteEditorSubscr);
   }
 
   ngOnDestroy(): void {

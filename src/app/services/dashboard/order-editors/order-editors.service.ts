@@ -56,9 +56,7 @@ export class OrderEditorsService {
     this.isLoadingSubject.next(true);
     return this.OrderEditorsHTTPService.saveOrder(
       auth.authToken,
-      newsOrder,
-      categoryId,
-      subCategoryId
+      newsOrder
     ).pipe(
       map((data: any) => {
         return data.data;
