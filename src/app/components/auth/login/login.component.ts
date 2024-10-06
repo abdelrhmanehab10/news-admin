@@ -5,7 +5,6 @@ import { first } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { UserModel } from 'src/app/models/user.model';
-import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +12,13 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  defaultAuth: { userName: string; password: string } = {
+    userName: 'admin123',
+    password: 'admin123',
+  };
+
   loginForm: FormGroup;
+  hasError: boolean;
   returnUrl: string;
   isLoading$: Observable<boolean>;
 
@@ -23,8 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router,
-    private toast: ToastrService
+    private router: Router
   ) {
     this.isLoading$ = this.authService.isLoading$;
     if (this.authService.currentUserValue) {
@@ -34,6 +38,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initForm();
+    // get return url from route parameters or default to '/'
     this.returnUrl =
       this.route.snapshot.queryParams['returnUrl'.toString()] || '/';
   }
@@ -45,7 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   initForm() {
     this.loginForm = this.fb.group({
       userName: [
-        'admin123',
+        this.defaultAuth.userName,
         Validators.compose([
           Validators.required,
           Validators.minLength(3),
@@ -53,7 +58,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         ]),
       ],
       password: [
-        'admin123',
+        this.defaultAuth.password,
         Validators.compose([
           Validators.required,
           Validators.minLength(8),
@@ -64,19 +69,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   submit() {
+    this.hasError = false;
     const loginSubscr = this.authService
       .login(this.f.userName.value, this.f.password.value)
       .pipe(first())
-      .subscribe({
-        next: (user) => {
-          if (user) {
-            this.router.navigate([this.returnUrl]);
-          }
-        },
-        error: (err) => {
-          console.log('LOGIN', err);
-          this.toast.error(err.error.message);
-        },
+      .subscribe((user: UserModel | undefined) => {
+        if (user) {
+          this.router.navigate([this.returnUrl]);
+        } else {
+          this.hasError = true;
+        }
       });
     this.unsubscribe.push(loginSubscr);
   }

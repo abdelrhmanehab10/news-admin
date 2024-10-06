@@ -1,4 +1,5 @@
 export interface ListOptions {
+
   isEdit?: boolean;
   isEditWithModal?: boolean;
   isEnable?: boolean;
@@ -12,10 +13,11 @@ export interface ListOptions {
   isState?: boolean;
   isEmployee?: boolean;
   isCustom?: boolean;
+  isEditor?: boolean;
 
   type?: string;
 
-  edit?: () => void;
+  edit?: (id:string) => void;
   enable?: (id: string) => void;
   delete?: (id: string) => void;
 }

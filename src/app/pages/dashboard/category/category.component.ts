@@ -18,8 +18,7 @@ export class CategoryComponent implements OnInit {
   listOptions: ListOptions = {
     isCheckList: true,
     isEdit: true,
-
-    type: 'category',
+    edit: () => {},
   };
 
   selectedCategories: string[] = [];
@@ -88,6 +87,12 @@ export class CategoryComponent implements OnInit {
 
   recieveSelectedItems(data: string[]) {
     this.selectedCategories = data;
+  }
+
+  recieveIsNewCategoryAdded(data: boolean) {
+    if (data) {
+      this.getAllCategories();
+    }
   }
 
   ngOnDestroy() {

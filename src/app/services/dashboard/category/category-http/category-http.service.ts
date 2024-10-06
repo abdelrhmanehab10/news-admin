@@ -29,40 +29,12 @@ export class CategoryHTTPService {
     });
   }
 
-  editCategory(token: string, data: { [key: string]: any }): Observable<any> {
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    const formData = new FormData();
-
-    for (const key in data) {
-      if (data.hasOwnProperty(key)) {
-        formData.append(key, data[key].toString());
-      }
-    }
-
-    return this.http.put<any>(`${API_URL}EditNewsCategory`, formData, {
-      headers: httpHeaders,
-    });
-  }
-
   getAllCategories(token: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
 
     return this.http.get<any>(`${API_URL}GetNewsCategories`, {
-      headers: httpHeaders,
-    });
-  }
-
-  getCategoryById(token: string, categoryId: string): Observable<any> {
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    return this.http.get<any>(`${API_URL}GetCategoryById/${categoryId}`, {
       headers: httpHeaders,
     });
   }

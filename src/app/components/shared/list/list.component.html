@@ -23,7 +23,7 @@ $index){
       type="checkbox"
       value="{{ item.id }}"
       (change)="toggleSelect($event)"
-      [checked]="isItemChecked(item.id)"
+      [checked]="isAllSectionSelected"
       data-kt-check="true"
       data-kt-check-target=".widget-9-check"
     />
@@ -43,19 +43,18 @@ $index){
     class="btn btn-sm btn-outline-light border b d-flex align-items-center gap-3 me-2"
   >
     {{ item.active ? "ايقاف" : "تفعيل" }}</button
-  >} @if(listOptions.isEdit){ @if(listOptions.type==='category'){
-  <app-add-category
+  >} @if(listOptions.isEdit&&listOptions.isEditor){<app-edit-editor
     [type]="'edit'"
-    [categoryId]="item.id"
+    [item]="item"
+    [sectionId]="item.id"
     (eventEmitter)="recieveEvent($event)"
-  ></app-add-category>
-  }@else{
-  <app-add-section
+  ></app-edit-editor
+  >}@else if (listOptions.isEdit) {<app-add-section
     [type]="'edit'"
     [sectionId]="item.id"
     (eventEmitter)="recieveEvent($event)"
-  ></app-add-section>
-  } } @if(listOptions.isDelete && listOptions.delete){<button
+  ></app-add-section
+  >} @if(listOptions.isDelete && listOptions.delete){<button
     (click)="listOptions.delete(item.id)"
     class="btn btn-sm btn-icon btn-outline-light border b d-flex align-items-center gap-3 me-2"
   >

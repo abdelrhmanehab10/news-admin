@@ -11,6 +11,13 @@
       كن مستعدا لتجربة نسختنا الجديدة
     </div>
   </div>
+  <ng-container *ngIf="hasError">
+    <div class="mb-lg-15 alert alert-danger">
+      <div class="alert-text font-weight-bold">
+        كلمة المرور او كلمة السر خطأ
+      </div>
+    </div>
+  </ng-container>
   <div class="fv-row mb-8 text-end">
     <label class="form-label fs-6 fw-bolder text-gray-900">اسم المستخدم</label>
     <input

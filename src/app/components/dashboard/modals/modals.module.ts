@@ -27,6 +27,7 @@ import {
 import { AddEventComponent } from './add-event/add-event.component';
 import { FilesEventsComponent } from './files-events/files-events.component';
 import { AddGalleryComponent } from './add-gallery/add-gallery.component';
+import { EditEditorComponent } from './edit-editor/edit-editor.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,7 @@ import { AddGalleryComponent } from './add-gallery/add-gallery.component';
     FilesEventsComponent,
     AddEventComponent,
     AddGalleryComponent,
-
+    EditEditorComponent,
     ModalComponent,
     KeeniconComponent,
     ImageComponent,
@@ -80,7 +81,8 @@ import { AddGalleryComponent } from './add-gallery/add-gallery.component';
     VoteResultComponent,
     FilesEventsComponent,
     AddEventComponent,
-    AddGalleryComponent,
+    AddGalleryComponent, 
+    EditEditorComponent
   ],
 })
 export class ModalsModule {}

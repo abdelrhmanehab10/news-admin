@@ -12,7 +12,9 @@
       <span class="me-2">الكل</span>
     </div>
     <div class="card-toolbar">
-      <app-add-category (eventEmitter)="getAllCategories()"></app-add-category>
+      <app-add-category
+        (onNewCategoryAddedEmitter)="recieveIsNewCategoryAdded($event)"
+      ></app-add-category>
       <button (click)="deleteCategories()" class="btn btn-danger btn-sm mx-2">
         حذف
       </button>
@@ -21,11 +23,10 @@
   <div class="card-body pt-2">
     <app-list
       [items]="items"
-      [selectedItems]="selectedCategories"
+      [isAllSectionSelected]="items.length === selectedCategories.length"
       (selectedItemsEmitter)="recieveSelectedItems($event)"
       [isLoading]="isLoading$ | async"
       [listOptions]="listOptions"
-      (eventEmitter)="getAllCategories()"
     ></app-list>
   </div>
 </div>

@@ -3,7 +3,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnDestroy,
   OnInit,
   Output,
   ViewChild,
@@ -21,7 +20,7 @@ import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
   selector: 'app-add-category',
   templateUrl: './add-category.component.html',
 })
-export class AddCategoryComponent implements OnDestroy {
+export class AddCategoryComponent implements OnInit {
   categoryForm: FormGroup;
   filterForm: FormGroup;
 
@@ -29,24 +28,31 @@ export class AddCategoryComponent implements OnDestroy {
 
   @ViewChild('modal') private modalComponent: ModalComponent;
 
-  @Output() eventEmitter = new EventEmitter<boolean>();
+  @Output() onNewCategoryAddedEmitter = new EventEmitter<boolean>();
 
+  @Input() title: string = 'أضافة باب رئيسي';
   @Input() btnStyle: string = '';
-  @Input() categoryId: string;
-  @Input() type: 'add' | 'edit' = 'add';
+  @Input() category: Category = {
+    Name: '',
+    Hide: false,
+    SeoTitle: '',
+    SeoKeyWords: '',
+    SeoDescription: '',
+  };
+
+  hasError: boolean = false;
 
   isLoading$: Observable<boolean>;
   newsCategories: any[] = [];
 
   modalConfig: ModalConfig = {
-    modalTitle: this.type === 'add' ? 'أضافة باب رئيسي' : 'تعديل باب رئيسي',
-    dismissButtonLabel: this.type === 'add' ? 'حفظ' : 'تعديل',
+    modalTitle: 'أضافة باب فرعي',
+    dismissButtonLabel: 'حفظ',
     closeButtonLabel: 'اغلاق',
     customDismiss: () => {
-      if (this.type === 'add') {
+      if (!this.categoryForm.invalid) {
         this.addCategory();
-      } else {
-        this.editCategory();
+        this.modalComponent.close();
       }
     },
   };
@@ -63,6 +69,10 @@ export class AddCategoryComponent implements OnDestroy {
     });
   }
 
+  ngOnInit(): void {
+    this.initForm();
+  }
+
   get f() {
     return this.categoryForm.controls;
   }
@@ -72,23 +82,19 @@ export class AddCategoryComponent implements OnDestroy {
       Name: ['', Validators.required],
       SeoTitle: ['', Validators.required],
       SeoKeyWords: ['', Validators.required],
+      SecTitle: ['', Validators.required],
       Hide: [false],
       SeoDescription: ['', Validators.required],
     });
   }
 
   async openModal() {
-    this.initForm();
-    if (this.type === 'edit') {
-      this.getCategoryById(this.categoryId);
-    }
     return await this.modalComponent.open();
   }
 
   addCategory() {
-    if (this.categoryForm.invalid) {
-      return;
-    }
+    this.hasError = false;
+    this.onNewCategoryAddedEmitter.emit(false);
     const addCategorySubscr = this.categoryService
       .addCategory({
         Name: this.f.Name.value,
@@ -101,61 +107,15 @@ export class AddCategoryComponent implements OnDestroy {
         next: (data: any) => {
           if (data) {
             this.toast.success(data.message);
-            this.eventEmitter.emit(true);
-            this.modalComponent.close();
+            this.onNewCategoryAddedEmitter.emit(true);
           }
         },
         error: (error: any) => {
           console.log('[ADD_CATEGORY]', error);
+          this.hasError = true;
         },
       });
     this.unsubscribe.push(addCategorySubscr);
-  }
-
-  editCategory() {
-    if (this.categoryForm.invalid) {
-      return;
-    }
-    const editCategorySubscr = this.categoryService
-      .editCategory({
-        CatId: this.categoryId,
-        Name: this.f.Name.value,
-        SeoTitle: this.f.SeoTitle.value,
-        SeoKeyWords: this.f.SeoKeyWords.value,
-        SeoDescription: this.f.SeoDescription.value,
-        Hide: this.f.Hide.value,
-      })
-      .subscribe({
-        next: (data: any) => {
-          if (data) {
-            this.toast.success(data);
-            this.eventEmitter.emit(true);
-            this.modalComponent.close();
-          }
-        },
-        error: (error: any) => {
-          console.log('[EDIT_CATEGORY]', error);
-        },
-      });
-    this.unsubscribe.push(editCategorySubscr);
-  }
-
-  getCategoryById(categoryId: string) {
-    const getCategoryByIdSubscr = this.categoryService
-      .getCategoryById(categoryId)
-      .subscribe({
-        next: (data: any) => {
-          this.f.Name.setValue(data.name);
-          this.f.Hide.setValue(data.hide);
-          this.f.SeoDescription.setValue(data.seoDescription);
-          this.f.SeoKeyWords.setValue(data.seoKeyWords);
-          this.f.SeoTitle.setValue(data.seoTitle);
-        },
-        error: (error: any) => {
-          console.log('[GET_CATEGORY_BY_ID]', error);
-        },
-      });
-    this.unsubscribe.push(getCategoryByIdSubscr);
   }
 
   ngOnDestroy() {

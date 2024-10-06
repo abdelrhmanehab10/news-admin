@@ -57,10 +57,10 @@
   <div class="card-body pt-2">
     <app-list
       [items]="items"
+      [isAllSectionSelected]="items.length === selectedVotes.length"
       (selectedItemsEmitter)="recieveSelectedItems($event)"
       [isLoading]="isLoading$ | async"
       [listOptions]="listOptions"
-      [selectedItems]="selectedVotes"
     >
     </app-list>
   </div>

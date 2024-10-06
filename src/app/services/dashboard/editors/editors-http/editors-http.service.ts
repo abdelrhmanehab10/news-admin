@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { AuthService } from 'src/app/pages/auth';
 import { environment } from 'src/environments/environment';
 
 const API_URL = `${environment.apiUrl}/Editor/`;
@@ -9,6 +10,7 @@ const API_URL = `${environment.apiUrl}/Editor/`;
   providedIn: 'root',
 })
 export class EditorsHTTPService {
+  private readonly _HttpClient = inject(HttpClient);
   constructor(private http: HttpClient) {}
 
   getAllEditors(
@@ -34,6 +36,51 @@ export class EditorsHTTPService {
       }
     );
   }
+  getEditorById(token: string, id: string): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    console.log(id);
+    return this._HttpClient.get(`${API_URL}GetEditorById?EditorId=${id}`, {
+      headers: httpHeaders,
+    });
+  }
+  editEditor(
+    token: string,
+    EditorName: string,
+    EditorId?: string,
+    Picture?: File,
+    Description?: string,
+    EditorEmail?: string
+  ): Observable<any> {
+    const httpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+
+    // Append required and optional fields
+    formData.append('EditorName', EditorName);
+    formData.append('EditorId', EditorId ?? '');
+    if (Picture) {
+      formData.append('Picture', Picture);
+    }
+    if (Description) {
+      formData.append('Description', Description);
+    }
+    if (EditorEmail) {
+      formData.append('EditorEmail', EditorEmail);
+    }
+
+    return this._HttpClient.put<{
+      status: number;
+      data: any[];
+      message: string | null;
+      errors: string[] | null;
+    }>(`${API_URL}EditEditor`, formData, {
+      headers: httpHeaders,
+    });
+  }
 
   toggleEnableEditor(token: string, editorId: string): Observable<any> {
     const httpHeaders = new HttpHeaders({
@@ -49,24 +96,6 @@ export class EditorsHTTPService {
       message: string | null;
       errors: string[] | null;
     }>(`${API_URL}DisbleOrEnableEditor`, formData, {
-      headers: httpHeaders,
-    });
-  }
-
-  deleteEditor(token: string, editorId: string): Observable<any> {
-    const httpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
-
-    const formData = new FormData();
-    formData.append('EditorId', editorId);
-
-    return this.http.put<{
-      status: number;
-      data: any[];
-      message: string | null;
-      errors: string[] | null;
-    }>(`${API_URL}DeleteEditor`, formData, {
       headers: httpHeaders,
     });
   }

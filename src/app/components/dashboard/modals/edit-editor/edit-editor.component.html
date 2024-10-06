@@ -1,11 +1,13 @@
 <app-modal #modal [modalConfig]="modalConfig">
-  <form [formGroup]="editorForm" novalidate="novalidate">
+  <form [formGroup]="editEditorForm" novalidate="novalidate">
     <div class="row mb-6">
       <label class="col-lg-2 col-form-label required fw-bold fs-6"
         >أسم الكاتب</label
       >
+
       <div class="col-lg-8">
         <input
+          [placeholder]="item.editorName"
           type="text"
           class="form-control form-control-lg form-control-solid"
           formControlName="editorName"
@@ -15,7 +17,7 @@
           [ngTemplateOutletContext]="{
             validation: 'required',
             message: 'الأسم مطلوب',
-            control: editorForm.controls['editorName']
+            control: editEditorForm.controls['editorName']
           }"
         ></ng-container>
       </div>
@@ -65,7 +67,7 @@
           [ngTemplateOutletContext]="{
             validation: 'required',
             message: 'بيانات الكاتب مطلوبة',
-            control: editorForm.controls['editorDetails']
+            control: editEditorForm.controls['editorDetails']
           }"
         ></ng-container>
       </div>
@@ -97,9 +99,8 @@
   </form>
 </app-modal>
 <button
-  class="btn btn-sm mx-2 btn-primary d-flex align-items-center gap-2"
-  (click)="openModal()"
+  class="btn btn-sm mx-2 d-flex align-items-center gap-2"
+  (click)="openModal(item.editorId)"
 >
-  أضافة كاتب
-  <app-keenicon name="plus" class="fs-1"></app-keenicon>
+  تعديل
 </button>

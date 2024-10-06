@@ -124,17 +124,8 @@ export class DeletedNewsComponent implements OnInit, OnDestroy {
   toggleSelectAll(e: any) {
     this.selectedNews = this.utilsService.toggleSelectAll(
       e,
-      this.getDeletedNewsIds()
+      this.items.map((items) => items.news).flat(1)
     );
-  }
-
-  getDeletedNewsIds() {
-    return this.items.map((items) => items.news).flat(1);
-  }
-
-  receiveSelectedDeletedNews(data: string[]) {
-    this.selectedNews = data;
-    console.log(this.items);
   }
 
   ngOnDestroy() {

@@ -11,12 +11,13 @@ export class ListComponent {
   @Output() eventEmitter = new EventEmitter<boolean>();
 
   @Input() items: any[] = [];
+  @Input() isAllSectionSelected: boolean = false;
   @Input() isLoading: boolean | null = false;
   @Input() isCheckList: boolean = false;
 
   @Input() listOptions: ListOptions;
 
-  @Input() selectedItems: string[] = [];
+  selectedItems: string[] = [];
 
   constructor() {}
 
@@ -48,19 +49,14 @@ export class ListComponent {
       this.selectedItems.push(e.target.value);
     } else {
       this.selectedItems = this.selectedItems.filter(
-        (id) => id != e.target.value
+        (id) => id === e.target.value
       );
-      console.log(this.selectedItems);
     }
 
     this.selectedItemsEmitter.emit(this.selectedItems);
   }
 
-  isItemChecked(id: string) {
-    return this.selectedItems.some((itemId) => itemId == id);
-  }
-
   recieveEvent(data: boolean) {
     this.eventEmitter.emit(data);
   }
-}
+} 

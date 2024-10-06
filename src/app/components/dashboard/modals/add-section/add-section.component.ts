@@ -5,7 +5,7 @@ import {
   Input,
   OnInit,
   Output,
-  ViewChild,
+  ViewChild, OnDestroy,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Toast, ToastrService } from 'ngx-toastr';
@@ -20,7 +20,7 @@ import { SectionsService } from 'src/app/services/dashboard/sections/sections.se
   templateUrl: './add-section.component.html',
   styleUrl: './add-section.component.scss',
 })
-export class AddSectionComponent implements OnInit {
+export class AddSectionComponent implements OnInit, OnDestroy {
   sectionForm: FormGroup;
   filterForm: FormGroup;
 
@@ -90,7 +90,7 @@ export class AddSectionComponent implements OnInit {
   }
 
   addMainSection() {
-    if (this.sectionForm.invalid) {
+    if (!this.sectionForm.invalid) {
       return;
     }
     const addMainSectionSubscr = this.sectionsService

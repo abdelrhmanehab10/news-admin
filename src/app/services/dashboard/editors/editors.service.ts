@@ -1,3 +1,4 @@
+import { Editor } from './../../../models/data.model';
 import { Injectable } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import {
@@ -16,6 +17,7 @@ import { EditorsHTTPService } from './editors-http/editors-http.service';
 export class EditorsService {
   isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
+  Editor: Editor[];
 
   constructor(
     private authService: AuthService,
@@ -36,6 +38,7 @@ export class EditorsService {
       .getAllEditors(auth.authToken, pageNumber, search)
       .pipe(
         map((data) => {
+          console.log(data);
           return data.data;
         }),
         catchError((err) => {
@@ -71,6 +74,46 @@ export class EditorsService {
         finalize(() => this.isLoadingSubject.next(false))
       );
   }
+ 
+  editEditor(
+    EditorName: string,
+    editorId?: string,
+    Picture?: File,
+    Description?: string,
+    EditorEmail?: string
+  ) {
+    const auth = this.authService.getAuthFromLocalStorage();
+
+    // Check if authToken is available, return undefined observable if not
+    if (!auth || !auth.authToken) {
+      return of(undefined);
+    }
+
+    this.isLoadingSubject.next(true);
+
+    // Call the HTTP service to send the PUT request
+    return this.editorsHTTPService
+      .editEditor(
+        auth.authToken,
+        EditorName,
+        editorId,
+        Picture,
+        Description,
+        EditorEmail
+      )
+      .pipe(
+        map((data) => {
+          // Successful response, returning data
+          return data;
+        }),
+        catchError((err) => {
+          // Error handling, logging the error
+          console.error('Error in editEditor:', err);
+          return of(undefined); // Return undefined on error
+        }),
+        finalize(() => this.isLoadingSubject.next(false)) // Reset loading state
+      );
+  }
 
   toggleEnableEditor(editorId: string) {
     const auth = this.authService.getAuthFromLocalStorage();
@@ -91,24 +134,5 @@ export class EditorsService {
         }),
         finalize(() => this.isLoadingSubject.next(false))
       );
-  }
-
-  deleteEditor(editorId: string) {
-    const auth = this.authService.getAuthFromLocalStorage();
-    if (!auth || !auth.authToken) {
-      return of(undefined);
-    }
-
-    this.isLoadingSubject.next(true);
-    return this.editorsHTTPService.deleteEditor(auth.authToken, editorId).pipe(
-      map((data) => {
-        return data.message;
-      }),
-      catchError((err) => {
-        console.error('err', err);
-        throw err;
-      }),
-      finalize(() => this.isLoadingSubject.next(false))
-    );
   }
 }

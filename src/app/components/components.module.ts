@@ -44,6 +44,7 @@ import { CompareVersionsComponent } from './dashboard/modals/compare-versions/co
 import { StatsComponent } from './shared/stats/stats.component';
 import { InlineSVGModule } from 'ng-inline-svg-2';
 import { ModalsModule } from './dashboard/modals/modals.module';
+import { EditEditorComponent } from './dashboard/modals/edit-editor/edit-editor.component';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,8 @@ import { ModalsModule } from './dashboard/modals/modals.module';
     ListComponent,
     TagsInputComponent,
     DraftsComponent,
-    StatsComponent,
+    StatsComponent, 
+    EditEditorComponent
   ],
   providers: [
     DatePipe,

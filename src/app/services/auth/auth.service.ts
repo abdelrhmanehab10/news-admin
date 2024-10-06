@@ -67,7 +67,7 @@ export class AuthService implements OnDestroy {
       switchMap(() => this.getUserByToken()),
       catchError((err) => {
         console.error('err', err);
-        throw err;
+        return of(undefined);
       }),
       finalize(() => this.isLoadingSubject.next(false))
     );

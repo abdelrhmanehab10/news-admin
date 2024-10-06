@@ -2,20 +2,19 @@
   <div class="card-header justify-content-between border-0 mt-2">
     <h3 class="card-title fw-bolder text-gray-900">المحتوي المحذوف</h3>
     <div class="w-100 d-flex gap-2 my-5">
-      <div
-        *ngIf="items.length"
-        class="form-check form-check-sm form-check-custom form-check-solid"
+      <label
+        class="checkbox checkbox-xl checkbox-inline ms-2 d-flex align-items-center"
       >
         <input
           class="form-check-input"
           type="checkbox"
           (change)="toggleSelectAll($event)"
-          [checked]="getDeletedNewsIds().length === selectedNews.length"
+          [checked]="items.length === selectedNews.length"
           data-kt-check="true"
           data-kt-check-target=".widget-9-check"
         />
         <span class="me-2">الكل</span>
-      </div>
+      </label>
       <div class="flex-grow-1 position-relative">
         <app-keenicon
           name="magnifier"
@@ -60,7 +59,6 @@
       [groupListOptions]="groupListOptions"
       [selectedItems]="selectedNews"
       [items]="items"
-      (selectedItemsEmitter)="receiveSelectedDeletedNews($event)"
     ></app-group-list>
   </div>
   <div class="card-footer text-center">
